@@ -102,7 +102,7 @@ function Status() {
                 lastHomeTeamGames: lastHomeTeamGames,
                 lastAwayTeamGames: lastAwayTeamGames
             }
-
+ 
 
             return items;
 
