@@ -1,180 +1,215 @@
 var Nightmare = require('nightmare');
 var vo = require('vo');
-function testingNext(scraper, data, pageLeft, resolve) {
+function Status() {
+    var scraper = new Nightmare({
+        show: false, webPreferences: {
+            images: false
+        }
+    });
 
-    console.log('Faltam ' + pageLeft)
+    scraper
+        .goto('https://www.onlinebettingacademy.com/stats/basketball/match/denver-nuggets-vs-san-antonio-spurs/244809/stats')
 
-    var exist = true;
-    if (pageLeft <= 0) {
-        console.log('finish')
-        scraper.end()
-        return resolve(data)
+        .evaluate(function () {
+            var items = [];
 
-    } 
-    else {
-        scraper.visible('li.pager-next')
-            .then(function (item) {
-                if (item) {
-                    scraper
-                        .click('li.pager-next > a')
-                        .wait('.offer-item-details')
-                        .evaluate(function () {
-                            var items = [];
-                            var rows = document.querySelectorAll('article.offer-item');
-                            for (var i = 0, row; row = rows[i]; i++) {
-                                var generalInfo = row.querySelectorAll('div.offer-item-details')[0];
-
-                                var header = generalInfo.querySelectorAll('header.offer-item-header')[0],
-                                    offerParams = generalInfo.querySelectorAll('ul.params')[0],
-                                    price = offerParams.querySelectorAll('li.offer-item-price')[0].innerText.trim().replace(' ', ''),
-                                    tipologia = offerParams.querySelectorAll('li.offer-item-rooms')[0].innerText,
-                                    area = offerParams.querySelectorAll('li.offer-item-area')[0].innerText;
-
-                                data = {
-                                    text: header.innerText,
-                                    tagline: header.querySelectorAll('p.text-nowrap')[0].innerHTML,
-                                    link: generalInfo.querySelectorAll("h3 > a")[0].getAttribute('href'),
-                                    imageLink: row.querySelectorAll('figure.offer-item-image > a > span.img-cover')[0].style.backgroundImage.replace("url(", "").replace(")", "").replace(/\"/g, ""),
-                                    price: price,
-                                    priceInt: parseInt(price),
-                                    tipologia: tipologia,
-                                    area: area,
-                                    areaInt: parseInt(area),
-                                    description: '',
-                                    location: '',
-                                    labels: ["imovirtual"]
-                                };
-                                data.id = data.link.split('/').reverse()[1];
-                                data.labels.push("euro" + data.priceInt);
-                                data.labels.push(data.tipologia.toLowerCase());
-                                data.labels.sort();
+            var principalHomeTeam = $('td.stats-game-head-teamname.hide-mobile')[0].innerText;
+            var principalAwayTeam = $('td.stats-game-head-teamname.hide-mobile')[1].innerText;
 
 
-                                items.push(data);
-                            }
 
-                            return items;
-                        })
 
-                        .then(function (item) {
+            var lastGamesBetweenTeams = [];
 
-                            data.push(item)
-                            pageLeft--;
-                            testingNext(scraper, data, pageLeft, resolve)
-                        }
+            var rows = $('table.data-table.hastoptitle > tbody > tr');
 
-                        )
+
+            for (var i = 0, row; row = rows[i]; i++) {
+
+                var info = row.querySelectorAll('td');
+
+                var infoawayTeam = info[4].innerText;
+                var infoscore = info[3].innerText.split(' - ');
+                var infoawayTeamScore = Number(infoscore[0]);
+                var infohomeTeamScore = Number(infoscore[1]);
+                var infohomeTeam = info[2].innerText;
+
+
+                var gameInfo = {
+                    awayTeam: infoawayTeam,
+                    awayTeamScore: infoawayTeamScore,
+                    homeTeamScore: infohomeTeamScore,
+                    homeTeam: infohomeTeam
                 }
-                else {
-                    console.log('finish')
-                    scraper.end()
-                    return resolve(data)
-                }
-            })
+                lastGamesBetweenTeams.push(gameInfo);
 
-    }
-
-
-
-
-}
-
-var maxPage = 30;
-
-function stats(file) {
-    console.log(file);
-    console.log('stats')
-    return new Promise(function (resolve, reject) {
-        console.log('testing promise')
-        var data = [];
-        var scraper = new Nightmare({
-            show: false, webPreferences: {
-                images: false
             }
-        });
-        scraper
-            .goto(file)
-
-            .evaluate(function () {
-                var items = [];
-                var rows = document.querySelectorAll('article.offer-item');
-                for (var i = 0, row; row = rows[i]; i++) {
-                    var generalInfo = row.querySelectorAll('div.offer-item-details')[0];
-
-                    var header = generalInfo.querySelectorAll('header.offer-item-header')[0],
-                        offerParams = generalInfo.querySelectorAll('ul.params')[0],
-                        price = offerParams.querySelectorAll('li.offer-item-price')[0].innerText.trim().replace(' ', ''),
-                        tipologia = offerParams.querySelectorAll('li.offer-item-rooms')[0].innerText,
-                        area = offerParams.querySelectorAll('li.offer-item-area')[0].innerText;
-
-                    data = {
-                        text: header.innerText,
-                        tagline: header.querySelectorAll('p.text-nowrap')[0].innerHTML,
-                        link: generalInfo.querySelectorAll("h3 > a")[0].getAttribute('href'),
-                        imageLink: row.querySelectorAll('figure.offer-item-image > a > span.img-cover')[0].style.backgroundImage.replace("url(", "").replace(")", "").replace(/\"/g, ""),
-                        price: price,
-                        priceInt: parseInt(price),
-                        tipologia: tipologia,
-                        area: area,
-                        areaInt: parseInt(area),
-                        description: '',
-                        location: '',
-                        labels: ["imovirtual"]
-                    };
-                    data.id = data.link.split('/').reverse()[1];
-                    data.labels.push("euro" + data.priceInt);
-                    data.labels.push(data.tipologia.toLowerCase());
-                    data.labels.sort();
 
 
-                    items.push(data);
+
+            var lastHomeTeamGames = [];
+            rows = $('table.data-table.hastotitle > tbody > tr');
+
+            for (var i = 0, row; row = rows[i]; i++) {
+
+                var info = row.querySelectorAll('td');
+
+                var infoawayTeam = info[3].innerText;
+                var infoscore = info[2].innerText.split(' - ');
+                var infoawayTeamScore = Number(infoscore[0]);
+                var infohomeTeamScore = Number(infoscore[1]);
+                var infohomeTeam = info[1].innerText;
+
+
+                var gameInfo = {
+                    awayTeam: infoawayTeam,
+                    awayTeamScore: infoawayTeamScore,
+                    homeTeamScore: infohomeTeamScore,
+                    homeTeam: infohomeTeam
                 }
+                lastHomeTeamGames.push(gameInfo);
 
-                return items;
-            })
+            }
 
-            .then(function (item) {
-                console.log('then')
-                data.push(item)
-                testingNext(scraper, data,1, resolve)
-            })
+            var lastAwayTeamGames = [];
+            rows = $('table.data-table  ')[2].querySelectorAll(' tbody > tr')
+
+            for (var i = 0, row; row = rows[i]; i++) {
+
+                var info = row.querySelectorAll('td');
+
+                var infoawayTeam = info[3].innerText;
+                var infoscore = info[2].innerText.split(' - ');
+                var infoawayTeamScore = Number(infoscore[0]);
+                var infohomeTeamScore = Number(infoscore[1]);
+                var infohomeTeam = info[1].innerText;
 
 
+                var gameInfo = {
+                    awayTeam: infoawayTeam,
+                    awayTeamScore: infoawayTeamScore,
+                    homeTeamScore: infohomeTeamScore,
+                    homeTeam: infohomeTeam
+                }
+                lastAwayTeamGames.push(gameInfo);
 
-    })
+            }
+
+            var items = {
+                home: principalHomeTeam,
+                away: principalAwayTeam,
+                lastGamesBetweenTeams: lastGamesBetweenTeams,
+                lastHomeTeamGames: lastHomeTeamGames,
+                lastAwayTeamGames: lastAwayTeamGames
+            }
+
+
+            return items;
+
+        }) 
+ 
+
+        .then(function (items) {
+            console.log('hello then');
+            // console.log(JSON.stringify(items));
+            items.home = capitalize(items.home);
+            items.away =  capitalize(items.away);
+        
+            console.log('----------------------');
+            GetStatsFromData(items.home, items.lastGamesBetweenTeams);
+            console.log('----------------------------------HOMES GAMES DATA------------------------------')
+            GetStatsFromData(items.home, items.lastHomeTeamGames);
+            console.log('----------------------------------AWAY GAMES DATA------------------------------')
+            GetStatsFromData(items.away, items.lastAwayTeamGames);
+
+            return items;
+        })
+
 }
-function testing() {
-    console.log('start')
-    startDate = new Date();
-    var url = [];
+
+function capitalize(s){
+   var result =  s.toLowerCase().replace( /\b./g, function(a){ return a.toUpperCase(); } );
+   console.log(result);
+   return result;
+};
+
+function GetStatsFromData(teamToStats, gamesToStats) {
+    var homeScored = 0;
+    var awayScored = 0;
+    var homeVictory = 0;
+    var awayVictory = 0;
+    var homeScoredAsHome = 0;
+    var homeVictoryAsHome = 0;
+    var awayVictoryAsAway = 0;
+    var awayScoredAsAway = 0;
+    gamesToStats.forEach(function (element) {
+        //console.log(JSON.stringify(element));
+        var isSameHomeTeam = false;
+    
+        if (element.homeTeam.trim() == teamToStats.trim())
+            isSameHomeTeam = true
+
+        if (isSameHomeTeam) {
+         
+            homeScored += element.homeTeamScore;
+            awayScored += element.awayTeamScore;
+
+           
+            homeScoredAsHome += element.homeTeamScore;
+            awayScoredAsAway += element.awayTeamScore;
+
+            //para outros desportos testar empates .....
+            if (element.homeTeamScore > element.awayTeamScore) {
+                homeVictory++;
+                homeVictoryAsHome++;
+            }
+
+            else {
+                awayVictory++;
+                awayVictoryAsAway++;
+            }
+        }
+        else {
+          
+            awayScored += element.homeTeamScore;
+            homeScored += element.awayTeamScore;
+            //para outros desportos testar empates .....
+            if (element.homeTeamScore > element.awayTeamScore)
+                awayVictory++;
+            else
+                homeVictory++;
+        }
+
+    }, this);
+    // console.log('Hoje ' + items.home + ' vs ' + items.away);
+    console.log('Nos últimos ' + gamesToStats.length + ' jogos');
+    console.log('Home Scored ' + homeScored);
+    console.log('Away Scored ' + awayScored);
+    console.log('Home Avrg Scored ' + (homeScored / gamesToStats.length))
+    console.log('Away Avrg Scored ' + (awayScored / gamesToStats.length))
+    
+
     
 
 
 
+    console.log('Home Avrg Scored as Home ' + (Math.round((homeScoredAsHome / (homeVictoryAsHome + awayVictoryAsAway)).toFixed(2))));
+    console.log('Away Avrg Scored as Away ' + (Math.round((awayScoredAsAway / (homeVictoryAsHome + awayVictoryAsAway)).toFixed(2))));
+    console.log('Home Victorys as Home Team ' + homeVictoryAsHome);
+    console.log('Away Victorys as Away Team ' + awayVictoryAsAway);
+    console.log('Home % Victory ' + (Math.round((homeVictory * 100) / (homeVictory + awayVictory)).toFixed(2) + '%'));
+    console.log('Away % Victory ' + (Math.round((awayVictory * 100) / (awayVictory + homeVictory)).toFixed(2) + '%'));
 
-//     var defaultUrl = 'https://www.imovirtual.com/comprar/apartamento/?page=';
-//     for (var index = 1; index <= 500; index += 50) {
+    console.log('Home % Victory as Home ' + (Math.round((homeVictoryAsHome * 100) / (homeVictoryAsHome + awayVictoryAsAway)).toFixed(2)) + '%');
+    console.log('Away % Victory  as Away ' + (Math.round((awayVictoryAsAway * 100) / (awayVictoryAsAway + homeVictoryAsHome)).toFixed(2)) + '%');
 
-//         url.push(stats(defaultUrl + index))
-
-//     }
-    Promise.all([stats("https://www.onlinebettingacademy.com/stats/basketball/match/detroit-pistons-vs-boston-celtics/244802/stats")])
-   .catch((err) => console.log(err))
-        .then((data) => {
-            var end = new Date() - startDate;
-            console.info("Total: %dms", end);
-
-            console.log(JSON.stringify(data))
-
-        })
-        
+    console.log('Home Victory ' + homeVictory);
+    console.log('Away Victory ' + awayVictory);
+    // console.log(JSON.stringify(items))
 }
 
-var startDate;
+vo(Status)(function (err, titles) {
 
 
-
-vo(testing)(function (err, titles) {
-
-     console.log('hello');
- });
+    console.log('hello');
+});
