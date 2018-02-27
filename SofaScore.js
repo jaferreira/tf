@@ -12,7 +12,7 @@ function Status() {
 
     scraper
   
-        .goto('https://www.sofascore.com/tournament/football/portugal/primeira-liga/238',)
+        .goto('https://www.sofascore.com/tournament/football/portugal/primeira-liga/238')
 
         .evaluate(function () {
             var items = [];
