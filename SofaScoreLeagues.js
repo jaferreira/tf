@@ -2,32 +2,34 @@ var Nightmare = require('nightmare');
 var vo = require('vo');
 function Status() {
     var scraper = new Nightmare({
-        
+
         show: true,
-         webPreferences: {
-             
+        webPreferences: {
+
             images: true
         }
     });
 
     scraper
-  
-        .goto('https://www.sofascore.com/tournament/football/portugal/primeira-liga/238')
 
+        .goto('https://www.sofascore.com/tournament/football/spain/laliga/8')
+        .wait('.js-event-list-tournament-events')
+        .click('label.js-tournament-page-events-select-round.radio-switch__item')
         .evaluate(function () {
             var items = [];
 
 
-            var rows = $('.tab-pane.tab-event-standings-22181-overall > .standings-table > .cell.cell--standings');
-
+            var rows = $('.tab-pane.active > .standings-table > .cell.cell--standings');
+            //GET STANDINGS
             for (var i = 0, row; row = rows[i]; i++) {
                 var data = row.querySelectorAll('div');
 
                 var position = data[0].innerText.trim();
-               
+
                 var teamName = row.querySelectorAll('.cell__content.standings__team-name')[0].innerText;
+                var link = row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href;
                 var gameInfo = row.querySelectorAll('.cell__content.standings__data.standings__columns-32 > span');
-                 var played = gameInfo[0].innerText;
+                var played = gameInfo[0].innerText;
                 var win = gameInfo[1].innerText;
                 var draw = gameInfo[2].innerText;
                 var defeated = gameInfo[3].innerText;
@@ -49,136 +51,81 @@ function Status() {
                 var points = row.querySelectorAll('.cell__section.standings__points')[0].innerText.trim();
 
                 var data = {
-                    position : position,
-                    teamName : teamName,
-                    gamesPlayed : played,
-                    wins : win,
-                    draws : draw,
-                    defeateds : defeated,
-                    goalScored : goalScored,
-                    goalConceded : goalConceded,
-                    lastResults : results,
-                    points : points
+                    position: position,
+                    teamName: teamName,
+                    teamLink : link,
+                    gamesPlayed: played,
+                    wins: win,
+                    draws: draw,
+                    defeateds: defeated,
+                    goalScored: goalScored,
+                    goalConceded: goalConceded,
+                    lastResults: results,
+                    points: points
                 }
 
-                items.push(data); 
+                items.push(data);
                 // items.push(teamName);
-                
+
 
             }
+            var topScores = [];
+            //GET TOP SCORES
+            rows = $('.bg-container > a.cell.cell--interactive.u-mB4.js-link.js-show-player-details');
+            for (var i = 0, row; row = rows[i]; i++) {
 
+                topScores.push({
+                    position: row.querySelectorAll('div')[0].innerText.trim(),
+                    name: row.querySelectorAll('div')[5].innerText.trim(),
 
-            // var principalHomeTeam = $('td.stats-game-head-teamname.hide-mobile')[0].innerText;
-            // var principalAwayTeam = $('td.stats-game-head-teamname.hide-mobile')[1].innerText;
+                    team: row.querySelectorAll('div')[6].innerText.trim(),
+                    matches: row.querySelectorAll('div')[7].innerText.trim(),
+                    goals: row.querySelectorAll('div')[9].innerText.trim(),
+                    rating: row.querySelectorAll('div')[11].innerText.trim()
+                })
+            }
 
+            var newcomers = [];
+            rows = $('div.bg-container > a.cell.cell--interactive.u-mB4.js-link > .cell__section--main.u-mL12');
+            for (var i = 0, row; row = rows[i]; i++) {
+                newcomers.push(row.innerText.trim())
+            }
 
+            var factsLeague = $('table.table.table--justified > tbody > tr > td.ff-medium');
+            var leagueData = {
+                standings: items,
+                topScores: topScores,
+                titleHolder: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[0].innerText.trim().split(/\r?\n/)[0],
+                mostTitles: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[0],
+                mostTitlesNumber: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[1].split('(')[1].replace(')', ''),
+                newcomers: newcomers,
+                facts: {
+                    devisionLevel: factsLeague[0].innerText.trim(),
+                    numberRounds: factsLeague[1].innerText.trim(),
+                    averageGoals: factsLeague[2].innerText.trim(),
+                    homeTeamWins: factsLeague[3].innerText.trim(),
+                    draws: factsLeague[4].innerText.trim(),
+                    awayTeamWins: factsLeague[5].innerText.trim(),
+                    yellowCards: factsLeague[6].innerText.trim(),
+                    redCards: factsLeague[7].innerText.trim(),
 
+                }
+            }
 
-            // var lastGamesBetweenTeams = [];
-
-            // var rows = $('table.data-table.hastoptitle > tbody > tr');
-
-
-            // for (var i = 0, row; row = rows[i]; i++) {
-
-            //     var info = row.querySelectorAll('td');
-
-            //     var infoawayTeam = info[4].innerText;
-            //     var infoscore = info[3].innerText.split(' - ');
-            //     var infoawayTeamScore = Number(infoscore[0]);
-            //     var infohomeTeamScore = Number(infoscore[1]);
-            //     var infohomeTeam = info[2].innerText;
-
-
-            //     var gameInfo = {
-            //         awayTeam: infoawayTeam,
-            //         awayTeamScore: infoawayTeamScore,
-            //         homeTeamScore: infohomeTeamScore,
-            //         homeTeam: infohomeTeam
-            //     }
-            //     lastGamesBetweenTeams.push(gameInfo);
-
-            // }
-
-
-
-            // var lastHomeTeamGames = [];
-            // rows = $('table.data-table.hastotitle > tbody > tr');
-
-            // for (var i = 0, row; row = rows[i]; i++) {
-
-            //     var info = row.querySelectorAll('td');
-
-            //     var infoawayTeam = info[3].innerText;
-            //     var infoscore = info[2].innerText.split(' - ');
-            //     var infoawayTeamScore = Number(infoscore[0]);
-            //     var infohomeTeamScore = Number(infoscore[1]);
-            //     var infohomeTeam = info[1].innerText;
-
-
-            //     var gameInfo = {
-            //         awayTeam: infoawayTeam,
-            //         awayTeamScore: infoawayTeamScore,
-            //         homeTeamScore: infohomeTeamScore,
-            //         homeTeam: infohomeTeam
-            //     }
-            //     lastHomeTeamGames.push(gameInfo);
-
-            // }
-
-            // var lastAwayTeamGames = [];
-            // rows = $('table.data-table  ')[2].querySelectorAll(' tbody > tr')
-
-            // for (var i = 0, row; row = rows[i]; i++) {
-
-            //     var info = row.querySelectorAll('td');
-
-            //     var infoawayTeam = info[3].innerText;
-            //     var infoscore = info[2].innerText.split(' - ');
-            //     var infoawayTeamScore = Number(infoscore[0]);
-            //     var infohomeTeamScore = Number(infoscore[1]);
-            //     var infohomeTeam = info[1].innerText;
-
-
-            //     var gameInfo = {
-            //         awayTeam: infoawayTeam,
-            //         awayTeamScore: infoawayTeamScore,
-            //         homeTeamScore: infohomeTeamScore,
-            //         homeTeam: infohomeTeam
-            //     }
-            //     lastAwayTeamGames.push(gameInfo);
-
-            // }
-
-            // var items = {
-            //     home: principalHomeTeam,
-            //     away: principalAwayTeam,
-            //     lastGamesBetweenTeams: lastGamesBetweenTeams,
-            //     lastHomeTeamGames: lastHomeTeamGames,
-            //     lastAwayTeamGames: lastAwayTeamGames
-            // }
-
-
-            return items;
+            return leagueData;
 
         })
-
+        .end()
 
         .then(function (items) {
-
+ 
             console.log(JSON.stringify(items));
-            // items.home = capitalize(items.home);
-            // items.away =  capitalize(items.away);
-
-            // console.log('----------------------');
-            // GetStatsFromData(items.home, items.lastGamesBetweenTeams);
-            // console.log('----------------------------------HOMES GAMES DATA------------------------------')
-            // GetStatsFromData(items.home, items.lastHomeTeamGames);
-            // console.log('----------------------------------AWAY GAMES DATA------------------------------')
-            // GetStatsFromData(items.away, items.lastAwayTeamGames);
-
+       
+           
             return items;
         })
+      
+
 
 }
 
