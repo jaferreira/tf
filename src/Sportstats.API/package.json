@@ -1,0 +1,23 @@
+{
+  "name": "sportstats.api",
+  "version": "1.0.0",
+  "description": "Sportstats API Server",
+  "main": "Api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon Api.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "nodemonConfig": {
+    "verbose": true
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "express-metrics": "^1.1.0",
+    "mongoose": "^5.0.7",
+    "mongoose-paginate": "^5.0.3"
+  }
+}
