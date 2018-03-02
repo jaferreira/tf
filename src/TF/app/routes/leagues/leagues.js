@@ -4,8 +4,6 @@ module.exports.default = (router) => {
 
     router.get("/league/:permalink", (req, res) => {
 
-        console.log(req);
-
         leagueController.get_league_info(req, res, function (info) {
             const data = {
                 message: "POST",
