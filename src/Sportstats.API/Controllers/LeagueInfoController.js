@@ -18,7 +18,7 @@ exports.get_league_info = function (req, res) {
     
     console.log('Called get_league_info: ' + req.params.league);
     var filter = {
-        permaLink: req.params.league
+        permalink: req.params.league
     };
 
     var options = {
