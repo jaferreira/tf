@@ -19,5 +19,8 @@ module.exports = function (app) {
     //     .post(leaguesScrapController.save_scrap_result);
     app.route('/scrap/leagues')
         .post(leaguesScrapController.create_league_to_scrap);
-        
+    
+    app.route('/scrap/leagues/:league')
+        .post(leaguesScrapController.save_league_scrap_info);
+    
 };

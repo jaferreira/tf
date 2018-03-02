@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+    Leagues = mongoose.model('Leagues'),
     LeaguesToScrap = mongoose.model('LeaguesToScrap'),
     async = require('async');
 
@@ -40,11 +41,22 @@ exports.create_league_to_scrap = function (req, res) {
 };
 
 
-// exports.save_scrap_result = function (req, res) {
-//     var bulk = req.body;
-//     LeaguesToScrap.insertMany(bulk, function (err, houses) {
-//         if (err)
-//             res.send(err);
-//         res.json(houses);
-//     });
-// };
+exports.save_league_scrap_info = function (req, res) {
+    var leagueInfo = req.body;
+    var leagueName = req.params.league;
+
+    var query = {
+        'permalink': leagueName
+    };
+
+    Leagues.findOneAndUpdate(query, leagueInfo, {
+        upsert: true
+    }, function (err, doc) {
+        if (err)
+            return res.sendStatus(500, {
+                error: err
+            });
+        console.log('League info succesfully saved: ' + leagueName);
+        return res.sendStatus(200);
+    });
+};

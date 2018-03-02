@@ -2,6 +2,7 @@ var express = require('express'),
     app = express(),
     cors = require('cors'),
     port = process.env.PORT || 3000,
+    metricsPort = process.env.PORT || 3001,
     mongoose = require('mongoose'),
     bodyParser = require('body-parser'),
     expressMetrics = require('express-metrics'),
@@ -25,7 +26,7 @@ mongoose.connect(mongoConnString, function (err) {
 
     // Metrics Configuration
     app.use(expressMetrics({
-        port: 3001
+        port: metricsPort
     }));
 
     app.use(cors());

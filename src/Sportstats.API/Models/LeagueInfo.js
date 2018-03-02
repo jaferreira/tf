@@ -5,6 +5,10 @@ var mongoosePaginate = require('mongoose-paginate');
 
 var LeagueInfo = new Schema({
 
+    name: String,
+
+    permalink: String,
+
     mostTitles: {
         type: String
     },

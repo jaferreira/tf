@@ -1,0 +1,39 @@
+{
+  "name": "tf",
+  "version": "1.0.0",
+  "description": "tf frontend",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint app",
+    "build": "npm run clean && npm run sass && npm run copy",
+    "copy": "ncp app dist",
+    "sass": "node-sass --output-style compressed app/assets/scss/app.scss app/assets/rendered/style.css",
+    "start": "gulp",
+    "clean": "rimraf dist",
+    "preversion": "npm run test",
+    "version": "git add .",
+    "postversion": "git push --follow-tags",
+    "build-deb": "node build-deb.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "compression": "^1.7.2",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "csurf": "^1.9.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.0.2",
+    "express-vue": "^5.2.4",
+    "helmet": "^3.11.0",
+    "method-override": "^2.3.10",
+    "morgan": "^1.9.0",
+    "request": "^2.83.0"
+  }
+}
