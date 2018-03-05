@@ -1,5 +1,5 @@
 var Nightmare = require('nightmare'),
-    request = require('request'),
+    request = require('request');
 
 
 
