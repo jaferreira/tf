@@ -1,5 +1,18 @@
-var Nightmare = require('nightmare');
-var vo = require('vo');
+var Nightmare = require('nightmare'),
+    request = require('request'),
+    vo = require('vo'),
+    tryCount = 0;
+process.on('unhandledRejection', (reason, p) => {
+    if (tryCount <= 5) {
+        console.log('retry - ' + tryCount)
+        tryCount++;
+        Status();
+    }
+    else {
+        //TODO reporting error
+    }
+});
+
 function Status() {
     var scraper = new Nightmare({
 
@@ -12,7 +25,7 @@ function Status() {
 
     scraper
 
-        .goto('https://www.sofascore.com/tournament/football/spain/laliga/8')
+        .goto('https://www.sofascore.com/tournament/football/italy/serie-a/23')
         .wait('.js-event-list-tournament-events')
         .click('label.js-tournament-page-events-select-round.radio-switch__item')
         .evaluate(function () {
@@ -53,7 +66,7 @@ function Status() {
                 var data = {
                     position: position,
                     teamName: teamName,
-                    teamLink : link,
+                    teamLink: link,
                     gamesPlayed: played,
                     wins: win,
                     draws: draw,
@@ -95,6 +108,8 @@ function Status() {
             var leagueData = {
                 standings: items,
                 topScores: topScores,
+                name: $('h2.page-title')[0].innerText.trim(),
+                permalink: $('h2.page-title')[0].innerText.split(' ').join(''),
                 titleHolder: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[0].innerText.trim().split(/\r?\n/)[0],
                 mostTitles: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[0],
                 mostTitlesNumber: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[1].split('(')[1].replace(')', ''),
@@ -118,13 +133,18 @@ function Status() {
         .end()
 
         .then(function (items) {
- 
-            console.log(JSON.stringify(items));
-       
-           
+            request({
+                url: 'http://wigserver.myvnc.com:3000/scrap/leagues/' + items.permalink,
+                method: 'POST',
+                json: items
+              }, function(error, response, body){
+                console.log(body);
+              });
+
+
             return items;
         })
-      
+
 
 
 }
