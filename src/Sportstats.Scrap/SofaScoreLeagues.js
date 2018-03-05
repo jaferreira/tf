@@ -9,7 +9,7 @@ var Nightmare = require('nightmare'),
         if (tryCount <= 5) {
             console.log('retry - ' + tryCount)
             tryCount++;
-            Status();
+            scrapLeague();
         }
         else {
             //TODO reporting error
