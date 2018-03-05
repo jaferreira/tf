@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "nightmare": "^2.10.0",
+    "node-cron": "^1.2.1",
     "request": "^2.83.0",
     "vo": "^4.0.2"
   }
