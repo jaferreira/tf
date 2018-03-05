@@ -3,7 +3,7 @@ var cron = require('node-cron'),
 
 
 
-cron.schedule('* 10 * * *', function () {
+cron.schedule('*/5 * * * *', function () {
     console.log('hey');
     leaguesJob.scrapLeague(); 
 }, null, true);
