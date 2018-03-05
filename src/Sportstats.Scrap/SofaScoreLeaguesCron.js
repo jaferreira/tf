@@ -17,6 +17,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 cron.schedule('*/5 * * * *', function () {
+    tryCount = 0;
     console.log('hey');
     leaguesJob.scrapLeague();
 }, null, true);
