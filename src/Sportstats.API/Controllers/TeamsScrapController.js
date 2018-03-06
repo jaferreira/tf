@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+    Teams = mongoose.model('Teams'),
     TeamsToScrap = mongoose.model('TeamsToScrap'),
     async = require('async');
 
@@ -30,11 +31,23 @@ exports.get_pending_teams_to_scrap = function (req, res) {
 };
 
 
-exports.save_scrap_result = function (req, res) {
-    var bulk = req.body;
-    TeamsToScrap.insertMany(bulk, function (err, houses) {
+exports.save_team_scrap_info = function (req, res) {
+    var teamInfo = req.body;
+    var teamName = req.params.team;
+
+    var query = {
+        'permalink': teamName
+    };
+
+    Teams.findOneAndUpdate(query, teamInfo, {
+        upsert: true
+    }, function (err, doc) {
         if (err)
-            res.send(err);
-        res.json(houses);
+            return res.sendStatus(500, {
+                error: err
+            });
+        console.log('Teams info succesfully saved: ' + teamName);
+        return res.sendStatus(200);
     });
+
 };

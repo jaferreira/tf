@@ -6,8 +6,10 @@ module.exports = function (app) {
 
     app.route('/scrap/teams/pending')
         .get(teamsScrapController.get_pending_teams_to_scrap);
-    app.route('/scrap/teams/save')
-        .post(teamsScrapController.save_scrap_result);
+    
+    app.route('/scrap/teams/:team')
+        .post(teamsScrapController.save_team_scrap_info);
+    
 
 
     // Leagues

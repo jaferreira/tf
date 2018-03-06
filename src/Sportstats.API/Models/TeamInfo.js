@@ -5,44 +5,30 @@ var mongoosePaginate = require('mongoose-paginate');
 
 var TeamInfo = new Schema({
 
-    mostTitles: {
-        type: String
+    teamInfo: {
+        capacity: String,
+        city: String,
+        manager: String,
+        stadium: String
     },
 
-    titleHolder: String,
-
-    mostTitlesNumber: {
-        type: Number
-    },
+    teamName: String,
+    teamLink: String,
+    permalink: String,
+    
+    squad: [{
+        goals: String,
+        nationality: String,
+        number: Number,
+        position: String
+    }],
 
     topScores: [{
-        goals: Number,
+        name: Number,
         matches: Number,
         name: String,
         position: Number,
-        rating: Number,
-        team: String
-    }],
-
-    facts: [{
-        key: String,
-        value: String
-    }],
-
-    newcomers: [],
-
-    standings: [{
-        defeateds: Number,
-        draws: Number,
-        gamesPlayed: Number,
-        goalConceded: Number,
-        goalScored: Number,
-        lastResults: [],
-        points: Number,
-        position: Number,
-        teamLink: String,
-        teamName: String,
-        wins: Number
+        ratings: Number
     }],
 
     createdAt: {
@@ -53,7 +39,7 @@ var TeamInfo = new Schema({
         type: Date
     }
 }, {
-    collection: 'Leagues'
-});
-LeagueInfo.plugin(mongoosePaginate);
-module.exports = mongoose.model('Leagues', LeagueInfo, 'Leagues');
+        collection: 'Teams'
+    });
+TeamInfo.plugin(mongoosePaginate);
+module.exports = mongoose.model('Teams', TeamInfo, 'Teams');

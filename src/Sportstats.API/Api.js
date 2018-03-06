@@ -9,8 +9,10 @@ var express = require('express'),
 
     // Models
     TeamToScrap = require('./Models/TeamToScrap'),
+    TeamInfo = require('./Models/TeamInfo');
     LeagueToScrap = require('./Models/LeagueToScrap'),
     LeagueInfo = require('./Models/LeagueInfo');
+
 
 // Mongoose Configuration
 var mongoConnString = 'mongodb://localhost/sportstats';
