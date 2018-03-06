@@ -28,10 +28,17 @@ var LeagueInfo = new Schema({
         team: String
     }],
 
-    facts: [{
-        key: String,
-        value: String
-    }],
+    facts: {
+        devisionLevel: Number,
+        numberRounds: Number,
+        averageGoals: Number,
+        homeTeamWins: String,
+        draws: String,
+        awayTeamWins: String,
+        yellowCards: Number,
+        redCards: Number,
+    },
+
 
     newcomers: [],
 
