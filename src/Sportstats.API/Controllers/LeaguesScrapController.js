@@ -39,10 +39,16 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
 
 exports.create_league_to_scrap = function (req, res) {
     var leagueInfo = req.body;
-    
+
     var query = {
         'permalink': leagueInfo.permalink
     };
+
+    if (!leagueInfo.nextScrapAt)
+        leagueInfo.nextScrapAt = new Date();
+
+    if (!leagueInfo.createdAt)
+        leagueInfo.createdAt = new Date();
 
     LeaguesToScrap.findOneAndUpdate(query, leagueInfo, {
         upsert: true
