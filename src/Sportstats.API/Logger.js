@@ -1,5 +1,5 @@
 var winston = require("winston");
-require('winston-daily-rotate-file');
+
 
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, label, printf } = format;
