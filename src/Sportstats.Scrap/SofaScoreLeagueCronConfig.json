@@ -1,0 +1,15 @@
+{
+    "apps" : [{
+      "name"        : "SofaScoreLeagueCron",
+      "script"      : "SofaScoreLeaguesCron.js",
+      "env": {
+        "DISPLAY": ":99"
+      }
+    },
+      {
+        "name"        : "Xvfb",
+        "interpreter" : "none",
+        "script"      : "Xvfb",
+        "args"        : ":99"
+      }]
+  }
