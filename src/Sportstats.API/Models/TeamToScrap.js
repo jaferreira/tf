@@ -2,10 +2,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var mongoosePaginate = require('mongoose-paginate');
+const upsertMany = require('@meanie/mongoose-upsert-many');
 
 var TeamToScrapSchema = new Schema({
 
     country: String,
+
+    league: String,
 
     permalink: String,
 
@@ -31,4 +34,5 @@ var TeamToScrapSchema = new Schema({
     }
 }, { collection: 'TeamsToScrap' });
 TeamToScrapSchema.plugin(mongoosePaginate);
+TeamToScrapSchema.plugin(upsertMany);
 module.exports = mongoose.model('TeamsToScrap', TeamToScrapSchema, 'TeamsToScrap');

@@ -11,18 +11,20 @@ var logger = require('./Logger.js'),
     bodyParser = require('body-parser'),
     expressMetrics = require('express-metrics'),
     swaggerUi = require('swagger-ui-express'),
-    swaggerJSDoc = require('swagger-jsdoc'),
+    swaggerJSDoc = require('swagger-jsdoc')
+    upsertMany = require('@meanie/mongoose-upsert-many'),
 
     // Models
     TeamToScrap = require('./Models/TeamToScrap'),
     TeamInfo = require('./Models/TeamInfo');
-LeagueToScrap = require('./Models/LeagueToScrap'),
+    LeagueToScrap = require('./Models/LeagueToScrap'),
     LeagueInfo = require('./Models/LeagueInfo');
 
 
 // Mongoose Configuration
 var mongoConnString = 'mongodb://localhost/sportstats';
 mongoose.Promise = global.Promise;
+mongoose.plugin(upsertMany);
 
 // debug('Booting %s', name);
 

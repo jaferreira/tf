@@ -10,7 +10,10 @@ var logger = require('../Logger.js'),
 
 exports.get_pending_teams_to_scrap = function (req, res) {
 
-    var filter = {};
+    var now = new Date();
+    var filter = {
+        nextScrapAt: { "$lte": now }
+    };
 
     var options = {
         page: 1,
@@ -19,6 +22,7 @@ exports.get_pending_teams_to_scrap = function (req, res) {
             createdAt: -1
         }
     };
+
 
     TeamsToScrap.paginate(
         filter,

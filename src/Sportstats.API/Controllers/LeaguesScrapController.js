@@ -4,6 +4,7 @@ var logger = require('../Logger.js'),
     mongoose = require('mongoose'),
     Leagues = mongoose.model('Leagues'),
     LeaguesToScrap = mongoose.model('LeaguesToScrap'),
+    TeamsToScrap = mongoose.model('TeamsToScrap'),
     async = require('async');
 
 
@@ -69,7 +70,7 @@ exports.save_league_scrap_info = function (req, res) {
         logger.info('League info succesfully saved: ' + leagueName);
         logger.info('Updating LeaguesToScrap info for: ' + leagueName + ' (nextScrapAt: ' + nextScrapDate + ')');
 
-        LeaguesToScrap.findOneAndUpdate(query, { nextScrapAt: nextScrapDate}, {
+        LeaguesToScrap.findOneAndUpdate(query, { nextScrapAt: nextScrapDate }, {
             upsert: true,
             new: true
         }, function (err, doc) {
@@ -80,6 +81,30 @@ exports.save_league_scrap_info = function (req, res) {
                 });
             }
             logger.info('Updated Succesfuly LeaguesToScrap info for: ' + leagueName);
+
+
+            //Large amount of items
+            var items = [];
+            leagueInfo.standings.forEach(standing => {
+                var newTeamToScrap = new TeamsToScrap();
+                newTeamToScrap.country = leagueInfo.country;
+                newTeamToScrap.league = leagueInfo.name;
+                newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
+                newTeamToScrap.name = standing.teamName;
+                newTeamToScrap.link = '';
+
+                items.push(newTeamToScrap);
+                logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.country + ') to be scraped.');
+            });
+
+            //Fields to match on for upsert condition
+            const matchFields = ['permalink'];
+
+            //Perform bulk operation
+            var result = TeamsToScrap.upsertMany(items, matchFields);
+
+            logger.info('Updated ' + items.length + ' teams from ' + leagueInfo.name + ' to be scraped.');
+
             return res.json(doc);
         });
     });
