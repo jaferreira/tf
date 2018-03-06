@@ -54,6 +54,7 @@ exports.create_league_to_scrap = function (req, res) {
             });
         }
         logger.info('League to scrap succesfully saved: ' + leagueInfo.name);
+        return res.json(doc);
     });
 };
 
