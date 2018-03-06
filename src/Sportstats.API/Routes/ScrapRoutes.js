@@ -4,21 +4,7 @@ module.exports = function (app) {
     // Teams
     var teamsScrapController = require('../Controllers/TeamsScrapController');
 
-    /**
-     * @swagger
-     * /a/teams/pending:
-     *   get:
-     *     description: Get pending teams to be scraped
-     *     produces:
-     *      - application/json
-     *     responses:
-     *       200:
-     *         description: leagues
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#/definitions/LeagueToScrap'
-     */
+   
     app.route('/scrap/teams/pending')
         .get(teamsScrapController.get_pending_teams_to_scrap);
 

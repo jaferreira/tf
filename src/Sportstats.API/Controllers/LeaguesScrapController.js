@@ -38,13 +38,21 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
 
 
 exports.create_league_to_scrap = function (req, res) {
-    var newLeagueToScrap = new LeaguesToScrap(req.body);
-    newLeagueToScrap.save(function (err, house) {
+    var leagueInfo = req.body;
+    
+    var query = {
+        'permalink': leagueInfo.permalink
+    };
+
+    LeaguesToScrap.findOneAndUpdate(query, leagueInfo, {
+        upsert: true
+    }, function (err, doc) {
         if (err) {
             logger.error(err);
-            res.send(err);
+            return res.sendStatus(500, {
+                error: err
+            });
         }
-        res.json(house);
     });
 };
 

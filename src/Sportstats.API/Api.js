@@ -2,6 +2,7 @@ const debug = require('debug')('Sportstats.API')
 const name = 'API Server'
 
 var logger = require('./Logger.js'),
+    morgan = require('morgan'),
     express = require('express'),
     app = express(),
     cors = require('cors'),
@@ -76,7 +77,7 @@ mongoose.connect(mongoConnString, function (err) {
         port: metricsPort
     }));
 
-
+    app.use(morgan('dev'));
 
     app.use(cors());
 
