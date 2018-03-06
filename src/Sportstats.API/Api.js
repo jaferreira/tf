@@ -1,4 +1,8 @@
-var express = require('express'),
+const debug = require('debug')('Sportstats.API')
+const name = 'API Server'
+
+var logger = require('./Logger.js'),
+    express = require('express'),
     app = express(),
     cors = require('cors'),
     port = process.env.PORT || 3000,
@@ -18,14 +22,16 @@ var express = require('express'),
 var mongoConnString = 'mongodb://localhost/sportstats';
 mongoose.Promise = global.Promise;
 
-console.log("Checking MongoDb connection...");
+// debug('Booting %s', name);
+
+logger.info("Checking MongoDb connection...");
 mongoose.connect(mongoConnString, function (err) {
     if (err) {
         console.error('Error connecting to MongoDB: ' + mongoConnString);
         console.log("The aplication is terminating...");
         process.exit();
     }
-
+    
     // Metrics Configuration
     app.use(expressMetrics({
         port: metricsPort
@@ -53,5 +59,5 @@ mongoose.connect(mongoConnString, function (err) {
 
 
     app.listen(port);
-    console.log('Sportstats API server started on: ' + port);
+    logger.info('Sportstats API server started on: ' + port);
 });

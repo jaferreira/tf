@@ -1,6 +1,7 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+var logger = require('../Logger.js'),
+    mongoose = require('mongoose'),
     Leagues = mongoose.model('Leagues'),
     LeaguesToScrap = mongoose.model('LeaguesToScrap'),
     async = require('async');
@@ -24,6 +25,7 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
         options,
         function (err, house) {
             if (err) {
+                logger.error(err);
                 res.send(err);
             }
             res.json(house);
@@ -34,8 +36,10 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
 exports.create_league_to_scrap = function (req, res) {
     var newLeagueToScrap = new LeaguesToScrap(req.body);
     newLeagueToScrap.save(function (err, house) {
-        if (err)
+        if (err) {
+            logger.error(err);
             res.send(err);
+        }
         res.json(house);
     });
 };
@@ -52,11 +56,13 @@ exports.save_league_scrap_info = function (req, res) {
     Leagues.findOneAndUpdate(query, leagueInfo, {
         upsert: true
     }, function (err, doc) {
-        if (err)
+        if (err) {
+            logger.error(err);
             return res.sendStatus(500, {
                 error: err
             });
-        console.log('League info succesfully saved: ' + leagueName);
+        }
+        logger.info('League info succesfully saved: ' + leagueName);
         return res.sendStatus(200);
     });
 };

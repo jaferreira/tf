@@ -1,6 +1,7 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+var logger = require('../Logger.js'),
+    mongoose = require('mongoose'),
     Teams = mongoose.model('Teams'),
     TeamsToScrap = mongoose.model('TeamsToScrap'),
     async = require('async');
@@ -24,6 +25,7 @@ exports.get_pending_teams_to_scrap = function (req, res) {
         options,
         function (err, house) {
             if (err) {
+                logger.error(err);
                 res.send(err);
             }
             res.json(house);
@@ -42,11 +44,14 @@ exports.save_team_scrap_info = function (req, res) {
     Teams.findOneAndUpdate(query, teamInfo, {
         upsert: true
     }, function (err, doc) {
-        if (err)
+        if (err){
+            logger.error(err);
             return res.sendStatus(500, {
                 error: err
             });
-        console.log('Teams info succesfully saved: ' + teamName);
+        }
+            
+        logger.info('Teams info succesfully saved: ' + teamName);
         return res.sendStatus(200);
     });
 

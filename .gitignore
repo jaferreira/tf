@@ -1,2 +1,5 @@
 .gitignore
+**/*.log
+
 node_modules/
+log/    
