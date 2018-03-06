@@ -25,6 +25,7 @@
     "nodemon": "^1.17.1",
     "swagger-jsdoc": "^1.9.7",
     "swagger-ui-express": "^2.0.15",
-    "winston": "^3.0.0-rc1"
+    "winston": "^3.0.0-rc1",
+    "winston-daily-rotate-file": "^1.7.2"
   }
 }

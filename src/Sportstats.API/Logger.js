@@ -1,4 +1,5 @@
 var winston = require("winston");
+require('winston-daily-rotate-file');
 
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, label, printf } = format;
@@ -13,7 +14,7 @@ var logger = winston.createLogger({
         label({ label: 'Sportstats.API' }),
         timestamp(),
         myFormat
-      ),
+    ),
     transports: [
         new winston.transports.Console({
             colorize: true,
@@ -22,25 +23,9 @@ var logger = winston.createLogger({
         //
         // - Write all logs error (and below) to `error.log`.
         //
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'logs/info.log', level: 'info', maxsize: 1024000 }),
+        new winston.transports.File({ filename: 'logs/error.log', level: 'error' })
     ]
 });
-
-
-//
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-// 
-// if (process.env.NODE_ENV !== 'production') {
-//     logger.add(new winston.transports.Console({
-//         // format: winston.format.simple()
-//         format: combine(
-//             label({ label: 'right meow!' }),
-//             timestamp(),
-//             prettyPrint()
-//         )
-//     }));
-// }
-
 
 module.exports = logger;
