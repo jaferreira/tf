@@ -10,11 +10,14 @@ var logger = require('../Logger.js'),
 
 exports.get_pending_leagues_to_scrap = function (req, res) {
 
-    var filter = {};
+    var now = new Date();
+    var filter = {
+        nextScrapAt: { "$lte": now }
+    };
 
     var options = {
         page: 1,
-        limit: 100,
+        limit: 10,
         sort: {
             createdAt: -1
         }
@@ -48,6 +51,7 @@ exports.create_league_to_scrap = function (req, res) {
 exports.save_league_scrap_info = function (req, res) {
     var leagueInfo = req.body;
     var leagueName = req.params.league;
+    var nextScrapDate = req.body.nextScrapDate;
 
     var query = {
         'permalink': leagueName
@@ -63,6 +67,20 @@ exports.save_league_scrap_info = function (req, res) {
             });
         }
         logger.info('League info succesfully saved: ' + leagueName);
-        return res.sendStatus(200);
+        logger.info('Updating LeaguesToScrap info for: ' + leagueName + ' (nextScrapAt: ' + nextScrapDate + ')');
+
+        LeaguesToScrap.findOneAndUpdate(query, { nextScrapAt: nextScrapDate}, {
+            upsert: true,
+            new: true
+        }, function (err, doc) {
+            if (err) {
+                logger.error(err);
+                return res.sendStatus(500, {
+                    error: err
+                });
+            }
+            logger.info('Updated Succesfuly LeaguesToScrap info for: ' + leagueName);
+            return res.json(doc);
+        });
     });
 };

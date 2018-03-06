@@ -12,8 +12,12 @@ var TeamInfo = new Schema({
         stadium: String
     },
 
-    teamName: String,
-    teamLink: String,
+    country: String,
+
+    name: String,
+
+    link: String,
+    
     permalink: String,
     
     squad: [{

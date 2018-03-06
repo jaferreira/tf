@@ -4,13 +4,22 @@ var Schema = mongoose.Schema;
 var mongoosePaginate = require('mongoose-paginate');
 
 var TeamToScrapSchema = new Schema({
-    
-    name:{
-        type: String
+
+    country: String,
+
+    permalink: String,
+
+    name: String,
+
+    link: String,
+
+    scrapedAt: {
+        type: Date
     },
 
-    link:{
-        type: String
+    nextScrapAt: {
+        type: Date,
+        default: Date.now
     },
 
     createdAt: {
@@ -21,5 +30,5 @@ var TeamToScrapSchema = new Schema({
         type: Date
     }
 }, { collection: 'TeamsToScrap' });
-TeamToScrapSchema.plugin(mongoosePaginate); 
+TeamToScrapSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('TeamsToScrap', TeamToScrapSchema, 'TeamsToScrap');

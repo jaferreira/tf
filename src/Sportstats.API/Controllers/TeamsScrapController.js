@@ -36,6 +36,7 @@ exports.get_pending_teams_to_scrap = function (req, res) {
 exports.save_team_scrap_info = function (req, res) {
     var teamInfo = req.body;
     var teamName = req.params.team;
+    var nextScrapDate = req.body.nextScrapDate;
 
     var query = {
         'permalink': teamName
@@ -51,8 +52,34 @@ exports.save_team_scrap_info = function (req, res) {
             });
         }
             
-        logger.info('Teams info succesfully saved: ' + teamName);
-        return res.sendStatus(200);
+        logger.info('Team info succesfully saved: ' + teamName);
+        logger.info('Updating TeamsToScrap info for: ' + teamName + ' (nextScrapAt: ' + nextScrapDate + ')');
+        
+        TeamsToScrap.findOneAndUpdate(query, { nextScrapAt: nextScrapDate}, {
+            upsert: true,
+            new: true
+        }, function (err, doc) {
+            if (err) {
+                logger.error(err);
+                return res.sendStatus(500, {
+                    error: err
+                });
+            }
+            logger.info('Updated Succesfuly TeamsToScrap info for: ' + teamName);
+            return res.json(doc);
+        });
     });
 
+};
+
+
+exports.create_team_to_scrap = function (req, res) {
+    var newTeamToScrap = new TeamsToScrap(req.body);
+    newTeamToScrap.save(function (err, house) {
+        if (err) {
+            logger.error(err);
+            res.send(err);
+        }
+        res.json(house);
+    });
 };

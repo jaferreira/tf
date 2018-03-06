@@ -5,9 +5,11 @@ var mongoosePaginate = require('mongoose-paginate');
 
 var LeagueToScrap = new Schema({
     
-    name:{
-        type: String
-    },
+    permalink: String,
+
+    name: String,
+
+    country: String,
 
     providers: [
         {
@@ -15,6 +17,15 @@ var LeagueToScrap = new Schema({
             link: String
         }
     ],
+
+    scrapedAt:{
+        type: Date
+    },
+
+    nextScrapAt: {
+        type: Date,
+        default: Date.now
+    },
 
     createdAt: {
         type: Date,

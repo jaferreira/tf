@@ -9,15 +9,16 @@ var LeagueInfo = new Schema({
 
     permalink: String,
 
-    mostTitles: {
-        type: String
-    },
+    country: String,
+
+    mostTitles: [{
+        name: String,
+        titles: Number
+    }],
 
     titleHolder: String,
 
-    mostTitlesNumber: {
-        type: Number
-    },
+    mostTitlesNumber: Number,
 
     topScores: [{
         goals: Number,
@@ -39,7 +40,6 @@ var LeagueInfo = new Schema({
         redCards: Number,
     },
 
-
     newcomers: [],
 
     standings: [{
@@ -60,6 +60,7 @@ var LeagueInfo = new Schema({
         type: Date,
         default: Date.now
     },
+    
     updatedAt: {
         type: Date
     }
