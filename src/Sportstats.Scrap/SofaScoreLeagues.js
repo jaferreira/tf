@@ -8,7 +8,7 @@ module.exports = {
     scrapLeague:
 
 
-        function Status() {
+        function Status(toScrap) {
             var scraper = new Nightmare({
 
                 show: true,
@@ -20,7 +20,7 @@ module.exports = {
 
             scraper
 
-                .goto('https://www.sofascore.com/tournament/football/italy/serie-a/23')
+                .goto('https://www.sofascore.com/tournament/football/england/premier-league/17')
                 .wait('.js-event-list-tournament-events')
                 .click('label.js-tournament-page-events-select-round.radio-switch__item')
                 .evaluate(function () {
@@ -133,7 +133,7 @@ module.exports = {
                         method: 'POST',
                         json: items
                     }, function (error, response, body) {
-                        console.log(body);
+                        console.log(JSON.stringify(items));
                     });
 
 

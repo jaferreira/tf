@@ -1,22 +1,9 @@
-var cron = require('node-cron'),
-    leaguesJob = require('./SofaScoreLeagues');
+var
+    vo = require('vo'),
+    request = require('request');
 
-tryCount = 0;
-
-
-
-process.on('unhandledRejection', (reason, p) => {
-    if (tryCount <= 5) {
-        console.log('retry - ' + tryCount)
-        tryCount++;
-        leaguesJob.scrapLeague();
-    }
-    else {
-        //TODO reporting error
-    }
-});
-
-cron.schedule('*/5 * * * *', function () {
+function Job() {
+    console.log('teste');
 
 
     var t = request.get({
@@ -41,11 +28,14 @@ cron.schedule('*/5 * * * *', function () {
                     console.log(error);
                 });
             }
-            else {
+            else
+            {
                 console.log('No Leagues To Scrap')
             }
         }
     });
 
 
-}, null, true);
+}
+
+Job()
