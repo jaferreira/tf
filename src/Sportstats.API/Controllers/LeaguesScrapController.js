@@ -37,6 +37,23 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
 };
 
 
+exports.reset_leagues_to_scrap = function (req, res) {
+ 
+    var now = new Date();
+    LeaguesToScrap.update({ sport: 'football' }, { nextScrapAt: now }, { multi: true },
+        function (err, num) {
+            if (err) {
+                logger.error(err);
+                return res.sendStatus(500, {
+                    error: err
+                });
+            }
+            logger.info('Reset Next Scrap Date for ' + num + ' football leagues.');
+            return res.sendStatus(200);
+        });
+};
+
+
 exports.create_league_to_scrap = function (req, res) {
     var leagueInfo = req.body;
 
@@ -107,7 +124,12 @@ exports.save_league_scrap_info = function (req, res) {
                 newTeamToScrap.league = leagueInfo.name;
                 newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
                 newTeamToScrap.name = standing.teamName;
-                newTeamToScrap.link = '';
+                newTeamToScrap.providers = [];
+                newTeamToScrap.providers.push({
+                    name: leagueInfo.providerInfo.name,
+                    link: leagueInfo.providerInfo.link,
+                });
+
 
                 items.push(newTeamToScrap);
                 logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.country + ') to be scraped.');

@@ -14,7 +14,12 @@ var TeamToScrapSchema = new Schema({
 
     name: String,
 
-    link: String,
+    providers: [
+        {
+            provider: String,
+            link: String
+        }
+    ],
 
     scrapedAt: {
         type: Date

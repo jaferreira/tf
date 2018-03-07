@@ -3,15 +3,10 @@
 module.exports.default = (router) => {
     router.get("/", (req, res) => {
         const data = {
-            title: "TF is Online!",
-            leagues: [{
-                name: 'Premier League',
-                permalink: '/league/PremierLeague'
-            },
-            {
-                name: 'La Liga',
-                permalink: '/league/LaLiga'
-            }]
+            title: "TF",
+            countries: [
+                {name: 'England', link: '/countries/England'},
+                {name: 'Portugal', link: '/countries/Portugal'}]
         };
         const vueOptions = {
             head: {

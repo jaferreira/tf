@@ -1,6 +1,6 @@
 // 
 const dotenv = require("dotenv");
-const Models = require("./models");
+const Models = require("./Models");
 
 let envFile = "development.env";
 const env = process.env.NODE_ENV || "development";

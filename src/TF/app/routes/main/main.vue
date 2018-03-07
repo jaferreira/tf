@@ -6,8 +6,8 @@
 
         <div id="app-4">
             <ul>
-                <li v-for="league in leagues">
-                    <a :href="league.permalink">{{ league.name }}</a>
+                <li v-for="country in countries">
+                    <a :href="country.link">{{ country.name }}</a>
                 </li>
             </ul>
         </div>
