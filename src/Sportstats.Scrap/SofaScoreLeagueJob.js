@@ -46,7 +46,7 @@ function* running(leagues) {
 }
 
 function handleError(error) {
-    nightmare.end().then();
+    nbot.end().then();
 
     var message;
     if (typeof error.details != "undefined" && error.details != "") {
