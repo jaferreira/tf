@@ -49,7 +49,7 @@ exports.reset_leagues_to_scrap = function (req, res) {
                 });
             }
             logger.info('Reset Next Scrap Date for ' + num + ' football leagues.');
-            return res.json(doc);
+            return res.sendStatus(200);
         });
 };
 
