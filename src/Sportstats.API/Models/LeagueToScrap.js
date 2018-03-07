@@ -41,5 +41,6 @@ var LeagueToScrap = new Schema({
         type: Date
     }
 }, { collection: 'LeaguesToScrap' });
-LeagueToScrap.plugin(mongoosePaginate); 
+LeagueToScrap.plugin(mongoosePaginate);
+LeagueToScrap.plugin(upsertMany);
 module.exports = mongoose.model('LeaguesToScrap', LeagueToScrap, 'LeaguesToScrap');

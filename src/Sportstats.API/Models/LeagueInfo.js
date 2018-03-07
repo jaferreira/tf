@@ -68,4 +68,5 @@ var LeagueInfo = new Schema({
     collection: 'Leagues'
 });
 LeagueInfo.plugin(mongoosePaginate);
+LeagueInfo.plugin(upsertMany);
 module.exports = mongoose.model('Leagues', LeagueInfo, 'Leagues');

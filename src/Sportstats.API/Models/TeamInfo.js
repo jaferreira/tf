@@ -49,4 +49,5 @@ var TeamInfo = new Schema({
         collection: 'Teams'
     });
 TeamInfo.plugin(mongoosePaginate);
+TeamInfo.plugin(upsertMany);
 module.exports = mongoose.model('Teams', TeamInfo, 'Teams');
