@@ -125,11 +125,11 @@ exports.save_league_scrap_info = function (req, res) {
                 newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
                 newTeamToScrap.name = standing.teamName;
                 newTeamToScrap.providers = [];
-                newTeamToScrap.providers.push({
-                    name: leagueInfo.providerInfo.name,
-                    link: leagueInfo.providerInfo.link,
-                });
 
+                newTeamToScrap.providers.push({
+                    name: standing.providerInfo.name,
+                    link: standing.providerInfo.link,
+                });
 
                 items.push(newTeamToScrap);
                 logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.country + ') to be scraped.');
