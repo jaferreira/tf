@@ -38,6 +38,8 @@ var TeamToScrapSchema = new Schema({
         type: Date
     }
 }, { collection: 'TeamsToScrap' });
+
 TeamToScrapSchema.plugin(mongoosePaginate);
 TeamToScrapSchema.plugin(upsertMany);
+
 module.exports = mongoose.model('TeamsToScrap', TeamToScrapSchema, 'TeamsToScrap');

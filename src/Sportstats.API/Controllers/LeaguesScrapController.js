@@ -38,7 +38,7 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
 
 
 exports.reset_leagues_to_scrap = function (req, res) {
- 
+
     var now = new Date();
     LeaguesToScrap.update({ sport: 'football' }, { nextScrapAt: now }, { multi: true },
         function (err, num) {
@@ -82,68 +82,74 @@ exports.create_league_to_scrap = function (req, res) {
 };
 
 
+
 exports.save_league_scrap_info = function (req, res) {
-    var leagueInfo = req.body;
-    var leagueName = req.params.league;
-    var nextScrapDate = req.body.nextScrapDate;
+    var leaguesData = req.body;
 
-    var query = {
-        'permalink': leagueName
-    };
-
-    Leagues.findOneAndUpdate(query, leagueInfo, {
-        upsert: true
-    }, function (err, doc) {
-        if (err) {
-            logger.error(err);
-            return res.sendStatus(500, {
-                error: err
-            });
-        }
-        logger.info('League info succesfully saved: ' + leagueName);
-        logger.info('Updating LeaguesToScrap info for: ' + leagueName + ' (nextScrapAt: ' + nextScrapDate + ')');
-
-        LeaguesToScrap.findOneAndUpdate(query, { nextScrapAt: nextScrapDate }, {
-            upsert: true,
-            new: true
-        }, function (err, doc) {
-            if (err) {
-                logger.error(err);
-                return res.sendStatus(500, {
-                    error: err
-                });
-            }
-            logger.info('Updated Succesfuly LeaguesToScrap info for: ' + leagueName);
-
-
-            //Large amount of items
-            var items = [];
-            leagueInfo.standings.forEach(standing => {
-                var newTeamToScrap = new TeamsToScrap();
-                newTeamToScrap.country = leagueInfo.country;
-                newTeamToScrap.league = leagueInfo.name;
-                newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
-                newTeamToScrap.name = standing.teamName;
-                newTeamToScrap.providers = [];
-
-                newTeamToScrap.providers.push({
-                    name: standing.providerInfo.name,
-                    link: standing.providerInfo.link,
-                });
-
-                items.push(newTeamToScrap);
-                logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.country + ') to be scraped.');
-            });
-
-            //Fields to match on for upsert condition
-            const matchFields = ['permalink'];
-
-            //Perform bulk operation
-            var result = TeamsToScrap.upsertMany(items, matchFields);
-
-            logger.info('Updated ' + items.length + ' teams from ' + leagueInfo.name + ' to be scraped.');
-
-            return res.json(doc);
+    try {
+        logger.info('Saving ' + leaguesData + ' leagues:');
+        leaguesData.forEach(league => {
+            logger.info(' » (' + league.country + ') ' + league.name);
         });
-    });
+
+
+        var nextScrapUpdateData = [];
+        leaguesData.forEach(leagueInfo => {
+            var providers = [];
+            providers.push(leagueInfo.provider);
+            nextScrapUpdateData.push({
+                permalink: leagueInfo.permalink,
+                nextScrapAt: leagueInfo.nextScrapAt,
+                providers: providers
+            });
+            leagueInfo.provider = null;
+        });
+        logger.info('Updating ' + nextScrapUpdateData.length + ' leagues to scrap.');
+
+
+
+        // Gather teams to scrap (in all the leagues)
+        var teamsToScrap = [];
+        leaguesData.forEach(leagueInfo => {
+            if (leagueInfo.standings)
+                leagueInfo.standings.forEach(standing => {
+                    var newTeamToScrap = new TeamsToScrap();
+                    newTeamToScrap.country = leagueInfo.country;
+                    newTeamToScrap.league = leagueInfo.name;
+                    newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
+                    newTeamToScrap.name = standing.teamName;
+                    newTeamToScrap.providers = [];
+
+                    newTeamToScrap.providers.push({
+                        name: standing.providerInfo.name,
+                        link: standing.providerInfo.link,
+                    });
+
+                    teamsToScrap.push(newTeamToScrap);
+                    logger.debug(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.country + ') to be scraped.');
+                });
+        });
+
+        //Fields to match on for leagues upsert condition
+        const matchFields = ['permalink'];
+
+        //Perform bulk operation
+        var result1 = TeamsToScrap.upsertMany(teamsToScrap, matchFields);
+        logger.info('Updated ' + teamsToScrap.length + ' teams to be scraped.');
+
+        // Updating League Info Data
+        var result2 = Leagues.upsertMany(leaguesData, matchFields);
+        logger.info('League info data succesfully saved for ' + leaguesData.length + ' teams.');
+
+
+        var result3 = LeaguesToScrap.upsertMany(nextScrapUpdateData, matchFields);
+        logger.info('Updated LeaguesToScrap info with nextScrapAt.');
+
+        return res.sendStatus(200);
+    } catch (err) {
+        logger.error(err);
+        return res.sendStatus(500, {
+            error: err
+        });
+    }
 };
