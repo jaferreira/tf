@@ -5,6 +5,11 @@ var mongoosePaginate = require('mongoose-paginate');
 
 var LeagueToScrap = new Schema({
     
+
+    sport: String,
+
+    gameTime: Number,
+
     permalink: String,
 
     name: String,
