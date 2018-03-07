@@ -36,7 +36,7 @@ function* running(leagues) {
 
     var results = [];
     for (i = 0; i < leagues.length; i++) {
-
+        console.log('Running [' + i + '] of ' + leagues.length )
         results.push(yield* scrapLeagueInfo(leagues[i]));
     }
 
@@ -46,7 +46,7 @@ function* running(leagues) {
 
 function* scrapLeagueInfo(league) {
 
-
+    console.log('starting Scrap Url ' + league.providers[0].link);
     var value = yield nbot
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
 
@@ -68,7 +68,7 @@ function* scrapLeagueInfo(league) {
 
                 var providerInfo = {
                     name : 'SofaScore',
-                    link : link = row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href
+                    link : row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href
                 };
 
                 

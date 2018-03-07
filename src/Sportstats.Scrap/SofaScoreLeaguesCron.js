@@ -17,7 +17,7 @@ process.on('unhandledRejection', (reason, p) => {
     }
 });
 
-cron.schedule('*/5 * * * *', function () {
+cron.schedule('*/1 * * * *', function () {
 
 
     var t = request.get({
