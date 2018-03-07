@@ -66,7 +66,7 @@ function* scrapLeagueInfo(league) {
 
                 var teamName = row.querySelectorAll('.cell__content.standings__team-name')[0].innerText;
 
-                var providerInfo = {
+                var provider = {
                     name : 'SofaScore',
                     link : row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href
                 };
@@ -97,7 +97,7 @@ function* scrapLeagueInfo(league) {
                 var data = {
                     position: position,
                     teamName: teamName,
-                    providerInfo: providerInfo,
+                    providerInfo: provider,
                     gamesPlayed: played,
                     wins: win,
                     draws: draw,
