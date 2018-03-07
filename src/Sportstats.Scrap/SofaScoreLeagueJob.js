@@ -65,7 +65,13 @@ function* scrapLeagueInfo(league) {
                 var position = data[0].innerText.trim();
 
                 var teamName = row.querySelectorAll('.cell__content.standings__team-name')[0].innerText;
-                var link = row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href;
+
+                var providerInfo = {
+                    name : 'SofaScore',
+                    link : link = row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href
+                };
+
+                
                 var gameInfo = row.querySelectorAll('.cell__content.standings__data.standings__columns-32 > span');
                 var played = gameInfo[0].innerText;
                 var win = gameInfo[1].innerText;
@@ -91,7 +97,7 @@ function* scrapLeagueInfo(league) {
                 var data = {
                     position: position,
                     teamName: teamName,
-                    teamLink: link,
+                    providerInfo: providerInfo,
                     gamesPlayed: played,
                     wins: win,
                     draws: draw,
@@ -137,6 +143,7 @@ function* scrapLeagueInfo(league) {
             for (var i = 0, row; row = rows[i]; i++) {
                 var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
                 if (time.getTime() > new Date().getTime()) {
+                    time.setMinutes(time.getMinutes() + league.gameTime )
                     nextGame = time;
                     break;
                 }
