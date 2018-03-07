@@ -15,7 +15,8 @@ process.on('unhandledRejection', (reason, p) => {
 module.exports = {
     scrapLeagues: function* run(leaguesToScrap) {
         nbot = nightmare({
-            show: true
+            switches: { 'ignore-certificate-errors': true },
+            show: false
         });
 
         console.log('start')
@@ -38,38 +39,21 @@ function* running(leagues) {
     var results = [];
     for (i = 0; i < leagues.length; i++) {
         console.log('Running [' + i + '] of ' + leagues.length)
-        results.push(yield* scrapLeagueInfo(leagues[i], leaguesToScrap));
+        results.push(yield* scrapLeagueInfo(leagues[i]));
     }
 
     //return results;
 
 }
 
-function handleError(error) {
-    // nbot.end().then();
-
-    var message;
-    if (typeof error.details != "undefined" && error.details != "") {
-        message = error.details;
-    } else if (typeof error == "string") {
-        message = error;
-
-        if (error == "Cannot read property 'focus' of null") {
-            message += " (Likely because a non-existent selector was used)";
-        }
-    } else {
-        message = error.message;
-    }
-    console.error({ "status": "error", "message": message });
-}
-function* scrapLeagueInfo(league, leaguesToScrap) {
+function* scrapLeagueInfo(league) {
 
     console.log('starting Scrap Url ' + league.providers[0].link);
     var value = yield nbot
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
 
         .goto(league.providers[0].link)
-
+        .wait(1000)
         .wait('.js-event-list-tournament-events')
         .click('label.js-tournament-page-events-select-round.radio-switch__item')
         .evaluate(function (league) {
@@ -214,8 +198,8 @@ function* scrapLeagueInfo(league, leaguesToScrap) {
                 console.log(response)
             });
         })
-
-        .catch(function (error) {
+        
+        .catch(error => {
             var message;
             if (typeof error.details != "undefined" && error.details != "") {
                 message = error.details;
@@ -230,11 +214,7 @@ function* scrapLeagueInfo(league, leaguesToScrap) {
             }
             console.error({ "status": "error", "message": message });
             console.log('erro')
-            if (tryCount <= 5) {
-                console.log('retry - ' + tryCount)
-                tryCount++;
-                run(leaguesToScrap);
-            }
+          
         }
         )
 
