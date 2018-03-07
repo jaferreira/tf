@@ -99,7 +99,7 @@ exports.save_league_scrap_info = function (req, res) {
             providers.push(leagueInfo.provider);
             nextScrapUpdateData.push({
                 permalink: leagueInfo.permalink,
-                nextScrapAt: leagueInfo.leagueInfo,
+                nextScrapAt: leagueInfo.nextScrapAt,
                 providers: providers
             });
             leagueInfo.provider = null;
