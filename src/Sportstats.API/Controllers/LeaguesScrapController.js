@@ -114,6 +114,9 @@ exports.save_league_scrap_info = function (req, res) {
                     logger.debug(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.country + ') to be scraped.');
                 });
         });
+
+        logger.info('_1_');
+
         //Fields to match on for leagues upsert condition
         const matchFields = ['permalink'];
 
@@ -139,6 +142,7 @@ exports.save_league_scrap_info = function (req, res) {
 
         return res.sendStatus(200);
     } catch (err) {
+        logger.error(err);
         return res.sendStatus(500, {
             error: err
         });
