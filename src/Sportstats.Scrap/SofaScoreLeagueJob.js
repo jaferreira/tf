@@ -22,6 +22,7 @@ module.exports = {
         console.log('start')
         z = 0;
         results = yield* running(leaguesToScrap);
+
         nbot.end();
         nbot.proc.disconnect();
         nbot.proc.kill();
@@ -42,7 +43,7 @@ function* running(leagues) {
         results.push(yield* scrapLeagueInfo(leagues[i]));
     }
     console.log('finish')
-    //return results;
+    return results;
 
 }
 
