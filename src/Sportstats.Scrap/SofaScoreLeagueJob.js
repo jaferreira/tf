@@ -43,7 +43,7 @@ function* running(leagues) {
         results.push(yield* scrapLeagueInfo(leagues[i]));
     }
     console.log('finish')
-    return results;
+    return yield results;
 
 }
 
