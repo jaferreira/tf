@@ -41,7 +41,7 @@ function* running(leagues) {
         console.log('Running [' + i + '] of ' + leagues.length)
         results.push(yield* scrapLeagueInfo(leagues[i]));
     }
-
+    console.log('finish')
     //return results;
 
 }
@@ -188,16 +188,16 @@ function* scrapLeagueInfo(league) {
 
         }, league)
 
-        .then(function (leagueData) {
-            console.log('done')
-            request.post({
-                url: 'http://localhost:3000/scrap/Leagues/' + leagueData.permalink,
-                json: true,
-                body: leagueData
-            }, function (error, response, body) {
-                console.log(response)
-            });
-        })
+        // .then(function (leagueData) {
+        //     console.log('done')
+        //     request.post({
+        //         url: 'http://localhost:3000/scrap/Leagues/' + leagueData.permalink,
+        //         json: true,
+        //         body: leagueData
+        //     }, function (error, response, body) {
+        //         console.log(response)
+        //     });
+        // })
         
         .catch(error => {
             var message;
