@@ -4,8 +4,7 @@ var leaguesJob = require('./SofaScoreLeagueJob'),
 
 function* Job() {
 
-
-    request.get({
+    var t = request.get({
         url: 'http://wigserver.myvnc.com:3000/scrap/leagues/pending',
         json: true,
         headers: { 'User-Agent': 'request' }
@@ -15,10 +14,21 @@ function* Job() {
         } else if (res.statusCode !== 200) {
             console.log('Status:', res.statusCode);
         } else {
-            console.log(data.docs)
-            tryCount = 0;
-            console.log('hey');
-            yield leaguesJob.scrapLeagues(data.docs);
+
+            if (data.docs.length > 0) {
+
+
+                request.post({
+                    url: 'http://wigserver.myvnc.com:3000/SofaScoreLeague',
+                    json: true,
+                    body: { leagues: data.docs }
+                }, function (error, response, body) {
+                    console.log(error);
+                });
+            }
+            else {
+                console.log('No Leagues To Scrap')
+            }
         }
     });
 
