@@ -14,12 +14,12 @@ function* Job() {
         } else if (res.statusCode !== 200) {
             console.log('Status:', res.statusCode);
         } else {
-
+            
             if (data.docs.length > 0) {
 
 
                 request.post({
-                    url: 'http://wigserver.myvnc.com:3000/SofaScoreLeague',
+                    url: 'http://wigserver.myvnc.com:3007/SofaScoreLeague',
                     json: true,
                     body: { leagues: data.docs }
                 }, function (error, response, body) {
