@@ -137,6 +137,7 @@ function* scrapLeagueInfo(league) {
             for (var i = 0, row; row = rows[i]; i++) {
                 var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
                 if (time.getTime() > new Date().getTime()) {
+                    time.setMinutes(time.getMinutes() + league.gameTime )
                     nextGame = time;
                     break;
                 }
