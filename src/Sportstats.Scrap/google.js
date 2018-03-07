@@ -8,7 +8,7 @@ function Status() {
             images: false
         }
     });
-
+    console.log('start')
     scraper
         .goto('https://www.google.com')
 
