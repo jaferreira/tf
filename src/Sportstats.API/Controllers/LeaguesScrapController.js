@@ -121,8 +121,8 @@ exports.save_league_scrap_info = function (req, res) {
         const matchFields = ['permalink'];
 
         //Perform bulk operation
-        var result1 = TeamsToScrap.upsertMany(items, matchFields);
-        logger.info('Updated ' + items.length + ' teams from ' + leagueInfo.name + ' to be scraped.');
+        var result1 = TeamsToScrap.upsertMany(teamsToScrap, matchFields);
+        logger.info('Updated ' + teamsToScrap.length + ' teams from ' + leagueInfo.name + ' to be scraped.');
 
         // Updating League Info Data
         var result2 = Leagues.upsertMany(leaguesData, matchFields);
