@@ -31,7 +31,7 @@ cron.schedule('*/5 * * * *', function () {
             console.log('Status:', res.statusCode);
         } else {
 
-            if (data.docs.lenght > 0) {
+            if (data.docs.length > 0) {
 
 
                 request.post({
