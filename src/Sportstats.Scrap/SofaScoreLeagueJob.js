@@ -24,13 +24,13 @@ module.exports = {
         results = yield* running(leaguesToScrap);
         //console.log(JSON.stringify(results))
 
-        console.log('done')
+        console.log(JSON.stringify('done'));
         request.post({
-            url: 'http://localhost:3000/scrap/bulk/',
+            url: 'http://localhost:3000/scrap/leagues/bulk/',
             json: true,
             body: results
         }, function (error, response, body) {
-            console.log(response)
+            console.log('API - ' + body)
         });
 
         nbot.end();
@@ -50,7 +50,11 @@ function* running(leagues) {
     var results = [];
     for (i = 0; i < leagues.length; i++) {
         console.log('Running [' + i + '] of ' + leagues.length)
-        results.push(yield* scrapLeagueInfo(leagues[i]));
+        var r = yield* scrapLeagueInfo(leagues[i]);
+        if (r != null)
+            results.push(r);
+        else
+            i--;
     }
     console.log('finish')
     return yield results;
@@ -157,7 +161,7 @@ function* scrapLeagueInfo(league) {
             for (var i = 0, row; row = rows[i]; i++) {
                 var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
                 if (time.getTime() > new Date().getTime()) {
-                    time.setMinutes(time.getMinutes() + league.gameTime)
+                    time.setMinutes(time.getMinutes() + 110)//change league.getTime()
                     nextGame = time;
                     break;
                 }
@@ -165,13 +169,14 @@ function* scrapLeagueInfo(league) {
 
             var factsLeague = $('table.table.table--justified > tbody > tr > td.ff-medium');
             var leagueData = {
+                provider: league.providers[0],
                 standings: items,
                 topScores: topScores,
                 name: $('h2.page-title')[0].innerText.trim(),
 
                 permalink: league.permalink,
                 country: league.country,
-                nextScrapDate: nextGame,
+                nextScrapAt: nextGame,
 
                 titleHolder: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[0].innerText.trim().split(/\r?\n/)[0],
 

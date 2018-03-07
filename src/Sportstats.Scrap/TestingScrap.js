@@ -3,7 +3,7 @@ var leaguesJob = require('./SofaScoreLeagueJob'),
     cron = require('node-cron'),
     request = require('request');
 
-    cron.schedule('*/1 * * * *', function () {
+     function scrap () {
 
 
         var t = request.get({
@@ -25,7 +25,7 @@ var leaguesJob = require('./SofaScoreLeagueJob'),
                         json: true,
                         body: { leagues: data.docs }
                     }, function (error, response, body) {
-                        console.log(error);
+                        console.log('error testing file');
                     });
                 }
                 else {
@@ -35,8 +35,8 @@ var leaguesJob = require('./SofaScoreLeagueJob'),
         });
     
     
-    }, null, true);
-
+    }
+scrap();
 
 // function* Job() {
 
