@@ -22,7 +22,17 @@ module.exports = {
         console.log('start')
         z = 0;
         results = yield* running(leaguesToScrap);
-        console.log(JSON.stringify(results))
+        //console.log(JSON.stringify(results))
+
+        console.log('done')
+        request.post({
+            url: 'http://localhost:3000/scrap/bulk/',
+            json: true,
+            body: results
+        }, function (error, response, body) {
+            console.log(response)
+        });
+
         nbot.end();
         nbot.proc.disconnect();
         nbot.proc.kill();
@@ -199,7 +209,7 @@ function* scrapLeagueInfo(league) {
         //         console.log(response)
         //     });
         // })
-        
+
         .catch(error => {
             var message;
             if (typeof error.details != "undefined" && error.details != "") {
@@ -215,7 +225,7 @@ function* scrapLeagueInfo(league) {
             }
             console.error({ "status": "error", "message": message });
             console.log('erro')
-          
+
         }
         )
 
