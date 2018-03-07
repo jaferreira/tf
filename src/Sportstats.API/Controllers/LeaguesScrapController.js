@@ -110,7 +110,7 @@ exports.save_league_scrap_info = function (req, res) {
                         link: standing.providerInfo.link,
                     });
 
-                    items.push(newTeamToScrap);
+                    teamsToScrap.push(newTeamToScrap);
                     logger.debug(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.country + ') to be scraped.');
                 });
         });
