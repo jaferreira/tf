@@ -39,7 +39,7 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
 
 exports.reset_leagues_to_scrap = function (req, res) {
  
-    var now = Date.now;
+    var now = new Date();
     LeaguesToScrap.update({ sport: 'football' }, { nextScrapAt: now }, { multi: true },
         function (err, num) {
             if (err) {
