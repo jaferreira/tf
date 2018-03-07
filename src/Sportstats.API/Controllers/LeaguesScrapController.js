@@ -85,14 +85,29 @@ exports.create_league_to_scrap = function (req, res) {
 
 exports.save_league_scrap_info = function (req, res) {
     var leaguesData = req.body;
-    
-    logger.info('Saving ' + leaguesData + ' leagues:');
-    leaguesData.forEach(league => {
-        logger.info(' » (' + league.country + ') ' + league.name);    
-    });
-    
 
     try {
+        logger.info('Saving ' + leaguesData + ' leagues:');
+        leaguesData.forEach(league => {
+            logger.info(' » (' + league.country + ') ' + league.name);
+        });
+
+
+        var nextScrapUpdateData = [];
+        leaguesData.forEach(leagueInfo => {
+            providers = [];
+            providers.push(leagueInfo.provider);
+            nextScrapUpdateData.push({
+                permalink: leagueInfo.permalink,
+                nextScrapAt: leagueInfo.leagueInfo,
+                providers: providers
+            });
+            leagueInfo.provider = null;
+        });
+        logger.info('Updating ' + nextScrapUpdateData.length + ' leagues to scrap.');
+
+
+
         // Gather teams to scrap (in all the leagues)
         var teamsToScrap = [];
         leaguesData.forEach(leagueInfo => {
@@ -115,8 +130,6 @@ exports.save_league_scrap_info = function (req, res) {
                 });
         });
 
-        logger.info('_1_');
-
         //Fields to match on for leagues upsert condition
         const matchFields = ['permalink'];
 
@@ -129,14 +142,6 @@ exports.save_league_scrap_info = function (req, res) {
         logger.info('League info data succesfully saved for ' + leaguesData.length + ' teams.');
 
 
-        logger.info('Updating LeaguesToScrap info for ' + leaguesData.length + ' teams with nextScrapAt.');
-        var nextScrapUpdateData = [];
-        leaguesData.forEach(leagueInfo => {
-            nextScrapUpdateData.push({
-                permalink: leagueInfo.permalink,
-                nextScrapAt: leagueInfo.leagueInfo
-            });
-        });
         var result3 = LeaguesToScrap.upsertMany(nextScrapUpdateData, matchFields);
         logger.info('Updated LeaguesToScrap info with nextScrapAt.');
 
