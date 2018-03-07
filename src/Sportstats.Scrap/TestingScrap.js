@@ -19,7 +19,7 @@ function* Job() {
 
 
                 request.post({
-                    url: 'http://wigserver.myvnc.com:3007/SofaScoreLeague',
+                    url: 'http://localhost:3007/SofaScoreLeague',
                     json: true,
                     body: { leagues: data.docs }
                 }, function (error, response, body) {
