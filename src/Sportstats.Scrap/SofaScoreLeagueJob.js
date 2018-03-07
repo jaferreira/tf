@@ -56,130 +56,130 @@ function* scrapLeagueInfo(league) {
         .evaluate(function (league) {
             var items = [];
 
+            var leagueData= [];
+            // var rows = $('.tab-pane.active > .standings-table > .cell.cell--standings');
+            // //GET STANDINGS
+            // for (var i = 0, row; row = rows[i]; i++) {
+            //     var data = row.querySelectorAll('div');
 
-            var rows = $('.tab-pane.active > .standings-table > .cell.cell--standings');
-            //GET STANDINGS
-            for (var i = 0, row; row = rows[i]; i++) {
-                var data = row.querySelectorAll('div');
+            //     var position = data[0].innerText.trim();
 
-                var position = data[0].innerText.trim();
+            //     var teamName = row.querySelectorAll('.cell__content.standings__team-name')[0].innerText;
 
-                var teamName = row.querySelectorAll('.cell__content.standings__team-name')[0].innerText;
-
-                var provider = {
-                    name : 'SofaScore',
-                    link : row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href
-                };
+            //     var provider = {
+            //         name : 'SofaScore',
+            //         link : row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href
+            //     };
 
                 
-                var gameInfo = row.querySelectorAll('.cell__content.standings__data.standings__columns-32 > span');
-                var played = gameInfo[0].innerText;
-                var win = gameInfo[1].innerText;
-                var draw = gameInfo[2].innerText;
-                var defeated = gameInfo[3].innerText;
-                var goals = gameInfo[4].innerText.split(':');
-                var goalScored = goals[0];
-                var goalConceded = goals[1];
+            //     var gameInfo = row.querySelectorAll('.cell__content.standings__data.standings__columns-32 > span');
+            //     var played = gameInfo[0].innerText;
+            //     var win = gameInfo[1].innerText;
+            //     var draw = gameInfo[2].innerText;
+            //     var defeated = gameInfo[3].innerText;
+            //     var goals = gameInfo[4].innerText.split(':');
+            //     var goalScored = goals[0];
+            //     var goalConceded = goals[1];
 
-                var results = [];
-                var lastResults = row.querySelectorAll('.cell__section.standings__last-5.switch-content.js-standings-view-form > div > a > span');
-                for (var x = 0, result; result = lastResults[x]; x++) {
-                    var className = result.className;
-                    if (className.indexOf('win') != -1)
-                        results.push('W');
-                    else if (className.indexOf('lose') != -1)
-                        results.push('L');
-                    else if (className.indexOf('draw') != -1)
-                        results.push('D');
-                }
-                var points = row.querySelectorAll('.cell__section.standings__points')[0].innerText.trim();
+            //     var results = [];
+            //     var lastResults = row.querySelectorAll('.cell__section.standings__last-5.switch-content.js-standings-view-form > div > a > span');
+            //     for (var x = 0, result; result = lastResults[x]; x++) {
+            //         var className = result.className;
+            //         if (className.indexOf('win') != -1)
+            //             results.push('W');
+            //         else if (className.indexOf('lose') != -1)
+            //             results.push('L');
+            //         else if (className.indexOf('draw') != -1)
+            //             results.push('D');
+            //     }
+            //     var points = row.querySelectorAll('.cell__section.standings__points')[0].innerText.trim();
 
-                var data = {
-                    position: position,
-                    teamName: teamName,
-                    providerInfo: provider,
-                    gamesPlayed: played,
-                    wins: win,
-                    draws: draw,
-                    defeateds: defeated,
-                    goalScored: goalScored,
-                    goalConceded: goalConceded,
-                    lastResults: results,
-                    points: points
-                }
+            //     var data = {
+            //         position: position,
+            //         teamName: teamName,
+            //         providerInfo: provider,
+            //         gamesPlayed: played,
+            //         wins: win,
+            //         draws: draw,
+            //         defeateds: defeated,
+            //         goalScored: goalScored,
+            //         goalConceded: goalConceded,
+            //         lastResults: results,
+            //         points: points
+            //     }
 
-                items.push(data);
-                // items.push(teamName);
+            //     items.push(data);
+            //     // items.push(teamName);
 
 
-            }
-            var topScores = [];
-            //GET TOP SCORES
-            rows = $('.bg-container > a.cell.cell--interactive.u-mB4.js-link.js-show-player-details');
-            for (var i = 0, row; row = rows[i]; i++) {
+            // }
+            // var topScores = [];
+            // //GET TOP SCORES
+            // rows = $('.bg-container > a.cell.cell--interactive.u-mB4.js-link.js-show-player-details');
+            // for (var i = 0, row; row = rows[i]; i++) {
 
-                topScores.push({
-                    position: row.querySelectorAll('div')[0].innerText.trim(),
-                    name: row.querySelectorAll('div')[5].innerText.trim(),
+            //     topScores.push({
+            //         position: row.querySelectorAll('div')[0].innerText.trim(),
+            //         name: row.querySelectorAll('div')[5].innerText.trim(),
 
-                    team: row.querySelectorAll('div')[6].innerText.trim(),
-                    matches: row.querySelectorAll('div')[7].innerText.trim(),
-                    goals: row.querySelectorAll('div')[9].innerText.trim(),
-                    rating: row.querySelectorAll('div')[11].innerText.trim()
-                })
-            }
+            //         team: row.querySelectorAll('div')[6].innerText.trim(),
+            //         matches: row.querySelectorAll('div')[7].innerText.trim(),
+            //         goals: row.querySelectorAll('div')[9].innerText.trim(),
+            //         rating: row.querySelectorAll('div')[11].innerText.trim()
+            //     })
+            // }
 
-            var newcomers = [];
-            rows = $('div.bg-container > a.cell.cell--interactive.u-mB4.js-link > .cell__section--main.u-mL12');
-            for (var i = 0, row; row = rows[i]; i++) {
-                newcomers.push(row.innerText.trim())
-            }
-            //2018-03-06 18:33:53.384
+            // var newcomers = [];
+            // rows = $('div.bg-container > a.cell.cell--interactive.u-mB4.js-link > .cell__section--main.u-mL12');
+            // for (var i = 0, row; row = rows[i]; i++) {
+            //     newcomers.push(row.innerText.trim())
+            // }
+            // //2018-03-06 18:33:53.384
 
-            rows = $('.js-event-list-tournament.tournament > .js-event-list-tournament-events > a');
-            //[0].innerText.split('\n').length
-            var nextGame = '';
+            // rows = $('.js-event-list-tournament.tournament > .js-event-list-tournament-events > a');
+            // //[0].innerText.split('\n').length
+            // var nextGame = '';
 
-            for (var i = 0, row; row = rows[i]; i++) {
-                var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
-                if (time.getTime() > new Date().getTime()) {
-                    time.setMinutes(time.getMinutes() + league.gameTime )
-                    nextGame = time;
-                    break;
-                }
-            }
+            // for (var i = 0, row; row = rows[i]; i++) {
+            //     var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
+            //     if (time.getTime() > new Date().getTime()) {
+            //         time.setMinutes(time.getMinutes() + league.gameTime )
+            //         nextGame = time;
+            //         break;
+            //     }
+            // }
 
-            var factsLeague = $('table.table.table--justified > tbody > tr > td.ff-medium');
-            var leagueData = {
-                standings: items,
-                topScores: topScores,
-                name: $('h2.page-title')[0].innerText.trim(),
+            // var factsLeague = $('table.table.table--justified > tbody > tr > td.ff-medium');
+            // var leagueData = {
+            //     standings: items,
+            //     topScores: topScores,
+            //     name: $('h2.page-title')[0].innerText.trim(),
 
-                permalink: league.permalink,
-                country: league.country,
-                nextScrapDate: nextGame,
+            //     permalink: league.permalink,
+            //     country: league.country,
+            //     nextScrapDate: nextGame,
 
-                titleHolder: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[0].innerText.trim().split(/\r?\n/)[0],
+            //     titleHolder: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[0].innerText.trim().split(/\r?\n/)[0],
 
-                //TODO REFACTORING CHAMPIONCHIP EXAMPLE
-                mostTitles: [{
-                    name: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[0],
-                    titles: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[1].split('(')[1].replace(')', '')
-                }],
+            //     //TODO REFACTORING CHAMPIONCHIP EXAMPLE
+            //     mostTitles: [{
+            //         name: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[0],
+            //         titles: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[1].split('(')[1].replace(')', '')
+            //     }],
 
-                newcomers: newcomers,
-                facts: {
-                    devisionLevel: factsLeague[0].innerText.trim(),
-                    numberRounds: factsLeague[1].innerText.trim(),
-                    averageGoals: factsLeague[2].innerText.trim(),
-                    homeTeamWins: factsLeague[3].innerText.trim(),
-                    draws: factsLeague[4].innerText.trim(),
-                    awayTeamWins: factsLeague[5].innerText.trim(),
-                    yellowCards: factsLeague[6].innerText.trim(),
-                    redCards: factsLeague[7].innerText.trim(),
+            //     newcomers: newcomers,
+            //     facts: {
+            //         devisionLevel: factsLeague[0].innerText.trim(),
+            //         numberRounds: factsLeague[1].innerText.trim(),
+            //         averageGoals: factsLeague[2].innerText.trim(),
+            //         homeTeamWins: factsLeague[3].innerText.trim(),
+            //         draws: factsLeague[4].innerText.trim(),
+            //         awayTeamWins: factsLeague[5].innerText.trim(),
+            //         yellowCards: factsLeague[6].innerText.trim(),
+            //         redCards: factsLeague[7].innerText.trim(),
 
-                }
-            }
+            //     }
+            // }
 
             return leagueData;
 
