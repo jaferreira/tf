@@ -188,7 +188,7 @@ function* scrapLeagueInfo(league) {
         .then(function (leagueData) {
             console.log('done')
             request.post({
-                url: 'http://server:3000/scrap/Leagues/' + leagueData.permalink,
+                url: 'http://localhost:3000/scrap/Leagues/' + leagueData.permalink,
                 json: true,
                 body: leagueData
             }, function (error, response, body) {
