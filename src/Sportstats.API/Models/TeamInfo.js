@@ -16,10 +16,13 @@ var TeamInfo = new Schema({
 
     name: String,
 
-    link: String,
-    
+    providerInfo: {
+        name: String,
+        link: String
+    },
+
     permalink: String,
-    
+
     squad: [{
         goals: String,
         nationality: String,

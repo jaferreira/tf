@@ -88,6 +88,8 @@ module.exports = function (app) {
     app.route('/scrap/leagues/pending')
         .get(leaguesScrapController.get_pending_leagues_to_scrap);
 
+    app.route('/scrap/leagues/reset')
+        .get(leaguesScrapController.reset_leagues_to_scrap);
     /**
      * @swagger
      * /scrap/leagues:

@@ -24,6 +24,9 @@ module.exports = function (app) {
 
     app.route('/info/leagues/:league')
         .get(leagueInfoController.get_league_info);
+    
+    app.route('/info/countries/:country')
+        .get(leagueInfoController.get_leagues_from_country);
    
         
 };

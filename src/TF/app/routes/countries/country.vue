@@ -2,7 +2,6 @@
     <div>
         <div>
             <h1>{{title}}</h1>
-            <h3>{{subtitle}}</h3>
         </div>
 
       <div>
@@ -10,24 +9,9 @@
       </div>
 
     <div>
-      <div>
-        <p>Title Holder: {{data.titleHolder}}</p>
-      </div>
-
-      <div>
-        <h3>Top Scores</h3>
-        <p v-for="topScore in data.topScores">
-            {{topScore.position}}. {{topScore.name}} ({{topScore.team}}): {{ topScore.goals }}  
-        </p>
-    
-      </div>
-
-
-
       
-      <hr/>
-        <p v-for="standing in standings">
-            {{standing.position}}. {{ standing.teamName }} ({{standing.points}})
+        <p v-for="league in leagues">
+            <a :href="league.link">{{league.name}}</a>
         </p>
     
     </div>
