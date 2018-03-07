@@ -8,13 +8,6 @@ var logger = require('../Logger.js'),
     async = require('async');
 
 
-function saveLeagueInfo(leagueInfo, callbak) {
-
-
-    callbak();
-};
-
-
 
 exports.get_pending_leagues_to_scrap = function (req, res) {
 
@@ -22,8 +15,6 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
     var filter = {
         nextScrapAt: { "$lte": now }
     };
-
-    pending('Hello World!');
 
     var options = {
         page: 1,
