@@ -1,10 +1,7 @@
-==API
-Run: npm start
-Port: 3000
+# Sportstats
 
-==TF
-Run: npm start
-Port: 9000
+## API
+Run Command: npm start
 
-==Database
-Mongo ConnString: mongodb://localhost/sportstats
+## TF
+Run Command: npm start

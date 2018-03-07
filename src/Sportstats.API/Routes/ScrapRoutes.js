@@ -122,7 +122,25 @@ module.exports = function (app) {
      *         schema:
      *             $ref: '#/definitions/LeagueInfo'
      */
-    app.route('/scrap/leagues/:league')
-        .post(leaguesScrapController.save_league_scrap_info);
+    // app.route('/scrap/leagues/:league')
+    //     .post(leaguesScrapController.save_league_scrap_info);
 
+    /**
+     * @swagger
+     * /scrap/leagues/league:
+     *   post:
+     *     description: Save scraped league info (upsert)
+     *     produces:
+     *      - application/json
+     *     parameters:
+     *       - name: league
+     *         type: string
+     *     responses:
+     *       200:
+     *         description: League
+     *         schema:
+     *             $ref: '#/definitions/LeagueInfo'
+     */
+    app.route('/scrap/leagues/bulk')
+    .post(leaguesScrapController.save_league_scrap_info);
 };
