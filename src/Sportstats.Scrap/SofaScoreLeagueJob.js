@@ -22,7 +22,7 @@ module.exports = {
         console.log('start')
         z = 0;
         results = yield* running(leaguesToScrap);
-
+        console.log(JSON.stringify(results))
         nbot.end();
         nbot.proc.disconnect();
         nbot.proc.kill();
