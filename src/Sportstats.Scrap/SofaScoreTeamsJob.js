@@ -132,7 +132,9 @@ function* scrapTeamInfo(link) {
             return result
 
         },link)
-
+        .catch(error => {
+            console.error('Search failed:', error)
+          })
 
 
     return value;

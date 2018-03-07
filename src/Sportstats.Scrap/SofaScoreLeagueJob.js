@@ -2,6 +2,7 @@ var nightmare = require('nightmare'),
     tryCount = 0,
     request = require('request');
 process.on('unhandledRejection', (reason, p) => {
+    console.log('erro')
     if (tryCount <= 5) {
         console.log('retry - ' + tryCount)
         tryCount++;
@@ -14,12 +15,24 @@ process.on('unhandledRejection', (reason, p) => {
 module.exports = {
     scrapLeagues: function* run(leaguesToScrap) {
         nbot = nightmare({
-            show: true
+            switches: { 'ignore-certificate-errors': true },
+            show: false
         });
 
         console.log('start')
         z = 0;
         results = yield* running(leaguesToScrap);
+        //console.log(JSON.stringify(results))
+
+        console.log('done')
+        request.post({
+            url: 'http://localhost:3000/scrap/bulk/',
+            json: true,
+            body: results
+        }, function (error, response, body) {
+            console.log(response)
+        });
+
         nbot.end();
         nbot.proc.disconnect();
         nbot.proc.kill();
@@ -36,11 +49,11 @@ function* running(leagues) {
 
     var results = [];
     for (i = 0; i < leagues.length; i++) {
-        console.log('Running [' + i + '] of ' + leagues.length )
+        console.log('Running [' + i + '] of ' + leagues.length)
         results.push(yield* scrapLeagueInfo(leagues[i]));
     }
-
-    //return results;
+    console.log('finish')
+    return yield results;
 
 }
 
@@ -51,6 +64,7 @@ function* scrapLeagueInfo(league) {
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
 
         .goto(league.providers[0].link)
+        .wait(1000)
         .wait('.js-event-list-tournament-events')
         .click('label.js-tournament-page-events-select-round.radio-switch__item')
         .evaluate(function (league) {
@@ -67,11 +81,11 @@ function* scrapLeagueInfo(league) {
                 var teamName = row.querySelectorAll('.cell__content.standings__team-name')[0].innerText;
 
                 var provider = {
-                    name : 'SofaScore',
-                    link : row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href
+                    name: 'SofaScore',
+                    link: row.querySelectorAll('.cell__content.standings__team-name > a.js-link')[0].href
                 };
 
-                
+
                 var gameInfo = row.querySelectorAll('.cell__content.standings__data.standings__columns-32 > span');
                 var played = gameInfo[0].innerText;
                 var win = gameInfo[1].innerText;
@@ -143,7 +157,7 @@ function* scrapLeagueInfo(league) {
             for (var i = 0, row; row = rows[i]; i++) {
                 var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
                 if (time.getTime() > new Date().getTime()) {
-                    time.setMinutes(time.getMinutes() + league.gameTime )
+                    time.setMinutes(time.getMinutes() + league.gameTime)
                     nextGame = time;
                     break;
                 }
@@ -184,18 +198,36 @@ function* scrapLeagueInfo(league) {
             return leagueData;
 
         }, league)
-        
-        .then(function (leagueData) {
-            console.log('done')
-            request.post({
-                url: 'http://localhost:3000/scrap/Leagues/' + leagueData.permalink,
-                json: true,
-                body: leagueData
-            }, function (error, response, body) {
-                console.log(response)
-            });
-        })
 
+        // .then(function (leagueData) {
+        //     console.log('done')
+        //     request.post({
+        //         url: 'http://localhost:3000/scrap/Leagues/' + leagueData.permalink,
+        //         json: true,
+        //         body: leagueData
+        //     }, function (error, response, body) {
+        //         console.log(response)
+        //     });
+        // })
+
+        .catch(error => {
+            var message;
+            if (typeof error.details != "undefined" && error.details != "") {
+                message = error.details;
+            } else if (typeof error == "string") {
+                message = error;
+
+                if (error == "Cannot read property 'focus' of null") {
+                    message += " (Likely because a non-existent selector was used)";
+                }
+            } else {
+                message = error.message;
+            }
+            console.error({ "status": "error", "message": message });
+            console.log('erro')
+
+        }
+        )
 
 
 
