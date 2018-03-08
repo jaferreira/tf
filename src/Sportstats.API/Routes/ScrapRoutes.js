@@ -13,7 +13,7 @@ module.exports = function (app) {
         .post(teamsScrapController.create_team_to_scrap);
 
     // Save scraped team info (upsert)
-    app.route('/scrap/teams/:team')
+    app.route('/scrap/teams/bulk')
         .post(teamsScrapController.save_team_scrap_info);
 
 
@@ -142,5 +142,5 @@ module.exports = function (app) {
      *             $ref: '#/definitions/LeagueInfo'
      */
     app.route('/scrap/leagues/bulk')
-    .post(leaguesScrapController.save_league_scrap_info);
+        .post(leaguesScrapController.save_league_scrap_info);
 };
