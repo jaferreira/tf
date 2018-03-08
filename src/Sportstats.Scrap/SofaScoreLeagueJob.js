@@ -75,7 +75,7 @@ function* running(leagues) {
             }
 
             console.log(retriesInfo);
-            if (retriesInfo && retriesInfo.retryCount < retriesInfo.maxRetries) {
+            if (retriesInfo && retriesInfo.retryCount <= retriesInfo.maxRetries) {
                 i--;
                 
                 // update retry information
