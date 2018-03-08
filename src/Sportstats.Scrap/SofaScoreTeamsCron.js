@@ -1,27 +1,15 @@
-var cron = require('node-cron'),
-    leaguesJob = require('./SofaScoreLeagues'),
+var cron = require('node-cron'),    
     request = require('request');
 
 tryCount = 0;
 
 
 
-process.on('unhandledRejection', (reason, p) => {
-    if (tryCount <= 5) {
-        console.log('retry - ' + tryCount)
-        tryCount++;
-        leaguesJob.scrapLeague();
-    }
-    else {
-        //TODO reporting error
-    }
-});
-
 cron.schedule('*/1 * * * *', function () {
 
 
     var t = request.get({
-        url: 'http://localhost:3000/scrap/leagues/pending',
+        url: 'http://localhost:3000/scrap/teams/pending',
         json: true,
         headers: { 'User-Agent': 'request' }
     }, (err, res, data) => {
@@ -35,15 +23,15 @@ cron.schedule('*/1 * * * *', function () {
 
 
                 request.post({
-                    url: 'http://localhost:3007/SofaScoreLeague',
+                    url: 'http://localhost:3007/SofaScoreTeam',
                     json: true,
-                    body: { leagues: data.docs }
+                    body: { teams: data.docs }
                 }, function (error, response, body) {
                     console.log(error);
                 });
             }
             else {
-                console.log('No Leagues To Scrap')
+                console.log('No Teams To Scrap')
             }
         }
     });
