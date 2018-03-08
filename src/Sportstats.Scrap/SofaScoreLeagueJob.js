@@ -73,9 +73,8 @@ function* running(leagues) {
                     break;
                 }
             }
+
             if (retriesInfo && retriesInfo.retryCount <= retriesInfo.maxRetries) {
-                i--;
-                
                 // update retry information
                 for (var i in retries) {
                     if (retries[i].permalink == leagues[i].permalink) {
@@ -84,6 +83,7 @@ function* running(leagues) {
                     }
                 }
                 console.log('[' + leagues[i].name + '] Error scraping league, trying one more time');
+                i--;
             }
             else {
                 console.log('[' + leagues[i].name + '] Max retries reached, going to next league.');
