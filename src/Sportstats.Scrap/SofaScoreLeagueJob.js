@@ -213,6 +213,7 @@ function* scrapLeagueInfo(league) {
             }
 
             var factsLeague = $('table.table.table--justified > tbody > tr > td.ff-medium');
+            var titleHolderSelector = $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link');
             var leagueData = {
                 provider: league.providers[0],
                 standings: items,
@@ -223,12 +224,14 @@ function* scrapLeagueInfo(league) {
                 country: league.country,
                 nextScrapAt: nextGame,
 
-                titleHolder: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[0].innerText.trim().split(/\r?\n/)[0],
+
+
+                titleHolder: titleHolderSelector[0].innerText.trim().split(/\r?\n/)[0],
 
                 //TODO REFACTORING CHAMPIONCHIP EXAMPLE
                 mostTitles: [{
-                    name: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[0],
-                    titles: $('a.cell__section--main.u-flex-halves.u-br.u-p4.hover-link-block.js-link')[1].innerText.trim().split(/\r?\n/)[1].split('(')[1].replace(')', '')
+                    name: (titleHolderSelector.length > 0) ? titleHolderSelector[1].innerText.trim().split(/\r?\n/)[0] : titleHolderSelector[0].innerText.trim().split(/\r?\n/)[0],
+                    titles:  (titleHolderSelector.length > 0) ? titleHolderSelector[1].innerText.trim().split(/\r?\n/)[1].split('(')[1].replace(')', '') : 0
                 }],
 
                 newcomers: newcomers,
