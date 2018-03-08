@@ -49,12 +49,23 @@ function* running(leagues) {
 
     var results = [];
     for (i = 0; i < leagues.length; i++) {
+        var retryCount = 0;
+        var maxRetries = 5;
         console.log('Running [' + i + '] of ' + leagues.length)
         var r = yield* scrapLeagueInfo(leagues[i]);
         if (r != null)
             results.push(r);
-        else
-            i--;
+        else {
+            if (retryCount < maxRetries) {
+                i--;
+                retryCount++;
+                console.log('[' + leagues[i].name + '] Error scraping league, trying one more time');
+            }
+            else {
+                console.log('[' + leagues[i].name + '] Max retries reached, going to next league.');
+            }
+        }
+
     }
     console.log('finish')
     return yield results;
