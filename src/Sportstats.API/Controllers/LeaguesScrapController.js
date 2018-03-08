@@ -86,27 +86,36 @@ exports.create_league_to_scrap = function (req, res) {
 exports.save_league_scrap_info = function (req, res) {
     var leaguesData = req.body;
 
-    try {
-        logger.info('Saving ' + leaguesData + ' leagues:');
-        leaguesData.forEach(league => {
-            logger.info(' » (' + league.country + ') ' + league.name);
-        });
+    var ids = [];
+    logger.info('Saving ' + leaguesData.length + ' leagues:');
+    leaguesData.forEach(league => {
+        ids.push(league.permalink);
+        logger.info(' » (' + league.country + ') ' + league.name);
+    });
+
+    LeaguesToScrap.find({
+        permalink: {
+            $in: ids
+        }
+    }, function (err, dbLeaguesToScrap) {
+        if (err) {
+            logger.error(err);
+            res.send(err);
+        }
+        logger.info('Got ' + dbLeaguesToScrap.length + ' LeaguesToScrap from db');
 
 
-        var nextScrapUpdateData = [];
-        leaguesData.forEach(leagueInfo => {
-            var providers = [];
-            providers.push(leagueInfo.provider);
-            nextScrapUpdateData.push({
-                permalink: leagueInfo.permalink,
-                nextScrapAt: leagueInfo.nextScrapAt,
-                providers: providers
+        // UPDATE Next Scrap Date
+        dbLeaguesToScrap.forEach(leagueInfo => {
+            var newArray = leaguesData.filter(function (el) {
+                return el.permalink == leagueInfo.permalink;
             });
-            leagueInfo.provider = null;
+
+            if (newArray.length > 0) {
+                leagueInfo.nextScrapAt = newArray[0].nextScrapAt;
+                logger.info('New scrap date: ' + leagueInfo.nextScrapAt);
+            }
         });
-        logger.info('Updating ' + nextScrapUpdateData.length + ' leagues to scrap.');
-
-
 
         // Gather teams to scrap (in all the leagues)
         var teamsToScrap = [];
@@ -120,18 +129,24 @@ exports.save_league_scrap_info = function (req, res) {
                     newTeamToScrap.name = standing.teamName;
                     newTeamToScrap.providers = [];
 
-                    newTeamToScrap.providers.push({
-                        name: standing.providerInfo.name,
-                        link: standing.providerInfo.link,
+                    var leagueFiltered = dbLeaguesToScrap.filter(function (el) {
+                        return el.permalink == leagueInfo.permalink;
                     });
+                    if (leagueFiltered.length > 0 && leagueFiltered[0].providers.length > 0) {
+                        newTeamToScrap.providers.push({
+                            name: leagueFiltered[0].providers[0].name,
+                            link: leagueFiltered[0].providers[0].link,
+                        });
+                    }
 
                     teamsToScrap.push(newTeamToScrap);
-                    logger.debug(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.country + ') to be scraped.');
+                    logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
                 });
         });
 
         //Fields to match on for leagues upsert condition
         const matchFields = ['permalink'];
+
 
         //Perform bulk operation
         var result1 = TeamsToScrap.upsertMany(teamsToScrap, matchFields);
@@ -142,14 +157,9 @@ exports.save_league_scrap_info = function (req, res) {
         logger.info('League info data succesfully saved for ' + leaguesData.length + ' teams.');
 
 
-        var result3 = LeaguesToScrap.upsertMany(nextScrapUpdateData, matchFields);
+        var result3 = LeaguesToScrap.upsertMany(dbLeaguesToScrap, matchFields);
         logger.info('Updated LeaguesToScrap info with nextScrapAt.');
 
         return res.sendStatus(200);
-    } catch (err) {
-        logger.error(err);
-        return res.sendStatus(500, {
-            error: err
-        });
-    }
+    });
 };

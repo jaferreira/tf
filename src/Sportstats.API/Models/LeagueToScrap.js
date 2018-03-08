@@ -18,7 +18,7 @@ var LeagueToScrap = new Schema({
 
     providers: [
         {
-            provider: String,
+            name: String,
             link: String
         }
     ],
