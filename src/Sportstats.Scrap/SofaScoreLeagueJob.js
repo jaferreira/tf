@@ -60,13 +60,18 @@ function* running(leagues) {
     });
 
     for (i = 0; i < leagues.length; i++) {
-        console.log('');
+        console.log(' --- ');
         console.log('Running [' + i + '] of ' + leagues.length)
         console.log('[' + leagues[i].name + '] Going to start scraping');
+
         var r = yield* scrapLeagueInfo(leagues[i]);
-        if (r != null)
+
+        if (r != null) {
+            console.log('[' + leagues[i].name + '] Scraping done.');
             results.push(r);
+        }
         else {
+            console.log('[' + leagues[i].name + '] Scraping error.');
             var retriesInfo = {};
             for (var j in retries) {
                 if (retries[j].permalink == leagues[j].permalink) {
@@ -74,8 +79,11 @@ function* running(leagues) {
                     break;
                 }
             }
+            var retryCount = retriesInfo.retryCount;
+            var maxRetries = retriesInfo.maxRetries;
 
-            if (retriesInfo && retriesInfo.retryCount <= retriesInfo.maxRetries) {
+            console.log('[' + leagues[i].name + '] Retry information: RetryCount: ' + retryCount + '(max: ' + maxRetries + ')');
+            if (retriesInfo && retryCount <= maxRetries) {
                 // update retry information
                 for (var k in retries) {
                     if (retries[k].permalink == leagues[k].permalink) {
@@ -83,11 +91,11 @@ function* running(leagues) {
                         break;
                     }
                 }
-                console.log('[' + leagues[i].name + '] Error scraping league, trying one more time');
                 i--;
+                console.log('[' + leagues[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + i);
             }
             else {
-                console.log('[' + leagues[i].name + '] Max retries reached, going to next league.');
+                console.log('[' + leagues[i].name + '] Max retries reached, going to next league (i: ' + i + ')');
             }
         }
 
@@ -264,8 +272,8 @@ function* scrapLeagueInfo(league) {
             } else {
                 message = error.message;
             }
-            console.error({ "status": "error", "message": message });
-            console.log('erro')
+            // console.error({ "status": "error", "message": message });
+            // console.log('erro')
 
         }
         )
