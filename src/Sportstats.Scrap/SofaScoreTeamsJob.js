@@ -181,7 +181,7 @@ function* scrapLeagueInfo(team) {
             var result = {
                 provider: team.providers[0],
                 teamName: $('h2.page-title')[0].innerText,
-                teamLink: link,
+                teamLink: team.providers[0].link,
                 topScores: topScores,
                 squad: squad,
                 teamInfo: {
