@@ -230,8 +230,8 @@ function* scrapLeagueInfo(league) {
 
                 //TODO REFACTORING CHAMPIONCHIP EXAMPLE
                 mostTitles: [{
-                    name: (titleHolderSelector.length > 0) ? titleHolderSelector[1].innerText.trim().split(/\r?\n/)[0] : titleHolderSelector[0].innerText.trim().split(/\r?\n/)[0],
-                    titles:  (titleHolderSelector.length > 0) ? titleHolderSelector[1].innerText.trim().split(/\r?\n/)[1].split('(')[1].replace(')', '') : 0
+                    name: (titleHolderSelector.length > 1) ? titleHolderSelector[1].innerText.trim().split(/\r?\n/)[0] : titleHolderSelector[0].innerText.trim().split(/\r?\n/)[0],
+                    titles:  (titleHolderSelector.length > 1) ? titleHolderSelector[1].innerText.trim().split(/\r?\n/)[1].split('(')[1].replace(')', '') : 0
                 }],
 
                 newcomers: newcomers,
