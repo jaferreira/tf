@@ -154,26 +154,31 @@ function* scrapLeagueInfo(team) {
             var city = '';
 
             for (var i = 0, row; row = rows[i]; i++) {
-
-                if (row.innerText.startsWith('Manager') == true) {
-                    manager = row.innerText.split('Manager').join('').trim();
-                    findElements++;
-                }
-                else if (row.innerText.startsWith('Stadium') == true) {
-                    stadium = row.innerText.split('Stadium').join('').trim();
-                    findElements++;
-                }
-                else if (row.innerText.startsWith('Capacity') == true) {
-                    capacity = row.innerText.split('Capacity').join('').trim();
-                    findElements++;
-                }
-                else if (row.innerText.startsWith('City') == true) {
-                    city = row.innerText.split('City').join('').trim();
-                    findElements++;
-                }
-                if (findElements == 4)
-                    break;
-
+                
+                    console.log(i)
+                    if (row.innerText.startsWith('Manager') == true) {
+                        console.log('1')
+                        manager = row.innerText.split('Manager').join('').trim();
+                        findElements++;
+                    }
+                    else if (row.innerText.startsWith('Stadium') == true) {
+                        console.log('2')
+                        stadium = row.innerText.split('Stadium').join('').trim();
+                        findElements++;
+                    }
+                    else if (row.innerText.startsWith('Capacity') == true) {
+                        console.log('3')
+                        capacity = row.innerText.split('Capacity').join('').trim();
+                        findElements++;
+                    }
+                    else if (row.innerText.startsWith('City') == true) {
+                        console.log('4')
+                        city = row.innerText.split('City').join('').trim();
+                        findElements++;
+                    }
+                    if (findElements == 4)
+                        break;
+                
             }
 
 
@@ -192,7 +197,7 @@ function* scrapLeagueInfo(team) {
                 }
             }
 
-
+            
             return result
 
         }, team)
