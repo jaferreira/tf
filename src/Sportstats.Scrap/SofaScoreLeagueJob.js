@@ -71,7 +71,7 @@ function* running(leagues) {
             results.push(r);
         }
         else {
-            console.log('[' + leagues[i].name + '] Scraping error.;
+            console.log('[' + leagues[i].name + '] Scraping error.');
             var retriesInfo = {};
             for (var j in retries) {
                 if (retries[j].permalink == leagues[i].permalink) {
@@ -272,7 +272,7 @@ function* scrapLeagueInfo(league) {
             } else {
                 message = error.message;
             }
-            console.log(message);
+            console.log(error);
             //console.error({ "status": "error", "message": message });
             // console.log('erro')
 
