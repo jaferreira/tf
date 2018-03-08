@@ -60,6 +60,7 @@ function* running(leagues) {
     });
 
     for (i = 0; i < leagues.length; i++) {
+        console.log(retries);
         console.log('Running [' + i + '] of ' + leagues.length)
         console.log('[' + leagues[i].name + '] Going to start scraping');
         var r = yield* scrapLeagueInfo(leagues[i]);
