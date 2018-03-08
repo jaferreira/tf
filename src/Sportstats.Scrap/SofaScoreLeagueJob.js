@@ -61,7 +61,7 @@ function* running(leagues) {
 
     for (i = 0; i < leagues.length; i++) {
         console.log(' --- ');
-        console.log('Running [' + i + '] of ' + leagues.length)
+        console.log('Running [' + (i + 1) + '] of ' + leagues.length)
         console.log('[' + leagues[i].name + '] Going to start scraping');
 
         var r = yield* scrapLeagueInfo(leagues[i]);
@@ -71,10 +71,10 @@ function* running(leagues) {
             results.push(r);
         }
         else {
-            console.log('[' + leagues[i].name + '] Scraping error.');
+            console.log('[' + leagues[i].name + '] Scraping error.;
             var retriesInfo = {};
             for (var j in retries) {
-                if (retries[j].permalink == leagues[j].permalink) {
+                if (retries[j].permalink == leagues[i].permalink) {
                     retriesInfo = retries[j];
                     break;
                 }
@@ -82,11 +82,11 @@ function* running(leagues) {
             var retryCount = retriesInfo.retryCount;
             var maxRetries = retriesInfo.maxRetries;
 
-            console.log('[' + leagues[i].name + '] Retry information: RetryCount: ' + retryCount + '(max: ' + maxRetries + ')');
+            console.log('[' + leagues[i].name + '] Retry information: RetryCount: ' + retryCount + ' (max: ' + maxRetries + ')');
             if (retriesInfo && retryCount <= maxRetries) {
                 // update retry information
                 for (var k in retries) {
-                    if (retries[k].permalink == leagues[k].permalink) {
+                    if (retries[k].permalink == leagues[i].permalink) {
                         retries[k].retryCount++;
                         break;
                     }
@@ -272,7 +272,8 @@ function* scrapLeagueInfo(league) {
             } else {
                 message = error.message;
             }
-            // console.error({ "status": "error", "message": message });
+            console.log(message);
+            //console.error({ "status": "error", "message": message });
             // console.log('erro')
 
         }
