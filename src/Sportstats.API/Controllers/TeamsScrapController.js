@@ -17,7 +17,7 @@ exports.get_pending_teams_to_scrap = function (req, res) {
 
     var options = {
         page: 1,
-        limit: 100,
+        limit: 10,
         sort: {
             createdAt: -1
         }
@@ -36,46 +36,53 @@ exports.get_pending_teams_to_scrap = function (req, res) {
         });
 };
 
-
 exports.save_team_scrap_info = function (req, res) {
-    var teamInfo = req.body;
-    var teamName = req.params.team;
-    var nextScrapDate = req.body.nextScrapDate;
 
-    var query = {
-        'permalink': teamName
-    };
+    var teamsData = req.body;
 
-    Teams.findOneAndUpdate(query, teamInfo, {
-        upsert: true
-    }, function (err, doc) {
-        if (err){
-            logger.error(err);
-            return res.sendStatus(500, {
-                error: err
-            });
-        }
-            
-        logger.info('Team info succesfully saved: ' + teamName);
-        logger.info('Updating TeamsToScrap info for: ' + teamName + ' (nextScrapAt: ' + nextScrapDate + ')');
-        
-        TeamsToScrap.findOneAndUpdate(query, { nextScrapAt: nextScrapDate}, {
-            upsert: true,
-            new: true
-        }, function (err, doc) {
-            if (err) {
-                logger.error(err);
-                return res.sendStatus(500, {
-                    error: err
-                });
-            }
-            logger.info('Updated Succesfuly TeamsToScrap info for: ' + teamName);
-            return res.json(doc);
-        });
+    var ids = [];
+    logger.info('Saving ' + teamsData.length + ' teams:');
+    teamsData.forEach(team => {
+        ids.push(team.permalink);
+        logger.info(' » (' + team.country + ') ' + team.name);
     });
 
-};
+    TeamsToScrap.find({
+        permalink: {
+            $in: ids
+        }
+    }, function (err, dbTeamsToScrap) {
+        if (err) {
+            logger.error(err);
+            res.send(err);
+        }
+        logger.info('Got ' + dbTeamsToScrap.length + ' TeamsToScrap from db');
 
+
+        // UPDATE Next Scrap Date
+        dbTeamsToScrap.forEach(teamInfo => {
+            var newArray = teamsData.filter(function (el) {
+                return el.permalink == teamInfo.permalink;
+            });
+
+            if (newArray.length > 0) {
+                teamInfo.nextScrapAt = newArray[0].nextScrapAt;
+                logger.info('New scrap date: ' + teamInfo.nextScrapAt);
+            }
+        });
+
+        const matchFields = ['permalink'];
+
+        var result2 = Teams.upsertMany(teamsData, matchFields);
+        logger.info('Team info data succesfully saved for ' + teamsData.length + ' teams.');
+
+
+        var result3 = TeamsToScrap.upsertMany(dbTeamsToScrap, matchFields);
+        logger.info('Updated TeamsToScrap info with nextScrapAt.');
+
+        return res.sendStatus(200);
+    });
+};
 
 exports.create_team_to_scrap = function (req, res) {
     var newTeamToScrap = new TeamsToScrap(req.body);
