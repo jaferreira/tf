@@ -1,57 +1,120 @@
-var nightmare = require('nightmare');
-var tryCount = 0;
+var nightmare = require('nightmare'),
+    tryCount = 0,
+    request = require('request');
 process.on('unhandledRejection', (reason, p) => {
-    if (tryCount <= 5)
-    {
+    console.log('erro')
+    if (tryCount <= 5) {
         console.log('retry - ' + tryCount)
         tryCount++;
         run();
     }
-    else
-    {
+    else {
         //TODO reporting error
     }
 });
 module.exports = {
-    scrapTeams: function* run(linksToScrap) {
+    scrapTeams: function* run(teamsToScrap) {
         nbot = nightmare({
-            openDevTools: {
-                mode: 'detach'
-            },
-            show: true
+            switches: { 'ignore-certificate-errors': true },
+            show: false
         });
 
-
+        console.log('start')
         z = 0;
-        results = yield* running(linksToScrap);
+        results = yield* running(teamsToScrap);
+        //console.log(JSON.stringify(results))
+
+        console.log(JSON.stringify('done'));
+        request.post({
+            url: 'http://localhost:3000/scrap/teams/bulk/',
+            json: true,
+            body: results
+        }, function (error, response, body) {
+            console.log('API - ' + body)
+        });
+
+        nbot.end();
+        nbot.proc.disconnect();
+        nbot.proc.kill();
+        nbot.ended = true;
+        nbot = null;
         return nbot;
     }
 
 
 }
 
-function* running(links) {
+function* running(teams) {
 
-
+    var globalMaxRetries = 5;
     var results = [];
-    for (i = 0; i < links.length; i++) {
-        console.log('teste')
-        results.push(yield* scrapTeamInfo(links[i]));
+    var retries = [];
+
+    // Initialize retry counters
+    teams.forEach(league => {
+        retries.push({
+            permalink: league.permalink,
+            maxRetries: globalMaxRetries,
+            retryCount: 0
+        });
+    });
+
+    for (i = 0; i < teams.length; i++) {
+        console.log(' --- ');
+        console.log('Running [' + (i + 1) + '] of ' + teams.length)
+        console.log('[' + teams[i].name + '] Going to start scraping');
+
+        var r = yield* scrapLeagueInfo(teams[i]);
+
+        if (r != null) {
+            console.log('[' + teams[i].name + '] Scraping done.');
+            results.push(r);
+        }
+        else {
+            console.log('[' + teams[i].name + '] Scraping error.');
+            var retriesInfo = {};
+            for (var j in retries) {
+                if (retries[j].permalink == teams[i].permalink) {
+                    retriesInfo = retries[j];
+                    break;
+                }
+            }
+            var retryCount = retriesInfo.retryCount;
+            var maxRetries = retriesInfo.maxRetries;
+
+            console.log('[' + teams[i].name + '] Retry information: RetryCount: ' + retryCount + ' (max: ' + maxRetries + ')');
+            if (retriesInfo && retryCount <= maxRetries) {
+                // update retry information
+                for (var k in retries) {
+                    if (retries[k].permalink == teams[i].permalink) {
+                        retries[k].retryCount++;
+                        break;
+                    }
+                }
+                console.log('[' + teams[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + (i - 1));
+                i--;
+            }
+            else {
+                console.log('[' + teams[i].name + '] Max retries reached, going to next league (i: ' + i + ')');
+            }
+        }
+
     }
-    console.log(JSON.stringify(results));
-    //return results;
+    console.log('finish')
+    return yield results;
 
 }
 
-function* scrapTeamInfo(link) {
+function* scrapLeagueInfo(team) {
 
-
+    console.log('starting Scrap Url ' + team.providers[0].link);
     var value = yield nbot
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
-        .goto(link, { 'accept-language': 'en-US' })
+
+        .goto(team.providers[0].link)
+        .wait(1000)
         .wait('.squad')
-        .evaluate(function (link) {
-            console.log('hello ');
+        .evaluate(function (team) {
             var nameTeam = $('h2.page-title')[0].innerText.trim();
             var rows = $('.top-scorers-container')[0].querySelectorAll('a');
             var topScores = [];
@@ -65,7 +128,7 @@ function* scrapTeamInfo(link) {
                     ratings: row.querySelectorAll('.cell__content')[5].innerText.trim()
                 });
 
-                console.log('hello 3 ');
+
             }
 
             rows = $('.squad > a');
@@ -79,7 +142,7 @@ function* scrapTeamInfo(link) {
                     number: row.querySelectorAll('span.squad-player__shirt-number.theme-background-color')[0].innerText.trim()
 
                 })
-                console.log('hello 5 ');
+
             }
 
             rows = $('table.table.table--justified > tbody > tr ');
@@ -91,7 +154,7 @@ function* scrapTeamInfo(link) {
             var city = '';
 
             for (var i = 0, row; row = rows[i]; i++) {
-            
+
                 if (row.innerText.startsWith('Manager') == true) {
                     manager = row.innerText.split('Manager').join('').trim();
                     findElements++;
@@ -114,27 +177,46 @@ function* scrapTeamInfo(link) {
             }
 
 
-          
+
             var result = {
-                teamName : $('h2.page-title')[0].innerText,
-                teamLink : link,
+                provider: team.providers[0],
+                teamName: $('h2.page-title')[0].innerText,
+                teamLink: link,
                 topScores: topScores,
                 squad: squad,
-                teamInfo : {
-                    manager : manager,
-                    stadium : stadium,
-                    capacity : capacity,
-                    city : city
+                teamInfo: {
+                    manager: manager,
+                    stadium: stadium,
+                    capacity: capacity,
+                    city: city
                 }
             }
-       
+
 
             return result
 
-        },link)
+        }, team)
+
+
+
         .catch(error => {
-            console.error('Search failed:', error)
-          })
+            var message;
+            if (typeof error.details != "undefined" && error.details != "") {
+                message = error.details;
+            } else if (typeof error == "string") {
+                message = error;
+
+                if (error == "Cannot read property 'focus' of null") {
+                    message += " (Likely because a non-existent selector was used)";
+                }
+            } else {
+                message = error.message;
+            }
+            console.log(error);
+
+        }
+        )
+
 
 
     return value;
