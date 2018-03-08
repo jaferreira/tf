@@ -179,15 +179,15 @@ function* scrapLeagueInfo(league) {
             //GET TOP SCORES
             rows = $('.bg-container > a.cell.cell--interactive.u-mB4.js-link.js-show-player-details');
             for (var i = 0, row; row = rows[i]; i++) {
-
+                var divs = row.querySelectorAll('div');
                 topScores.push({
-                    position: row.querySelectorAll('div')[0].innerText.trim(),
-                    name: row.querySelectorAll('div')[5].innerText.trim(),
+                    position: divs[0].innerText.trim(),
+                    name: divs[5].innerText.trim(),
 
-                    team: row.querySelectorAll('div')[6].innerText.trim(),
-                    matches: row.querySelectorAll('div')[7].innerText.trim(),
-                    goals: row.querySelectorAll('div')[9].innerText.trim(),
-                    rating: row.querySelectorAll('div')[11].innerText.trim()
+                    team: divs[6].innerText.trim(),
+                    matches: divs[7].innerText.trim(),
+                    goals: divs[9].innerText.trim(),
+                    rating: (divs.length > 12) ? divs[11].innerText.trim() : null
                 })
             }
 
