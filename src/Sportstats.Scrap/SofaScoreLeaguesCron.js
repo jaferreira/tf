@@ -50,3 +50,11 @@ cron.schedule('*/1 * * * *', function () {
 
 
 }, null, true);
+
+
+cron.schedule('*/1 * * * *', function () {
+
+console.log('teste');
+
+
+}, null, true);
