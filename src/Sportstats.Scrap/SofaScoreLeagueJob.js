@@ -60,6 +60,7 @@ function* running(leagues) {
     });
 
     for (i = 0; i < leagues.length; i++) {
+        console.log('');
         console.log('Running [' + i + '] of ' + leagues.length)
         console.log('[' + leagues[i].name + '] Going to start scraping');
         var r = yield* scrapLeagueInfo(leagues[i]);
@@ -67,18 +68,18 @@ function* running(leagues) {
             results.push(r);
         else {
             var retriesInfo = {};
-            for (var i in retries) {
-                if (retries[i].permalink == leagues[i].permalink) {
-                    retriesInfo = retries[i];
+            for (var j in retries) {
+                if (retries[j].permalink == leagues[j].permalink) {
+                    retriesInfo = retries[j];
                     break;
                 }
             }
 
             if (retriesInfo && retriesInfo.retryCount <= retriesInfo.maxRetries) {
                 // update retry information
-                for (var i in retries) {
-                    if (retries[i].permalink == leagues[i].permalink) {
-                        retries[i].retryCount++;
+                for (var k in retries) {
+                    if (retries[k].permalink == leagues[k].permalink) {
+                        retries[k].retryCount++;
                         break;
                     }
                 }
