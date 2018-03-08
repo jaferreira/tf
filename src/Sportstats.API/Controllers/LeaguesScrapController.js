@@ -128,16 +128,22 @@ exports.save_league_scrap_info = function (req, res) {
                     newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
                     newTeamToScrap.name = standing.teamName;
                     newTeamToScrap.providers = [];
-
-                    var leagueFiltered = dbLeaguesToScrap.filter(function (el) {
-                        return el.permalink == leagueInfo.permalink;
-                    });
-                    if (leagueFiltered.length > 0 && leagueFiltered[0].providers.length > 0) {
+                    
+                    if (standing.providerInfo)
                         newTeamToScrap.providers.push({
-                            name: leagueFiltered[0].providers[0].name,
-                            link: leagueFiltered[0].providers[0].link,
+                            name: standing.providerInfo.name,
+                            link: standing.providerInfo.link,
                         });
-                    }
+
+                    // var leagueFiltered = dbLeaguesToScrap.filter(function (el) {
+                    //     return el.permalink == leagueInfo.permalink;
+                    // });
+                    // if (leagueFiltered.length > 0 && leagueFiltered[0].providers.length > 0) {
+                    //     newTeamToScrap.providers.push({
+                    //         name: leagueFiltered[0].providers[0].name,
+                    //         link: leagueFiltered[0].providers[0].link,
+                    //     });
+                    // }
 
                     teamsToScrap.push(newTeamToScrap);
                     logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
