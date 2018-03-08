@@ -60,18 +60,22 @@ function* running(leagues) {
     });
 
     for (i = 0; i < leagues.length; i++) {
-        console.log(retries);
         console.log('Running [' + i + '] of ' + leagues.length)
         console.log('[' + leagues[i].name + '] Going to start scraping');
         var r = yield* scrapLeagueInfo(leagues[i]);
         if (r != null)
             results.push(r);
         else {
-            var retriesInfo = retries.filter(function (el) {
-                return el.permalink == leagues[i].permalink;
-            });
+            var retriesInfo = {};
+            for (var i in retries) {
+                if (retries[i].permalink == leagues[i].permalink) {
+                    retriesInfo = retries[i];
+                    break;
+                }
+            }
 
-            if (retriesInfo.length > 0 && retriesInfo[0].retryCount < retriesInfo[0].maxRetries) {
+            console.log(retriesInfo);
+            if (retriesInfo && retriesInfo.retryCount < retriesInfo.maxRetries) {
                 i--;
                 
                 // update retry information
