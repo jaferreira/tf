@@ -9,7 +9,7 @@
             </pre>
         </div>
         <div v-else>
-            <p>The page you're looking for is in another framework</p>
+            <p>Error...</p>
         </div>
     </div>
 </template>
