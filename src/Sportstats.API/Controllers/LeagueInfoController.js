@@ -9,8 +9,7 @@ var logger = require('../Logger.js'),
 exports.create_league_info = function (req, res) {
     var newLeagueInfo = new LeagueInfo(req.body);
     newLeagueInfo.save(function (err, house) {
-        if (err)
-        {
+        if (err) {
             logger.error(err);
             res.send(err);
         }
@@ -19,7 +18,7 @@ exports.create_league_info = function (req, res) {
 };
 
 exports.get_league_info = function (req, res) {
-    
+
     logger.info('Called get_league_info: ' + req.params.league);
     var filter = {
         permalink: req.params.league
@@ -47,9 +46,9 @@ exports.get_league_info = function (req, res) {
 
 
 exports.get_leagues_from_country = function (req, res) {
-    
+
     logger.info('Called get_leagues_from_country: ' + req.params.country);
-    
+
     var filter = {
         country: req.params.country
     };
@@ -76,18 +75,55 @@ exports.get_leagues_from_country = function (req, res) {
 
 
 exports.get_countries = function (req, res) {
-    
+
     logger.info('Called get_countries');
-    
+
     var countries = [
-        { name: 'England', link: '/countries/England' },
-        { name: 'Portugal', link: '/countries/Portugal' },
-        { name: 'Italy', link: '/countries/Italy' },
-        { name: 'France', link: '/countries/France' },
-        { name: 'China', link: '/countries/China' },
-        { name: 'EUA', link: '/countries/EUA' }   
+        // { name: 'England', link: '/countries/England' },
+        // { name: 'Portugal', link: '/countries/Portugal' },
+        // { name: 'Italy', link: '/countries/Italy' },
+        // { name: 'France', link: '/countries/France' },
+        // { name: 'China', link: '/countries/China' },
+        // { name: 'EUA', link: '/countries/EUA' }   
     ];
 
 
-    res.json(countries);
+    var options = {
+        page: 1,
+        limit: 1000,
+        sort: {
+            createdAt: -1
+        }
+    };
+
+    LeagueInfo.paginate(
+        {},
+        options,
+        function (err, leagues) {
+            if (err) {
+                logger.error(err);
+                res.send(err);
+            }
+
+            if (leagues.docs) {
+                leagues.docs.forEach(leagueInfo => {
+                    var exists = false;
+                    for (var i = 0; i < countries.length; i++) {
+                        if (countries[i].name === leagueInfo.country) {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists) {
+                        countries.push({
+                            name: leagueInfo.country,
+                            link: '/countries/' + leagueInfo.country
+                        });
+                    }
+                });
+            }
+
+            res.json(countries);
+        });
 };
