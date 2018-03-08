@@ -73,8 +73,6 @@ function* running(leagues) {
                     break;
                 }
             }
-
-            console.log(retriesInfo);
             if (retriesInfo && retriesInfo.retryCount <= retriesInfo.maxRetries) {
                 i--;
                 
