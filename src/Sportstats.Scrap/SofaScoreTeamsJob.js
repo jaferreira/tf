@@ -91,7 +91,7 @@ function* scrapTeamInfo(link) {
             var city = '';
 
             for (var i = 0, row; row = rows[i]; i++) {
-                console.log('hello 6 ');
+            
                 if (row.innerText.startsWith('Manager') == true) {
                     manager = row.innerText.split('Manager').join('').trim();
                     findElements++;
@@ -127,7 +127,7 @@ function* scrapTeamInfo(link) {
                     city : city
                 }
             }
-            console.log('hello 8 ');
+       
 
             return result
 

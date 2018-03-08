@@ -8,6 +8,13 @@
       }
     },
     {
+      "name": "SofaScoreTeamsCron",
+      "script": "SofaScoreTeamsCron.js",
+      "env": {
+        "DISPLAY": ":99"
+      }
+    },
+    {
       "name": "ScrapService",
       "script": "ScrapService.js",
       "env": {
