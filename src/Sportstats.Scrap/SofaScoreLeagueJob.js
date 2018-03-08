@@ -193,9 +193,10 @@ function* scrapLeagueInfo(league) {
 
             var newcomers = [];
             rows = $('div.bg-container > a.cell.cell--interactive.u-mB4.js-link > .cell__section--main.u-mL12');
-            for (var i = 0, row; row = rows[i]; i++) {
-                newcomers.push(row.innerText.trim())
-            }
+            if (rows.length > 0)
+                for (var i = 0, row; row = rows[i]; i++) {
+                    newcomers.push(row.innerText.trim())
+                }
             //2018-03-06 18:33:53.384
 
             rows = $('.js-event-list-tournament.tournament > .js-event-list-tournament-events > a');
@@ -239,7 +240,7 @@ function* scrapLeagueInfo(league) {
                     draws: factsLeague[4].innerText.trim(),
                     awayTeamWins: factsLeague[5].innerText.trim(),
                     yellowCards: factsLeague[6].innerText.trim(),
-                    redCards: factsLeague[7].innerText.trim(),
+                    redCards: (factsLeague.length >= 8) ? factsLeague[7].innerText.trim() : null,
 
                 }
             }
