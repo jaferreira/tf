@@ -46,19 +46,40 @@ module.exports = {
 
 function* running(leagues) {
 
-
+    var globalMaxRetries = 5;
     var results = [];
+    var retries = [];
+
+    // Initialize retry counters
+    leagues.forEach(league => {
+        retries.push({
+            permalink: league.permalink,
+            maxRetries: globalMaxRetries,
+            retryCount: 0
+        });
+    });
+
     for (i = 0; i < leagues.length; i++) {
-        var retryCount = 0;
-        var maxRetries = 5;
         console.log('Running [' + i + '] of ' + leagues.length)
+        console.log('[' + leagues[i].name + '] Going to start scraping');
         var r = yield* scrapLeagueInfo(leagues[i]);
         if (r != null)
             results.push(r);
         else {
-            if (retryCount < maxRetries) {
+            var retriesInfo = retries.filter(function (el) {
+                return el.permalink == leagues[i].permalink;
+            });
+
+            if (retriesInfo.length > 0 && retriesInfo[0].retryCount < retriesInfo[0].maxRetries) {
                 i--;
-                retryCount++;
+                
+                // update retry information
+                for (var i in retries) {
+                    if (retries[i].permalink == leagues[i].permalink) {
+                        retries[i].retryCount++;
+                        break;
+                    }
+                }
                 console.log('[' + leagues[i].name + '] Error scraping league, trying one more time');
             }
             else {
