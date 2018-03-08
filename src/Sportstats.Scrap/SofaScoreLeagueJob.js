@@ -233,13 +233,13 @@ function* scrapLeagueInfo(league) {
 
                 newcomers: newcomers,
                 facts: {
-                    devisionLevel: factsLeague[0].innerText.trim(),
-                    numberRounds: factsLeague[1].innerText.trim(),
-                    averageGoals: factsLeague[2].innerText.trim(),
-                    homeTeamWins: factsLeague[3].innerText.trim(),
-                    draws: factsLeague[4].innerText.trim(),
-                    awayTeamWins: factsLeague[5].innerText.trim(),
-                    yellowCards: factsLeague[6].innerText.trim(),
+                    devisionLevel: (factsLeague.length >= 1) ? factsLeague[0].innerText.trim() : null,
+                    numberRounds: (factsLeague.length >= 2) ? factsLeague[1].innerText.trim() : null,
+                    averageGoals: (factsLeague.length >= 3) ? factsLeague[2].innerText.trim() : null,
+                    homeTeamWins: (factsLeague.length >= 4) ? factsLeague[3].innerText.trim() : null,
+                    draws: (factsLeague.length >= 5) ? factsLeague[4].innerText.trim() : null,
+                    awayTeamWins: (factsLeague.length >= 6) ? factsLeague[5].innerText.trim() : null,
+                    yellowCards: (factsLeague.length >= 7) ? factsLeague[6].innerText.trim() : null,
                     redCards: (factsLeague.length >= 8) ? factsLeague[7].innerText.trim() : null,
 
                 }
