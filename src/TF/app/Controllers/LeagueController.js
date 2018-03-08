@@ -32,3 +32,18 @@ exports.get_country_leagues = function (req, res, callback) {
         }
     })
 };
+
+exports.get_countries = function (req, res, callback) {
+
+    var url = apiBaseUrl + '/info/countries';
+
+    request({
+        url: url,
+        json: true
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            callback(body);
+        }
+    })
+};
+

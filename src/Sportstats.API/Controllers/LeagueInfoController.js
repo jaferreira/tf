@@ -73,3 +73,21 @@ exports.get_leagues_from_country = function (req, res) {
             res.json(house);
         });
 };
+
+
+exports.get_countries = function (req, res) {
+    
+    logger.info('Called get_countries');
+    
+    var countries = [
+        { name: 'England', link: '/countries/England' },
+        { name: 'Portugal', link: '/countries/Portugal' },
+        { name: 'Italy', link: '/countries/Italy' },
+        { name: 'France', link: '/countries/France' },
+        { name: 'China', link: '/countries/China' },
+        { name: 'EUA', link: '/countries/EUA' }   
+    ];
+
+
+    res.json(countries);
+};
