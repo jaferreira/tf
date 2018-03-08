@@ -91,8 +91,8 @@ function* running(leagues) {
                         break;
                     }
                 }
+                console.log('[' + leagues[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + (i - 1));
                 i--;
-                console.log('[' + leagues[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + i);
             }
             else {
                 console.log('[' + leagues[i].name + '] Max retries reached, going to next league (i: ' + i + ')');
