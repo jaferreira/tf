@@ -71,6 +71,7 @@ function* running(teams) {
 
         if (r != null) {
             console.log('[' + teams[i].name + '] Scraping done.');
+            console.log(JSON.stringify(r))
             results.push(r);
         }
         // else {
