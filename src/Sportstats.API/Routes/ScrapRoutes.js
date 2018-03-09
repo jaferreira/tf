@@ -1,53 +1,6 @@
 'use strict';
 module.exports = function (app) {
 
-    // Teams
-    var teamsScrapController = require('../Controllers/TeamsScrapController');
-
-   /**
-     * @swagger
-     * /scrap/teams/pending:
-     *   get:
-     *     description: Returns teams that are pending to be scraped.
-     *     produces:
-     *      - application/json
-     *     responses:
-     *       200:
-     *         description: teams
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#/definitions/TeamToScrap'
-     */
-    app.route('/scrap/teams/pending')
-        .get(teamsScrapController.get_pending_teams_to_scrap);
-
-    // Create new team to be scraped
-    // app.route('/scrap/teams')
-    //     .post(teamsScrapController.create_team_to_scrap);
-
-    /**
-     * @swagger
-     * /scrap/teams/bulk:
-     *   post:
-     *     description: Save team scrap information for an array of teams. The ones that already exist, are updated. The key is the property 'permalink'.
-     *     produces:
-     *      - application/json
-     *     parameters:
-     *       - name: teams
-     *         type: array
-     *         in: body
-     *     responses:
-     *       200
-     */
-    app.route('/scrap/teams/bulk')
-        .post(teamsScrapController.save_team_scrap_info);
-
-
-
-    // Leagues
-    var leaguesScrapController = require('../Controllers/LeaguesScrapController');
-
     /**
      * @swagger
      * definitions:
@@ -61,6 +14,7 @@ module.exports = function (app) {
      *          type: string
      *       - link:
      *          type: string
+     *
      *   LeagueInfo:
      *     type: object
      *     required:
@@ -77,6 +31,7 @@ module.exports = function (app) {
      *          type: string
      *       - mostTitlesNumber:
      *          type: number
+     *
      *   LeagueToScrap:
      *     type: object
      *     required:
@@ -115,6 +70,60 @@ module.exports = function (app) {
      *         items:
      *             $ref: '#/definitions/Provider'
      */
+
+
+
+
+    // Teams
+    var teamsScrapController = require('../Controllers/TeamsScrapController');
+
+   /**
+     * @swagger
+     * /scrap/teams/pending:
+     *   get:
+     *     description: Returns teams that are pending to be scraped.
+     *     produces:
+     *      - application/json
+     *     responses:
+     *       200:
+     *         description: teams
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#/definitions/TeamToScrap'
+     */
+    app.route('/scrap/teams/pending')
+        .get(teamsScrapController.get_pending_teams_to_scrap);
+
+    // Create new team to be scraped
+    // app.route('/scrap/teams')
+    //     .post(teamsScrapController.create_team_to_scrap);
+
+    /**
+     * @swagger
+     * /scrap/teams/bulk:
+     *   post:
+     *     description: Save team scrap information for an array of teams. The ones that already exist, are updated. The key is the property 'permalink'.
+     *     produces:
+     *      - application/json
+     *     parameters:
+     *       - name: teams
+     *         type: array
+     *         in: body
+     *         required: true
+     *         description: Teams info to be saved.
+     *     responses:
+     *       200
+     */
+    app.route('/scrap/teams/bulk')
+        .post(teamsScrapController.save_team_scrap_info);
+
+
+
+    // Leagues
+    var leaguesScrapController = require('../Controllers/LeaguesScrapController');
+
+    
 
     /**
      * @swagger
@@ -174,6 +183,8 @@ module.exports = function (app) {
      *       - name: leagues
      *         type: array
      *         in: body
+     *         required: true
+     *         description: Leagues info to be saved.
      *     responses:
      *       200
      */

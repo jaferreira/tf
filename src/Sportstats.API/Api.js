@@ -48,7 +48,7 @@ mongoose.connect(mongoConnString, function (err) {
             version: '0.1.0', // Version (required)
             description: 'Sportstats API', // Description (optional)
         },
-        host: 'localhost:3000', // Host (optional)
+        host: 'wigserver.myvnc.com:3000', // Host (optional)
         basePath: '/', // Base path (optional)
     };
 

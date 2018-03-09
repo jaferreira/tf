@@ -17,7 +17,7 @@ exports.get_pending_teams_to_scrap = function (req, res) {
 
     var options = {
         page: 1,
-        limit: 10,
+        limit: 1,
         sort: {
             createdAt: -1
         }
