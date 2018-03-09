@@ -62,7 +62,7 @@ function* running(teams) {
     for (i = 0; i < teams.length; i++) {
         console.log(' --- ');
         console.log('Running [' + (i + 1) + '] of ' + teams.length)
-        console.log('[' + teams[i].name + '] Going to start scraping');
+        console.log('[' + teams[i].name + '] Going to start scraping url ' + teams[i].providers[0].link);
 
         var r = yield* scrapLeagueInfo(teams[i]);
 
@@ -115,6 +115,7 @@ function* scrapLeagueInfo(team) {
         .wait(1000)
         .wait('.squad')
         .evaluate(function (team) {
+            debugger;
             var nameTeam = $('h2.page-title')[0].innerText.trim();
             var rows = $('.top-scorers-container')[0].querySelectorAll('a');
             var topScores = [];
@@ -185,7 +186,7 @@ function* scrapLeagueInfo(team) {
             var result = {
                 provider: team.providers[0],
                 teamName: $('h2.page-title')[0].innerText,
-                teamLink: team.providers[0].link,
+                // teamLink: team.providers[0].link,
                 topScores: topScores,
                 squad: squad,
                 teamInfo: {

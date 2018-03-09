@@ -15,7 +15,7 @@ function Status() {
         }]
     }
     return scraper
-        .goto('https://www.sofascore.com/team/football/birmingham-city/9')
+        .goto('https://www.sofascore.com/pt/time/futebol/sunderland/41')
 
         .wait('.squad')
         .evaluate(function (team) {
@@ -39,7 +39,6 @@ function Status() {
             rows = $('.squad > a');
             var squad = [];
             for (var i = 0, row; row = rows[i]; i++) {
-                console.log('hello 4 ');
                 squad.push({
                     name: row.querySelectorAll('.squad-player__name')[0].innerText.trim(),
                     nationality: row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[1] ? row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[1].innerText.trim() : '',
