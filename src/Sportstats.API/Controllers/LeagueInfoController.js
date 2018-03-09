@@ -4,7 +4,7 @@ var logger = require('../Logger.js'),
     mongoose = require('mongoose'),
     LeagueInfo = mongoose.model('Leagues'),
     async = require('async'),
-    response = ('./Response.js');
+    response = require('./Response.js');
 
 
 exports.create_league_info = function (req, res) {
@@ -49,6 +49,8 @@ exports.get_league_info = function (req, res) {
 exports.get_leagues = function (req, res) {
 
     logger.info('Called get_leagues (max page size: 100)');
+
+    logger.info(response);
 
     var filter = {
         

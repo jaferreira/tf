@@ -6,22 +6,22 @@
         };
      },
      
-     successResponse = function (resultObj) {
+     successResponse: function (resultObj) {
         return {
             success: true,
-            resultObj: resultObj
+            result: resultObj
         };
      },
 
-     successResponse = function (resultObj, message) {
+     successResponse: function (resultObj, message) {
         return {
             success: true,
-            resultObj: resultObj,
+            result: resultObj,
             message: message
         };
      },
     
-     errorResponse = function (message) {
+     errorResponse: function (message) {
         return {
             success: false,
             message: message
