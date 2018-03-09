@@ -43,8 +43,12 @@ exports.save_team_scrap_info = function (req, res) {
     var ids = [];
     logger.info('Saving ' + teamsData.length + ' teams:');
     teamsData.forEach(team => {
-        ids.push(team.permalink);
-        logger.info(' » (' + team.country + ') ' + team.name);
+        if (!team.name || !team.country) {
+            logger.info(' » A team has no required data! (skip item)');
+        } else {
+            ids.push(team.permalink);
+            logger.info(' » (' + team.country + ') ' + team.name);
+        }
     });
 
     TeamsToScrap.find({
@@ -54,12 +58,12 @@ exports.save_team_scrap_info = function (req, res) {
     }, function (err, dbTeamsToScrap) {
         if (err) {
             logger.error(err);
-            res.send(err);
+            return res.send(err);
         }
         logger.info('Got ' + dbTeamsToScrap.length + ' TeamsToScrap from db');
         if (dbTeamsToScrap.length == 0) {
-            logger.info('Nothing to do...returning.');
-            return res.sendStatus(200);
+            logger.info('Nothing to do...returning "204 No Content".');
+            return res.sendStatus(204);
         }
 
         // UPDATE Next Scrap Date

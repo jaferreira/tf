@@ -10,9 +10,9 @@ module.exports = function (app) {
      *       - provider
      *       - link
      *     properties:
-     *       - provider:
+     *       provider:
      *          type: string
-     *       - link:
+     *       link:
      *          type: string
      *
      *   LeagueInfo:
@@ -21,15 +21,15 @@ module.exports = function (app) {
      *       - provider
      *       - link
      *     properties:
-     *       - name:
+     *       name:
      *          type: string
-     *       - permalink:
+     *       permalink:
      *          type: string
-     *       - country:
+     *       country:
      *          type: string
-     *       - titleHolder:
+     *       titleHolder:
      *          type: string
-     *       - mostTitlesNumber:
+     *       mostTitlesNumber:
      *          type: number
      *
      *   LeagueToScrap:

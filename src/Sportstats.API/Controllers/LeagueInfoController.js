@@ -3,7 +3,8 @@
 var logger = require('../Logger.js'),
     mongoose = require('mongoose'),
     LeagueInfo = mongoose.model('Leagues'),
-    async = require('async');
+    async = require('async'),
+    response = require('./Response.js');
 
 
 exports.create_league_info = function (req, res) {
@@ -49,6 +50,8 @@ exports.get_leagues = function (req, res) {
 
     logger.info('Called get_leagues (max page size: 100)');
 
+    logger.info(response);
+
     var filter = {
         
     };
@@ -67,9 +70,9 @@ exports.get_leagues = function (req, res) {
         function (err, house) {
             if (err) {
                 logger.error(err);
-                res.send(err);
+                return res.status(500).json(response.errorResponse(err));
             }
-            res.json(house);
+            return res.json(response.successResponse(house));
         });
 };
 
