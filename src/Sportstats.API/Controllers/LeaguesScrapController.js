@@ -5,7 +5,8 @@ var logger = require('../Logger.js'),
     Leagues = mongoose.model('Leagues'),
     LeaguesToScrap = mongoose.model('LeaguesToScrap'),
     TeamsToScrap = mongoose.model('TeamsToScrap'),
-    async = require('async');
+    async = require('async'),
+    response = require('./Response.js');
 
 
 
@@ -27,12 +28,12 @@ exports.get_pending_leagues_to_scrap = function (req, res) {
     LeaguesToScrap.paginate(
         filter,
         options,
-        function (err, house) {
+        function (err, data) {
             if (err) {
                 logger.error(err);
-                res.send(err);
+                return res.json(response.errorResponse(err));
             }
-            res.json(house);
+            return res.json(response.successResponse(data));
         });
 };
 
@@ -44,12 +45,10 @@ exports.reset_leagues_to_scrap = function (req, res) {
         function (err, num) {
             if (err) {
                 logger.error(err);
-                return res.sendStatus(500, {
-                    error: err
-                });
+                return res.json(response.errorResponse(err));
             }
             logger.info('Reset Next Scrap Date for ' + num + ' football leagues.');
-            return res.sendStatus(200);
+            return res.json(response.successResponse());
         });
 };
 
@@ -72,12 +71,10 @@ exports.create_league_to_scrap = function (req, res) {
     }, function (err, doc) {
         if (err) {
             logger.error(err);
-            return res.sendStatus(500, {
-                error: err
-            });
+            return res.json(response.errorResponse(err));
         }
         logger.info('League to scrap succesfully saved: ' + leagueInfo.name);
-        return res.json(doc);
+        return res.json(response.successResponse(doc));
     });
 };
 
@@ -100,7 +97,7 @@ exports.save_league_scrap_info = function (req, res) {
     }, function (err, dbLeaguesToScrap) {
         if (err) {
             logger.error(err);
-            res.send(err);
+            return res.json(response.errorResponse(err));
         }
         logger.info('Got ' + dbLeaguesToScrap.length + ' LeaguesToScrap from db');
 
@@ -128,22 +125,12 @@ exports.save_league_scrap_info = function (req, res) {
                     newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
                     newTeamToScrap.name = standing.teamName;
                     newTeamToScrap.providers = [];
-                    
+
                     if (standing.providerInfo)
                         newTeamToScrap.providers.push({
                             name: standing.providerInfo.name,
                             link: standing.providerInfo.link,
                         });
-
-                    // var leagueFiltered = dbLeaguesToScrap.filter(function (el) {
-                    //     return el.permalink == leagueInfo.permalink;
-                    // });
-                    // if (leagueFiltered.length > 0 && leagueFiltered[0].providers.length > 0) {
-                    //     newTeamToScrap.providers.push({
-                    //         name: leagueFiltered[0].providers[0].name,
-                    //         link: leagueFiltered[0].providers[0].link,
-                    //     });
-                    // }
 
                     teamsToScrap.push(newTeamToScrap);
                     logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
@@ -166,6 +153,6 @@ exports.save_league_scrap_info = function (req, res) {
         var result3 = LeaguesToScrap.upsertMany(dbLeaguesToScrap, matchFields);
         logger.info('Updated LeaguesToScrap info with nextScrapAt.');
 
-        return res.sendStatus(200);
+        return res.json(response.successResponse());
     });
 };

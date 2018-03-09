@@ -9,12 +9,12 @@ var logger = require('../Logger.js'),
 
 exports.create_league_info = function (req, res) {
     var newLeagueInfo = new LeagueInfo(req.body);
-    newLeagueInfo.save(function (err, house) {
+    newLeagueInfo.save(function (err, data) {
         if (err) {
             logger.error(err);
-            res.send(err);
+            return res.json(response.errorResponse(err));
         }
-        res.json(house);
+        return res.json(response.successResponse(data));
     });
 };
 
@@ -36,12 +36,12 @@ exports.get_league_info = function (req, res) {
     LeagueInfo.paginate(
         filter,
         options,
-        function (err, house) {
+        function (err, data) {
             if (err) {
                 logger.error(err);
-                res.send(err);
+                return res.status(500).json(response.errorResponse(err));
             }
-            res.json(house);
+            return res.json(response.successResponse(data));
         });
 };
 
@@ -67,12 +67,12 @@ exports.get_leagues = function (req, res) {
     LeagueInfo.paginate(
         filter,
         options,
-        function (err, house) {
+        function (err, data) {
             if (err) {
                 logger.error(err);
                 return res.status(500).json(response.errorResponse(err));
             }
-            return res.json(response.successResponse(house));
+            return res.json(response.successResponse(data));
         });
 };
 
@@ -95,12 +95,12 @@ exports.get_leagues_from_country = function (req, res) {
     LeagueInfo.paginate(
         filter,
         options,
-        function (err, house) {
+        function (err, data) {
             if (err) {
                 logger.error(err);
-                res.send(err);
+                return res.status(500).json(response.errorResponse(err));
             }
-            res.json(house);
+            return res.json(response.successResponse(data));
         });
 };
 
@@ -133,7 +133,7 @@ exports.get_countries = function (req, res) {
         function (err, leagues) {
             if (err) {
                 logger.error(err);
-                res.send(err);
+                return res.status(500).json(response.errorResponse(err));
             }
 
             if (leagues.docs) {
@@ -155,6 +155,6 @@ exports.get_countries = function (req, res) {
                 });
             }
 
-            res.json(countries);
+            return res.json(response.successResponse(countries));
         });
 };

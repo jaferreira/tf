@@ -4,7 +4,8 @@ var logger = require('../Logger.js'),
     mongoose = require('mongoose'),
     Teams = mongoose.model('Teams'),
     TeamsToScrap = mongoose.model('TeamsToScrap'),
-    async = require('async');
+    async = require('async'),
+    response = require('./Response.js');
 
 
 
@@ -23,16 +24,15 @@ exports.get_pending_teams_to_scrap = function (req, res) {
         }
     };
 
-
     TeamsToScrap.paginate(
         filter,
         options,
-        function (err, house) {
+        function (err, data) {
             if (err) {
                 logger.error(err);
-                res.send(err);
+                return res.status(500).json(response.errorResponse(err));
             }
-            res.json(house);
+            return res.json(response.successResponse(data));
         });
 };
 
@@ -58,12 +58,12 @@ exports.save_team_scrap_info = function (req, res) {
     }, function (err, dbTeamsToScrap) {
         if (err) {
             logger.error(err);
-            return res.send(err);
+            return res.status(500).json(response.errorResponse(err));
         }
         logger.info('Got ' + dbTeamsToScrap.length + ' TeamsToScrap from db');
         if (dbTeamsToScrap.length == 0) {
             logger.info('Nothing to do...returning "204 No Content".');
-            return res.sendStatus(204);
+            return res.status(204).json(response.errorResponse('Found no teams to update.'));
         }
 
         // UPDATE Next Scrap Date
@@ -87,17 +87,17 @@ exports.save_team_scrap_info = function (req, res) {
         var result3 = TeamsToScrap.upsertMany(dbTeamsToScrap, matchFields);
         logger.info('Updated TeamsToScrap info with nextScrapAt.');
 
-        return res.sendStatus(200);
+        return res.json(response.successResponse());
     });
 };
 
 exports.create_team_to_scrap = function (req, res) {
     var newTeamToScrap = new TeamsToScrap(req.body);
-    newTeamToScrap.save(function (err, house) {
+    newTeamToScrap.save(function (err, data) {
         if (err) {
             logger.error(err);
             res.send(err);
         }
-        res.json(house);
+        res.json(response.successResponse(data));
     });
 };
