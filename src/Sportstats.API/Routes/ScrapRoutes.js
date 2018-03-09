@@ -37,6 +37,8 @@ module.exports = function (app) {
      *       - name: teams
      *         type: array
      *         in: body
+     *         required: true
+     *         description: Teams info to be saved.
      *     responses:
      *       200
      */
@@ -174,6 +176,8 @@ module.exports = function (app) {
      *       - name: leagues
      *         type: array
      *         in: body
+     *         required: true
+     *         description: Leagues info to be saved.
      *     responses:
      *       200
      */
