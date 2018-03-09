@@ -66,14 +66,14 @@ function* running(teams) {
         console.log(' --- ');
         console.log('Running [' + (i + 1) + '] of ' + teams.length)
         console.log('[' + teams[i].name + '] Going to start scraping url ' + teams[i].providers[0].link);
+        results.push(yield* scrapLeagueInfo(teams[i]));
+        // var r = yield* scrapLeagueInfo(teams[i]);
 
-        var r = yield* scrapLeagueInfo(teams[i]);
-
-        if (r != null) {
-            console.log('[' + teams[i].name + '] Scraping done.');
-            console.log(JSON.stringify(r))
-            results.push(r);
-        }
+        // if (r != null) {
+        //     console.log('[' + teams[i].name + '] Scraping done.');
+        //     console.log(JSON.stringify(r))
+        //     results.push(r);
+        // }
         // else {
         //     console.log('[' + teams[i].name + '] Scraping error.');
         //     var retriesInfo = {};
