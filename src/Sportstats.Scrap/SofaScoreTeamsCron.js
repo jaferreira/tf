@@ -19,7 +19,7 @@ cron.schedule('*/1 * * * *', function () {
             console.log('Status:', res.statusCode);
         } else {
 
-            if (data.docs.length > 0) {
+            if (data.results.docs.length > 0) {
 
 
                 request.post({
