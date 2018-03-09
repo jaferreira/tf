@@ -45,6 +45,34 @@ exports.get_league_info = function (req, res) {
 };
 
 
+exports.get_leagues = function (req, res) {
+
+    logger.info('Called get_leagues (max page size: 100)');
+
+    var filter = {
+        
+    };
+
+    var options = {
+        page: 1,
+        limit: 100,
+        sort: {
+            createdAt: -1
+        }
+    };
+
+    LeagueInfo.paginate(
+        filter,
+        options,
+        function (err, house) {
+            if (err) {
+                logger.error(err);
+                res.send(err);
+            }
+            res.json(house);
+        });
+};
+
 exports.get_leagues_from_country = function (req, res) {
 
     logger.info('Called get_leagues_from_country: ' + req.params.country);
