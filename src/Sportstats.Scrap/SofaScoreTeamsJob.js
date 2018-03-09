@@ -1,6 +1,6 @@
 var nightmare = require('nightmare'),
     tryCount = 0,
-    equest = require('request'),
+    request = require('request'),
     currentTeam = {};
 
 process.on('unhandledRejection', (reason, p) => {
