@@ -27,7 +27,7 @@ module.exports = {
         results = yield* running(teamsToScrap);
         //console.log(JSON.stringify(results))
 
-        console.log(JSON.stringify(results));
+        console.log('before send  ->'.JSON.stringify(results));
         request.post({
             url: 'http://localhost:3000/scrap/teams/bulk/',
             json: true,
@@ -71,7 +71,7 @@ function* running(teams) {
 
         if (r != null) {
             console.log('[' + teams[i].name + '] Scraping done.');
-            console.log(JSON.stringify(r))
+            
             results.push(r);
         }
         else {
@@ -104,7 +104,7 @@ function* running(teams) {
         }
 
     }
-    console.log('finish')
+    console.log('results -> '.JSON.stringify(results))
    
     return yield results;
 
