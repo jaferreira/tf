@@ -106,12 +106,12 @@ function* running(teams) {
 }
 
 function* scrapLeagueInfo(team) {
-
-    console.log('starting Scrap Url ' + team.providers[0].link);
+    var url =  team.providers[0].link;
+    console.log('starting Scrap Url ' + url);
     var value = yield nbot
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
 
-        .goto(team.providers[0].link)
+        .goto(url)
         .wait(1000)
         .wait('.squad')
         .evaluate(function (team) {
@@ -186,7 +186,7 @@ function* scrapLeagueInfo(team) {
             var result = {
                 provider: team.providers[0],
                 teamName: $('h2.page-title')[0].innerText,
-                // teamLink: team.providers[0].link,
+                teamLink: team.providers[0].link,
                 topScores: topScores,
                 squad: squad,
                 teamInfo: {
