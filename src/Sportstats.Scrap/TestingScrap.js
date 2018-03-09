@@ -19,7 +19,7 @@ function Status() {
 
         .wait('.squad')
         .evaluate(function (team) {
-            debugger;
+            
             var nameTeam = $('h2.page-title')[0].innerText.trim();
             var rows = $('.top-scorers-container')[0].querySelectorAll('a');
             var topScores = [];
