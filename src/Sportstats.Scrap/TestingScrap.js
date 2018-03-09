@@ -15,7 +15,7 @@ function Status() {
         }]
     }
     return scraper
-        .goto('https://www.sofascore.com/pt/time/futebol/sunderland/41')
+        .goto('https://www.sofascore.com/pt/time/futebol/west-bromwich-albion/8')
 
         .wait('.squad')
         .evaluate(function (team) {

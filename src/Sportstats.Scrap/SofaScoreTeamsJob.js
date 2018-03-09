@@ -1,17 +1,20 @@
 var nightmare = require('nightmare'),
     tryCount = 0,
-    request = require('request');
-// process.on('unhandledRejection', (reason, p) => {
-//     console.log('erro')
-//     if (tryCount <= 5) {
-//         console.log('retry - ' + tryCount)
-//         tryCount++;
-//         run();
-//     }
-//     else {
-//         //TODO reporting error
-//     }
-// });
+    equest = require('request'),
+    currentTeam = {};
+
+process.on('unhandledRejection', (reason, p) => {
+    console.error('Scrap error')
+    console.error(reason)
+    if (tryCount <= 5) {
+        console.log('retry - ' + tryCount)
+        tryCount++;
+        run(currentTeam,tryCount);
+    }
+    else {
+        //TODO reporting error
+    }
+});
 module.exports = {
     scrapTeams: function* run(teamsToScrap) {
         nbot = nightmare({
@@ -70,34 +73,34 @@ function* running(teams) {
             console.log('[' + teams[i].name + '] Scraping done.');
             results.push(r);
         }
-        else {
-            console.log('[' + teams[i].name + '] Scraping error.');
-            var retriesInfo = {};
-            for (var j in retries) {
-                if (retries[j].permalink == teams[i].permalink) {
-                    retriesInfo = retries[j];
-                    break;
-                }
-            }
-            var retryCount = retriesInfo.retryCount;
-            var maxRetries = retriesInfo.maxRetries;
+        // else {
+        //     console.log('[' + teams[i].name + '] Scraping error.');
+        //     var retriesInfo = {};
+        //     for (var j in retries) {
+        //         if (retries[j].permalink == teams[i].permalink) {
+        //             retriesInfo = retries[j];
+        //             break;
+        //         }
+        //     }
+        //     var retryCount = retriesInfo.retryCount;
+        //     var maxRetries = retriesInfo.maxRetries;
 
-            console.log('[' + teams[i].name + '] Retry information: RetryCount: ' + retryCount + ' (max: ' + maxRetries + ')');
-            if (retriesInfo && retryCount <= maxRetries) {
-                // update retry information
-                for (var k in retries) {
-                    if (retries[k].permalink == teams[i].permalink) {
-                        retries[k].retryCount++;
-                        break;
-                    }
-                }
-                console.log('[' + teams[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + (i - 1));
-                i--;
-            }
-            else {
-                console.log('[' + teams[i].name + '] Max retries reached, going to next league (i: ' + i + ')');
-            }
-        }
+        //     console.log('[' + teams[i].name + '] Retry information: RetryCount: ' + retryCount + ' (max: ' + maxRetries + ')');
+        //     if (retriesInfo && retryCount <= maxRetries) {
+        //         // update retry information
+        //         for (var k in retries) {
+        //             if (retries[k].permalink == teams[i].permalink) {
+        //                 retries[k].retryCount++;
+        //                 break;
+        //             }
+        //         }
+        //         console.log('[' + teams[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + (i - 1));
+        //         i--;
+        //     }
+        //     else {
+        //         console.log('[' + teams[i].name + '] Max retries reached, going to next league (i: ' + i + ')');
+        //     }
+        // }
 
     }
     console.log('finish')
@@ -105,7 +108,9 @@ function* running(teams) {
 
 }
 
-function* scrapLeagueInfo(team) {
+function* scrapLeagueInfo(team,retry) {
+    tryCount = retry;
+    currentTeam = team;
     var url =  team.providers[0].link;
     console.log('starting Scrap Url ' + url);
     var value = yield nbot
