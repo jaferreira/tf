@@ -1,17 +1,17 @@
 var nightmare = require('nightmare'),
     tryCount = 0,
     request = require('request');
-process.on('unhandledRejection', (reason, p) => {
-    console.log('erro')
-    if (tryCount <= 5) {
-        console.log('retry - ' + tryCount)
-        tryCount++;
-        run();
-    }
-    else {
-        //TODO reporting error
-    }
-});
+// process.on('unhandledRejection', (reason, p) => {
+//     console.log('erro')
+//     if (tryCount <= 5) {
+//         console.log('retry - ' + tryCount)
+//         tryCount++;
+//         run();
+//     }
+//     else {
+//         //TODO reporting error
+//     }
+// });
 module.exports = {
     scrapTeams: function* run(teamsToScrap) {
         nbot = nightmare({
@@ -62,7 +62,7 @@ function* running(teams) {
     for (i = 0; i < teams.length; i++) {
         console.log(' --- ');
         console.log('Running [' + (i + 1) + '] of ' + teams.length)
-        console.log('[' + teams[i].name + '] Going to start scraping');
+        console.log('[' + teams[i].name + '] Going to start scraping url ' + teams[i].providers[0].link);
 
         var r = yield* scrapLeagueInfo(teams[i]);
 
@@ -106,15 +106,16 @@ function* running(teams) {
 }
 
 function* scrapLeagueInfo(team) {
-
-    console.log('starting Scrap Url ' + team.providers[0].link);
+    var url =  team.providers[0].link;
+    console.log('starting Scrap Url ' + url);
     var value = yield nbot
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
 
-        .goto(team.providers[0].link)
+        .goto(url)
         .wait(1000)
         .wait('.squad')
         .evaluate(function (team) {
+            debugger;
             var nameTeam = $('h2.page-title')[0].innerText.trim();
             var rows = $('.top-scorers-container')[0].querySelectorAll('a');
             var topScores = [];
