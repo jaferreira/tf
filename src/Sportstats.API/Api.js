@@ -13,12 +13,13 @@ var logger = require('./Logger.js'),
     expressMetrics = require('express-metrics'),
     swaggerUi = require('swagger-ui-express'),
     swaggerJSDoc = require('swagger-jsdoc')
-    upsertMany = require('@meanie/mongoose-upsert-many'),
+upsertMany = require('@meanie/mongoose-upsert-many'),
+    request = require('request'),
 
     // Models
     TeamToScrap = require('./Models/TeamToScrap'),
     TeamInfo = require('./Models/TeamInfo');
-    LeagueToScrap = require('./Models/LeagueToScrap'),
+LeagueToScrap = require('./Models/LeagueToScrap'),
     LeagueInfo = require('./Models/LeagueInfo');
 
 
@@ -90,7 +91,38 @@ mongoose.connect(mongoConnString, function (err) {
     }));
 
     app.get('/', function (req, res) {
-        res.send('Sportstats API');
+
+        var metricsUrl = 'http://wigserver.myvnc.com:3001/metrics';
+        request.get(metricsUrl, (error, response, body) => {
+            let json = JSON.parse(body);
+            var stats = [];
+            for (var prop in json) {
+                if (json.hasOwnProperty(prop)) {
+                    stats.push({ key: prop, stats: json[prop] });
+                }
+            }
+            var message = '<h1>Sportstats API</h1>';
+            stats.forEach(stat => {
+                if (stat.key.indexOf('/') == 0){
+                    message += '<h3>' + stat.key + '</h3>';
+                    if(stat.stats.get){
+                        message += '<h4>min=' + stat.stats.get.duration.min + '</h4>'; 
+                        message += '<h4>max=' + stat.stats.get.duration.max + '</h4>'; 
+                        message += '<h4>avg=' + stat.stats.get.duration.mean + '</h4>'; 
+                    }
+
+                    if(stat.stats.post){
+                        message += '<h4>min=' + stat.stats.post.duration.min + '</h4>'; 
+                        message += '<h4>max=' + stat.stats.post.duration.max + '</h4>'; 
+                        message += '<h4>avg=' + stat.stats.post.duration.mean + '</h4>'; 
+                    }
+                        
+                    message += '<hr/>';
+                }
+            });
+
+            res.send(message);
+        });
     });
 
     // Routes
