@@ -1,17 +1,17 @@
 var nightmare = require('nightmare'),
     tryCount = 0,
     request = require('request');
-process.on('unhandledRejection', (reason, p) => {
-    console.log('erro')
-    if (tryCount <= 5) {
-        console.log('retry - ' + tryCount)
-        tryCount++;
-        run();
-    }
-    else {
-        //TODO reporting error
-    }
-});
+// process.on('unhandledRejection', (reason, p) => {
+//     console.log('erro')
+//     if (tryCount <= 5) {
+//         console.log('retry - ' + tryCount)
+//         tryCount++;
+//         run();
+//     }
+//     else {
+//         //TODO reporting error
+//     }
+// });
 module.exports = {
     scrapTeams: function* run(teamsToScrap) {
         nbot = nightmare({
