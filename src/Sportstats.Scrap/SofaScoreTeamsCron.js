@@ -25,7 +25,7 @@ cron.schedule('*/1 * * * *', function () {
                 request.post({
                     url: 'http://localhost:3007/SofaScoreTeam',
                     json: true,
-                    body: { teams: data.docs }
+                    body: { teams: data.result.docs }
                 }, function (error, response, body) {
                     console.log(error);
                 });

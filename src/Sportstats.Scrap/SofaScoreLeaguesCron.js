@@ -37,7 +37,7 @@ cron.schedule('*/1 * * * *', function () {
                 request.post({
                     url: 'http://localhost:3007/SofaScoreLeague',
                     json: true,
-                    body: { leagues: data.docs }
+                    body: { leagues: data.result.docs }
                 }, function (error, response, body) {
                     console.log(error);
                 });
