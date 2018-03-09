@@ -43,13 +43,12 @@ exports.save_team_scrap_info = function (req, res) {
     var ids = [];
     logger.info('Saving ' + teamsData.length + ' teams:');
     teamsData.forEach(team => {
-        if(!team.name || !team.country)
-        {
-            logger.info(' » A team has no required data! (skip item)');    
-            continue;
+        if (!team.name || !team.country) {
+            logger.info(' » A team has no required data! (skip item)');
+        } else {
+            ids.push(team.permalink);
+            logger.info(' » (' + team.country + ') ' + team.name);
         }
-        ids.push(team.permalink);
-        logger.info(' » (' + team.country + ') ' + team.name);
     });
 
     TeamsToScrap.find({
