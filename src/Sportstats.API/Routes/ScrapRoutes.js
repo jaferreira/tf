@@ -4,15 +4,42 @@ module.exports = function (app) {
     // Teams
     var teamsScrapController = require('../Controllers/TeamsScrapController');
 
-   
+   /**
+     * @swagger
+     * /scrap/teams/pending:
+     *   get:
+     *     description: Returns teams that are pending to be scraped.
+     *     produces:
+     *      - application/json
+     *     responses:
+     *       200:
+     *         description: teams
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#/definitions/TeamToScrap'
+     */
     app.route('/scrap/teams/pending')
         .get(teamsScrapController.get_pending_teams_to_scrap);
 
     // Create new team to be scraped
-    app.route('/scrap/teams')
-        .post(teamsScrapController.create_team_to_scrap);
+    // app.route('/scrap/teams')
+    //     .post(teamsScrapController.create_team_to_scrap);
 
-    // Save scraped team info (upsert)
+    /**
+     * @swagger
+     * /scrap/teams/bulk:
+     *   post:
+     *     description: Save team scrap information for an array of teams. The ones that already exist, are updated. The key is the property 'permalink'.
+     *     produces:
+     *      - application/json
+     *     parameters:
+     *       - name: teams
+     *         type: array
+     *         in: body
+     *     responses:
+     *       200
+     */
     app.route('/scrap/teams/bulk')
         .post(teamsScrapController.save_team_scrap_info);
 
@@ -68,13 +95,32 @@ module.exports = function (app) {
      *         type: array
      *         items:
      *             $ref: '#/definitions/Provider'
+     * 
+     *   TeamToScrap:
+     *     type: object
+     *     required:
+     *       - permalink
+     *       - name
+     *       - country
+     *       - providers
+     *     properties:
+     *       permalink:
+     *         type: string
+     *       name:
+     *         type: string
+     *       country:
+     *         type: string
+     *       providers:
+     *         type: array
+     *         items:
+     *             $ref: '#/definitions/Provider'
      */
 
     /**
      * @swagger
      * /scrap/leagues/pending:
      *   get:
-     *     description: Returns leagues
+     *     description: Returns leagues that are pending to be scraped.
      *     produces:
      *      - application/json
      *     responses:
@@ -88,8 +134,19 @@ module.exports = function (app) {
     app.route('/scrap/leagues/pending')
         .get(leaguesScrapController.get_pending_leagues_to_scrap);
 
+    /**
+     * @swagger
+     * /scrap/leagues/pending:
+     *   get:
+     *     description: Reset the next scrap date for all the leagues, they will all stay pending for scrap.
+     *     produces:
+     *      - application/json
+     *     responses:
+     *       200
+     */
     app.route('/scrap/leagues/reset')
         .get(leaguesScrapController.reset_leagues_to_scrap);
+    
     /**
      * @swagger
      * /scrap/leagues:
@@ -108,38 +165,17 @@ module.exports = function (app) {
 
     /**
      * @swagger
-     * /scrap/leagues/league:
+     * /scrap/leagues/bulk:
      *   post:
-     *     description: Save scraped league info (upsert)
+     *     description: Save league scrap information for an array of leagues. The ones that already exist, are updated. The key is the property 'permalink'.
      *     produces:
      *      - application/json
      *     parameters:
-     *       - name: league
-     *         type: string
+     *       - name: leagues
+     *         type: array
+     *         in: body
      *     responses:
-     *       200:
-     *         description: League
-     *         schema:
-     *             $ref: '#/definitions/LeagueInfo'
-     */
-    // app.route('/scrap/leagues/:league')
-    //     .post(leaguesScrapController.save_league_scrap_info);
-
-    /**
-     * @swagger
-     * /scrap/leagues/league:
-     *   post:
-     *     description: Save scraped league info (upsert)
-     *     produces:
-     *      - application/json
-     *     parameters:
-     *       - name: league
-     *         type: string
-     *     responses:
-     *       200:
-     *         description: League
-     *         schema:
-     *             $ref: '#/definitions/LeagueInfo'
+     *       200
      */
     app.route('/scrap/leagues/bulk')
         .post(leaguesScrapController.save_league_scrap_info);
