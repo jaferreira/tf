@@ -1,31 +1,40 @@
-var Nightmare = require('./nightmare');
+var Nightmare = require('./custom');
 var vo = require('vo');
-
+var nightmare;
 
 vo(run)(function (err, result) {
-    if (err) throw err;
+    if (err) console.log(err);
 });
 
-function *run() {
+
+
+function* run() {
     var team = {
         providers: [{
             link: 'asdasd',
             name: 'asdasd'
         }]
     }
-    var nightmare = Nightmare({
+     nightmare = Nightmare({
         show: true,
-        paths: {
-            userData: '/dev/null'
-        }
+        width: 1920,
+        height: 1080,
+        waitTimeout: 100000,
+        switches: {
+            'ignore-certificate-errors': true
+          }
+        // paths: {
+        //     userData: '/dev/null'
+        // }
     });
-
+    console.log('hello')
     var title = yield nightmare
-        .goto("https://www.sofascore.com/pt/time/futebol/west-bromwich-albion/8")
         
-        .ewait("dom-ready")
+        .goto("https://www.sofascore.com/team/football/west-bromwich-albion/8")
+        .wait(1000)
+        .wait('.squad')
         .evaluate(function (team) {
-            
+            //return document.querySelectorAll('h2.page-title')[0].innerText;
             var nameTeam = $('h2.page-title')[0].innerText.trim();
             var rows = $('.top-scorers-container')[0].querySelectorAll('a');
             var topScores = [];
@@ -111,8 +120,10 @@ function *run() {
             return result
 
         }, team)
-        .then(function(items){
-            console.log(JSON.stringify(items))
+
+
+        .then(function (item) {
+            console.log(item)
         })
     yield nightmare.end();
 

@@ -120,6 +120,7 @@ function* scrapLeagueInfo(team,retry) {
         .goto(url)
         .wait(1000)
         .wait('.squad')
+        
         .evaluate(function (team) {
             debugger;
             var nameTeam = $('h2.page-title')[0].innerText.trim();

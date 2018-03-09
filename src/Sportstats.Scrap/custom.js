@@ -26,12 +26,12 @@ _Nightmare.action('ewait', function (event, cb, done) {
         done = cb;
         cb = undefined;
     }
-
+  
     var result,
         self = this,
         isTimedOut = false,
         tm = null;
-
+        console.log(self.optionWaitTimeout)
     self._proxyEvents.on(event, ()=> {
         if (isTimedOut) return;
 
@@ -60,7 +60,7 @@ _Nightmare.action('ewait', function (event, cb, done) {
         }
 
         done(err);
-    }, self.optionWaitTimeout);
+    }, 6000);
 });
 
 function ProxyEvents() {
