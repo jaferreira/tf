@@ -57,7 +57,10 @@ exports.save_team_scrap_info = function (req, res) {
             res.send(err);
         }
         logger.info('Got ' + dbTeamsToScrap.length + ' TeamsToScrap from db');
-
+        if (dbTeamsToScrap.length == 0) {
+            logger.info('Nothing to do...returning.');
+            return res.sendStatus(200);
+        }
 
         // UPDATE Next Scrap Date
         dbTeamsToScrap.forEach(teamInfo => {
