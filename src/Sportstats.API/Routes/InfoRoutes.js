@@ -8,7 +8,7 @@ module.exports = function (app) {
      * @swagger
      * /info/leagues:
      *   get:
-     *     description: Re that are pending to be scraped.
+     *     description: Returns teams that are pending to be scraped.
      *     produces:
      *      - application/json
      *     responses:
@@ -19,8 +19,8 @@ module.exports = function (app) {
      *           items:
      *             $ref: '#/definitions/TeamToScrap'
      */
-    app.route('/info/leagues/')
-        .post(leagueInfoController.create_league_info);
+    // app.route('/info/leagues/')
+    //     .post(leagueInfoController.create_league_info);
 
     /**
      * @swagger
@@ -56,6 +56,9 @@ module.exports = function (app) {
      *     responses:
      *       200:
      *         description: countries
+     *         schema:
+     *           type: array
+     *           items: string
      */
     app.route('/info/countries')
         .get(leagueInfoController.get_countries);

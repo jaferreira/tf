@@ -1,6 +1,79 @@
 'use strict';
 module.exports = function (app) {
 
+    /**
+     * @swagger
+     * definitions:
+     *   Provider:
+     *     type: object
+     *     required:
+     *       - provider
+     *       - link
+     *     properties:
+     *       - provider:
+     *          type: string
+     *       - link:
+     *          type: string
+     *
+     *   LeagueInfo:
+     *     type: object
+     *     required:
+     *       - provider
+     *       - link
+     *     properties:
+     *       - name:
+     *          type: string
+     *       - permalink:
+     *          type: string
+     *       - country:
+     *          type: string
+     *       - titleHolder:
+     *          type: string
+     *       - mostTitlesNumber:
+     *          type: number
+     *
+     *   LeagueToScrap:
+     *     type: object
+     *     required:
+     *       - permalink
+     *       - name
+     *       - country
+     *       - providers
+     *     properties:
+     *       permalink:
+     *         type: string
+     *       name:
+     *         type: string
+     *       country:
+     *         type: string
+     *       providers:
+     *         type: array
+     *         items:
+     *             $ref: '#/definitions/Provider'
+     * 
+     *   TeamToScrap:
+     *     type: object
+     *     required:
+     *       - permalink
+     *       - name
+     *       - country
+     *       - providers
+     *     properties:
+     *       permalink:
+     *         type: string
+     *       name:
+     *         type: string
+     *       country:
+     *         type: string
+     *       providers:
+     *         type: array
+     *         items:
+     *             $ref: '#/definitions/Provider'
+     */
+
+
+
+
     // Teams
     var teamsScrapController = require('../Controllers/TeamsScrapController');
 
@@ -50,73 +123,7 @@ module.exports = function (app) {
     // Leagues
     var leaguesScrapController = require('../Controllers/LeaguesScrapController');
 
-    /**
-     * @swagger
-     * definitions:
-     *   Provider:
-     *     type: object
-     *     required:
-     *       - provider
-     *       - link
-     *     properties:
-     *       - provider:
-     *          type: string
-     *       - link:
-     *          type: string
-     *   LeagueInfo:
-     *     type: object
-     *     required:
-     *       - provider
-     *       - link
-     *     properties:
-     *       - name:
-     *          type: string
-     *       - permalink:
-     *          type: string
-     *       - country:
-     *          type: string
-     *       - titleHolder:
-     *          type: string
-     *       - mostTitlesNumber:
-     *          type: number
-     *   LeagueToScrap:
-     *     type: object
-     *     required:
-     *       - permalink
-     *       - name
-     *       - country
-     *       - providers
-     *     properties:
-     *       permalink:
-     *         type: string
-     *       name:
-     *         type: string
-     *       country:
-     *         type: string
-     *       providers:
-     *         type: array
-     *         items:
-     *             $ref: '#/definitions/Provider'
-     * 
-     *   TeamToScrap:
-     *     type: object
-     *     required:
-     *       - permalink
-     *       - name
-     *       - country
-     *       - providers
-     *     properties:
-     *       permalink:
-     *         type: string
-     *       name:
-     *         type: string
-     *       country:
-     *         type: string
-     *       providers:
-     *         type: array
-     *         items:
-     *             $ref: '#/definitions/Provider'
-     */
+    
 
     /**
      * @swagger
