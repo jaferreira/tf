@@ -16,7 +16,7 @@ module.exports = {
     scrapTeams: function* run(teamsToScrap) {
         nbot = nightmare({
             switches: { 'ignore-certificate-errors': true },
-            show: false
+            show: true
         });
 
         console.log('start')
@@ -134,12 +134,11 @@ function* scrapLeagueInfo(team) {
             rows = $('.squad > a');
             var squad = [];
             for (var i = 0, row; row = rows[i]; i++) {
-                console.log('hello 4 ');
                 squad.push({
                     name: row.querySelectorAll('.squad-player__name')[0].innerText.trim(),
-                    nationality: row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[1].innerText.trim(),
-                    position: row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[0].innerText.trim(),
-                    number: row.querySelectorAll('span.squad-player__shirt-number.theme-background-color')[0].innerText.trim()
+                    nationality: row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[1] ? row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[1].innerText.trim() : '',
+                    position: row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[0] ? row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[0].innerText.trim() : '',
+                    number: row.querySelectorAll('span.squad-player__shirt-number.theme-background-color')[0] ? row.querySelectorAll('span.squad-player__shirt-number.theme-background-color')[0].innerText.trim() : ''
 
                 })
 
