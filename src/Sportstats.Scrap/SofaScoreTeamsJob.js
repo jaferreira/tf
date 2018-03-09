@@ -105,6 +105,7 @@ function* running(teams) {
 
     }
     console.log('finish')
+    console.log('----------- '. JSON.stringify(results))
     return yield results;
 
 }
@@ -205,7 +206,7 @@ function* scrapLeagueInfo(team,retry) {
             }
 
             
-            return result
+            return result;
 
         }, team)
 
