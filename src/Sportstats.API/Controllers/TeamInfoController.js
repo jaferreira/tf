@@ -3,19 +3,10 @@
 var logger = require('../Logger.js'),
     mongoose = require('mongoose'),
     LeagueInfo = mongoose.model('Leagues'),
-    async = require('async');
+    async = require('async'),
+    response = require('./Response.js');
 
 
-exports.create_league_info = function (req, res) {
-    var newLeagueInfo = new LeagueInfo(req.body);
-    newLeagueInfo.save(function (err, house) {
-        if (err){
-            logger.error(err);
-            res.send(err);
-        }
-        res.json(house);
-    });
-};
 
 exports.get_league_info = function (req, res) {
     
@@ -35,11 +26,11 @@ exports.get_league_info = function (req, res) {
     LeagueInfo.paginate(
         filter,
         options,
-        function (err, house) {
+        function (err, data) {
             if (err) {
                 logger.error(err);
-                res.send(err);
+                return res.json(response.errorResponse(err));
             }
-            res.json(house);
+            return res.json(response.successResponse(data));
         });
 };
