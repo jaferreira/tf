@@ -82,7 +82,7 @@ module.exports = function (app) {
      *         schema:
      *           type: array
      *           items:
-     *             $ref: '#/definitions/LegueInfo'
+     *             $ref: '#/definitions/LeagueInfo'
      */
     app.route('/info/countries/:country')
         .get(leagueInfoController.get_leagues_from_country);
