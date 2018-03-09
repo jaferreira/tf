@@ -3,7 +3,8 @@
 var logger = require('../Logger.js'),
     mongoose = require('mongoose'),
     LeagueInfo = mongoose.model('Leagues'),
-    async = require('async');
+    async = require('async'),
+    response = ('./Response.js');
 
 
 exports.create_league_info = function (req, res) {
@@ -67,9 +68,9 @@ exports.get_leagues = function (req, res) {
         function (err, house) {
             if (err) {
                 logger.error(err);
-                res.send(err);
+                return res.status(500).json(response.errorResponse(err));
             }
-            res.json(house);
+            return res.json(response.successResponse(house));
         });
 };
 
