@@ -66,42 +66,42 @@ function* running(teams) {
         console.log(' --- ');
         console.log('Running [' + (i + 1) + '] of ' + teams.length)
         console.log('[' + teams[i].name + '] Going to start scraping url ' + teams[i].providers[0].link);
-        results.push(yield* scrapLeagueInfo(teams[i]));
-        // var r = yield* scrapLeagueInfo(teams[i]);
+        // results.push(yield* scrapLeagueInfo(teams[i]));
+        var r = yield* scrapLeagueInfo(teams[i]);
 
-        // if (r != null) {
-        //     console.log('[' + teams[i].name + '] Scraping done.');
-        //     console.log(JSON.stringify(r))
-        //     results.push(r);
-        // }
-        // else {
-        //     console.log('[' + teams[i].name + '] Scraping error.');
-        //     var retriesInfo = {};
-        //     for (var j in retries) {
-        //         if (retries[j].permalink == teams[i].permalink) {
-        //             retriesInfo = retries[j];
-        //             break;
-        //         }
-        //     }
-        //     var retryCount = retriesInfo.retryCount;
-        //     var maxRetries = retriesInfo.maxRetries;
+        if (r != null) {
+            console.log('[' + teams[i].name + '] Scraping done.');
+            console.log(JSON.stringify(r))
+            results.push(r);
+        }
+        else {
+            console.log('[' + teams[i].name + '] Scraping error.');
+            // var retriesInfo = {};
+            // for (var j in retries) {
+            //     if (retries[j].permalink == teams[i].permalink) {
+            //         retriesInfo = retries[j];
+            //         break;
+            //     }
+            // }
+            // var retryCount = retriesInfo.retryCount;
+            // var maxRetries = retriesInfo.maxRetries;
 
-        //     console.log('[' + teams[i].name + '] Retry information: RetryCount: ' + retryCount + ' (max: ' + maxRetries + ')');
-        //     if (retriesInfo && retryCount <= maxRetries) {
-        //         // update retry information
-        //         for (var k in retries) {
-        //             if (retries[k].permalink == teams[i].permalink) {
-        //                 retries[k].retryCount++;
-        //                 break;
-        //             }
-        //         }
-        //         console.log('[' + teams[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + (i - 1));
-        //         i--;
-        //     }
-        //     else {
-        //         console.log('[' + teams[i].name + '] Max retries reached, going to next league (i: ' + i + ')');
-        //     }
-        // }
+            // console.log('[' + teams[i].name + '] Retry information: RetryCount: ' + retryCount + ' (max: ' + maxRetries + ')');
+            // if (retriesInfo && retryCount <= maxRetries) {
+            //     // update retry information
+            //     for (var k in retries) {
+            //         if (retries[k].permalink == teams[i].permalink) {
+            //             retries[k].retryCount++;
+            //             break;
+            //         }
+            //     }
+            //     console.log('[' + teams[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + (i - 1));
+            //     i--;
+            // }
+            // else {
+            //     console.log('[' + teams[i].name + '] Max retries reached, going to next league (i: ' + i + ')');
+            // }
+        }
 
     }
     console.log('finish')
