@@ -1,5 +1,6 @@
 const debug = require('debug')('Sportstats.API')
 const name = 'API Server'
+const version = '0.0.1';
 
 var logger = require('./Logger.js'),
     morgan = require('morgan'),
@@ -45,7 +46,7 @@ mongoose.connect(mongoConnString, function (err) {
     var swaggerDefinition = {
         info: { // API informations (required)
             title: 'Sportstats', // Title (required)
-            version: '0.1.0', // Version (required)
+            version: version, // Version (required)
             description: 'Sportstats API', // Description (optional)
         },
         host: 'wigserver.myvnc.com:3000', // Host (optional)
@@ -57,7 +58,10 @@ mongoose.connect(mongoConnString, function (err) {
         // Import swaggerDefinitions
         swaggerDefinition: swaggerDefinition,
         // Path to the API docs
-        apis: ['./Routes/*.js']
+        apis: [
+            './docs/swaggwer/tags.yaml',
+            './docs/swaggwer/definitions.yaml',
+            './Routes/*.js']
     };
 
     // Initialize swagger-jsdoc -> returns validated swagger spec in json format
@@ -70,7 +74,10 @@ mongoose.connect(mongoConnString, function (err) {
     });
 
     // Swagger UI
-    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    var swaggerUIOptions = {
+        explorer: true
+    };
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUIOptions));
 
 
     // Metrics Configuration
@@ -90,10 +97,13 @@ mongoose.connect(mongoConnString, function (err) {
         extended: true
     }));
 
-    app.get('/', function (req, res) {
 
+    app.get('/metrics', function (req, res) {
         var metricsUrl = 'http://wigserver.myvnc.com:3001/metrics';
         request.get(metricsUrl, (error, response, body) => {
+            if (error) {
+                return res.send(error);
+            }
             let json = JSON.parse(body);
             var stats = [];
             for (var prop in json) {
@@ -101,28 +111,47 @@ mongoose.connect(mongoConnString, function (err) {
                     stats.push({ key: prop, stats: json[prop] });
                 }
             }
-            var message = '<h1>Sportstats API</h1>';
+            var content = '<h1><a href="/">Sportstats API</a></h1><h2>Metrics</h2>';
             stats.forEach(stat => {
-                if (stat.key.indexOf('/') == 0){
-                    message += '<h3>' + stat.key + '</h3>';
-                    if(stat.stats.get){
-                        message += '<h4>min=' + stat.stats.get.duration.min + '</h4>'; 
-                        message += '<h4>max=' + stat.stats.get.duration.max + '</h4>'; 
-                        message += '<h4>avg=' + stat.stats.get.duration.mean + '</h4>'; 
+                if (stat.key.indexOf('/') == 0 && stat.key != '/metrics' && stat.key != '/') {
+
+                    if (stat.stats.get) {
+                        content += '<h3>[GET] ' + stat.key + '</h3>';
+                        content += '<ul>';
+                        content += '<li>count: ' + stat.stats.get.duration.count + '</li>';
+                        content += '<li>min: ' + stat.stats.get.duration.min + '</li>';
+                        content += '<li>max: ' + stat.stats.get.duration.max + '</li>';
+                        content += '<li>avg: ' + stat.stats.get.duration.mean + '</li>';
+                        content += '</ul>';
                     }
 
-                    if(stat.stats.post){
-                        message += '<h4>min=' + stat.stats.post.duration.min + '</h4>'; 
-                        message += '<h4>max=' + stat.stats.post.duration.max + '</h4>'; 
-                        message += '<h4>avg=' + stat.stats.post.duration.mean + '</h4>'; 
+                    if (stat.stats.post) {
+                        content += '<h3>[POST] ' + stat.key + '</h3>';
+                        content += '<ul>';
+                        content += '<li>count: ' + stat.stats.post.duration.count + '</li>';
+                        content += '<li>min: ' + stat.stats.post.duration.min + '</li>';
+                        content += '<li>max: ' + stat.stats.post.duration.max + '</li>';
+                        content += '<li>avg: ' + stat.stats.post.duration.mean + '</li>';
+                        content += '</ul>';
                     }
-                        
-                    message += '<hr/>';
+
+                    content += '<hr/>';
                 }
             });
-
-            res.send(message);
+            res.send(content);
         });
+    });
+
+
+    app.get('/', function (req, res) {
+        var content = '<h1>Sportstats API</h1>';
+
+        content += '<ul>' +
+            '<li>' + '<a href="/docs">Documentation</a>' + '</li>' +
+            '<li>' + '<a href="/metrics">Metrics</a>' + '</li>' +
+            '</ul>' + '<br/>';
+
+        res.send(content);
     });
 
     // Routes
