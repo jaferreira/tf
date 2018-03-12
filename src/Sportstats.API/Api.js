@@ -99,7 +99,7 @@ mongoose.connect(mongoConnString, function (err) {
 
 
     app.get('/metrics', function (req, res) {
-        var metricsUrl = 'http://wigserver.myvnc.com:3001/metrics';
+        var metricsUrl = 'http://localhost:3001/metrics';
         request.get(metricsUrl, (error, response, body) => {
             if (error) {
                 return res.send(error);
