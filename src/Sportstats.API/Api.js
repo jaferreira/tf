@@ -108,7 +108,7 @@ mongoose.connect(mongoConnString, function (err) {
             }
             var content = '<h1>Sportstats API</h1><h2>Metrics</h2>';
             stats.forEach(stat => {
-                if (stat.key.indexOf('/') == 0 && stat.key != '/metrics') {
+                if (stat.key.indexOf('/') == 0 && stat.key != '/metrics' && stat.key != '/') {
                     
                     if (stat.stats.get) {
                         content += '<h3>[GET] ' + stat.key + '</h3>';
