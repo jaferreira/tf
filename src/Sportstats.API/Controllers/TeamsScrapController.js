@@ -74,7 +74,13 @@ exports.save_team_scrap_info = function (req, res) {
 
             if (newArray.length > 0) {
                 teamInfo.nextScrapAt = newArray[0].nextScrapAt;
-                logger.info('New scrap date: ' + teamInfo.nextScrapAt);
+                if (teamInfo.nextScrapAt)
+                    logger.info('New scrap date: ' + teamInfo.nextScrapAt);
+                else{
+                    var nextScrapDateDefault = new Date();
+                    teamInfo.nextScrapAt = nextScrapDateDefault;
+                    logger.console.warn('The scrap date received is null, going to set next scrap date to: ' + nextScrapDateDefault);
+                }
             }
         });
 
