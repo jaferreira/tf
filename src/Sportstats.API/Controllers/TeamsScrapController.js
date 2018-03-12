@@ -11,6 +11,8 @@ var logger = require('../Logger.js'),
 
 exports.get_pending_teams_to_scrap = function (req, res) {
 
+    var requestBody = req.body;
+
     var now = new Date();
     var filter = {
         nextScrapAt: { "$lte": now }
@@ -18,11 +20,29 @@ exports.get_pending_teams_to_scrap = function (req, res) {
 
     var options = {
         page: 1,
-        limit: 1,
+        limit: 10,
         sort: {
             createdAt: -1
         }
     };
+
+    if(requestBody)
+    {
+        logger.debug('Aplying custom parameters');
+        //
+        // page:
+        // pageSize:
+        // 
+        //
+        if(requestBody.page){
+            options.page = requestBody.page;
+            logger.debug('Aplying custom page: ' + requestBody.page);
+        }
+        if(requestBody.pageSize){
+            options.limit = requestBody.pageSize;
+            logger.debug('Aplying custom pageSize: ' + requestBody.pageSize);
+        }
+    }
 
     TeamsToScrap.paginate(
         filter,
