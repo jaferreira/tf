@@ -11,15 +11,15 @@ module.exports.default = (router) => {
                 message: "POST",
                 csrfToken: req.csrfToken(),
                 
-                title: info.docs[0].name,
-                subtitle: info.docs[0].country,
+                title: info.result.docs[0].name,
+                subtitle: info.result.docs[0].country,
                 
-                data: info.docs[0],
-                standings: info.docs[0].standings
+                data: info.result.docs[0],
+                standings: info.result.docs[0].standings
             };
             req.vueOptions = {
                 head: {
-                    title: info.docs[0].name
+                    title: info.result.docs[0].name
                 }
             };
             res.renderVue("leagues/league.vue", data, req.vueOptions);

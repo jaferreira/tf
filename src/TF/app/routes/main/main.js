@@ -9,7 +9,7 @@ module.exports.default = (router) => {
             
             const data = {
                 title: "TF",
-                countries: info
+                countries: info.result.docs
             };
             const vueOptions = {
                 head: {

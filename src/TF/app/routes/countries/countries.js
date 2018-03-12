@@ -11,7 +11,7 @@ module.exports.default = (router) => {
             const data = {
                 title: req.params.country,
                 
-                leagues: info.docs
+                leagues: info.result.docs
             };
 
             data.leagues.forEach(element => {
