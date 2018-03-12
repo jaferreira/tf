@@ -1,105 +1,30 @@
 'use strict';
 module.exports = function (app) {
 
-    /**
-     * @swagger
-     * tags:
-     *   - name: "Leagues"
-     *     description: "Leagues info..."
-     *   - name: "Teams"
-     *     description: "Teams info..."
-     * 
-     * definitions:
-     *   Provider:
-     *     type: object
-     *     required:
-     *       - provider
-     *       - link
-     *     properties:
-     *       provider:
-     *          type: string
-     *       link:
-     *          type: string
-     *
-     *   LeagueInfo:
-     *     type: object
-     *     required:
-     *       - provider
-     *       - link
-     *     properties:
-     *       name:
-     *          type: string
-     *       permalink:
-     *          type: string
-     *       country:
-     *          type: string
-     *       titleHolder:
-     *          type: string
-     *       mostTitlesNumber:
-     *          type: number
-     *
-     *   LeagueToScrap:
-     *     type: object
-     *     required:
-     *       - permalink
-     *       - name
-     *       - country
-     *       - providers
-     *     properties:
-     *       permalink:
-     *         type: string
-     *       name:
-     *         type: string
-     *       country:
-     *         type: string
-     *       providers:
-     *         type: array
-     *         items:
-     *             $ref: '#/definitions/Provider'
-     * 
-     *   TeamToScrap:
-     *     type: object
-     *     required:
-     *       - permalink
-     *       - name
-     *       - country
-     *       - providers
-     *     properties:
-     *       permalink:
-     *         type: string
-     *       name:
-     *         type: string
-     *       country:
-     *         type: string
-     *       providers:
-     *         type: array
-     *         items:
-     *             $ref: '#/definitions/Provider'
-     */
-
-
-
-
     // Teams
     var teamsScrapController = require('../Controllers/TeamsScrapController');
+    // Leagues
+    var leaguesScrapController = require('../Controllers/LeaguesScrapController');
 
-   /**
-     * @swagger
-     * /scrap/teams/pending:
-     *   get:
-     *     tags:
-     *       - "Teams"
-     *     description: Returns teams that are pending to be scraped.
-     *     produces:
-     *      - application/json
-     *     responses:
-     *       200:
-     *         description: teams
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#/definitions/TeamToScrap'
-     */
+
+
+
+
+    /**
+      * @swagger
+      * /scrap/teams/pending:
+      *   get:
+      *     tags:
+      *       - "Teams"
+      *     description: Returns teams that are pending to be scraped.
+      *     produces:
+      *      - application/json
+      *     responses:
+      *       200:
+      *         description: teams
+      *         schema:
+      *           type: array
+      */
     app.route('/scrap/teams/pending')
         .get(teamsScrapController.get_pending_teams_to_scrap);
 
@@ -130,10 +55,9 @@ module.exports = function (app) {
 
 
 
-    // Leagues
-    var leaguesScrapController = require('../Controllers/LeaguesScrapController');
 
-    
+
+
 
     /**
      * @swagger
@@ -149,8 +73,6 @@ module.exports = function (app) {
      *         description: leagues
      *         schema:
      *           type: array
-     *           items:
-     *             $ref: '#/definitions/LeagueToScrap'
      */
     app.route('/scrap/leagues/pending')
         .get(leaguesScrapController.get_pending_leagues_to_scrap);
@@ -169,7 +91,7 @@ module.exports = function (app) {
      */
     app.route('/scrap/leagues/reset')
         .get(leaguesScrapController.reset_leagues_to_scrap);
-    
+
     /**
      * @swagger
      * /scrap/leagues:
@@ -182,8 +104,6 @@ module.exports = function (app) {
      *     responses:
      *       200:
      *         description: leagueToScrap
-     *         schema:
-     *             $ref: '#/definitions/LeagueToScrap'
      */
     app.route('/scrap/leagues')
         .post(leaguesScrapController.create_league_to_scrap);

@@ -14,13 +14,13 @@ var logger = require('./Logger.js'),
     expressMetrics = require('express-metrics'),
     swaggerUi = require('swagger-ui-express'),
     swaggerJSDoc = require('swagger-jsdoc')
-    upsertMany = require('@meanie/mongoose-upsert-many'),
+upsertMany = require('@meanie/mongoose-upsert-many'),
     request = require('request'),
 
     // Models
     TeamToScrap = require('./Models/TeamToScrap'),
     TeamInfo = require('./Models/TeamInfo');
-    LeagueToScrap = require('./Models/LeagueToScrap'),
+LeagueToScrap = require('./Models/LeagueToScrap'),
     LeagueInfo = require('./Models/LeagueInfo');
 
 
@@ -58,7 +58,10 @@ mongoose.connect(mongoConnString, function (err) {
         // Import swaggerDefinitions
         swaggerDefinition: swaggerDefinition,
         // Path to the API docs
-        apis: ['./Routes/*.js']
+        apis: [
+            './docs/swaggwer/tags.yaml',
+            './docs/swaggwer/definitions.yaml',
+            './Routes/*.js']
     };
 
     // Initialize swagger-jsdoc -> returns validated swagger spec in json format
@@ -71,7 +74,10 @@ mongoose.connect(mongoConnString, function (err) {
     });
 
     // Swagger UI
-    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    var swaggerUIOptions = {
+        explorer: true
+    };
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUIOptions));
 
 
     // Metrics Configuration
@@ -95,8 +101,7 @@ mongoose.connect(mongoConnString, function (err) {
     app.get('/metrics', function (req, res) {
         var metricsUrl = 'http://wigserver.myvnc.com:3001/metrics';
         request.get(metricsUrl, (error, response, body) => {
-            if(error)
-            {
+            if (error) {
                 return res.send(error);
             }
             let json = JSON.parse(body);
@@ -106,10 +111,10 @@ mongoose.connect(mongoConnString, function (err) {
                     stats.push({ key: prop, stats: json[prop] });
                 }
             }
-            var content = '<h1>Sportstats API</h1><h2>Metrics</h2>';
+            var content = '<h1><a href="/">Sportstats API</a></h1><h2>Metrics</h2>';
             stats.forEach(stat => {
                 if (stat.key.indexOf('/') == 0 && stat.key != '/metrics' && stat.key != '/') {
-                    
+
                     if (stat.stats.get) {
                         content += '<h3>[GET] ' + stat.key + '</h3>';
                         content += '<ul>';
