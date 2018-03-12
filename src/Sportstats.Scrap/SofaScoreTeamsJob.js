@@ -194,7 +194,7 @@ function* scrapLeagueInfo(team,retry) {
             var result = {
                 provider: team.providers[0],
                 name: team.name,
-                teamLink: team.providers[0].link,
+                permalink: team.providers[0].link,
                 topScores: topScores,
                 squad: squad,
                 country : team.country,
