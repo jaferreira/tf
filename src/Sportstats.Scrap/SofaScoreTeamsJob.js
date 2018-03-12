@@ -19,7 +19,7 @@ module.exports = {
     scrapTeams: function* run(teamsToScrap) {
         nbot = nightmare({
             switches: { 'ignore-certificate-errors': true },
-            show: true
+            show: false
         });
 
         console.log('start')
@@ -71,7 +71,7 @@ function* running(teams) {
 
         if (r != null) {
             console.log('[' + teams[i].name + '] Scraping done.');
-            
+            console.log(JSON.stringify(r))
             results.push(r);
         }
         else {
