@@ -47,7 +47,7 @@ exports.save_team_scrap_info = function (req, res) {
             logger.info(' » A team has no required data! (skip item)');
         } else {
             ids.push(team.permalink);
-            logger.info(' » (' + team.country + ') ' + team.name);
+            logger.info(' » (' + team.country + ') ' + team.name + ' » ' + team.permalink);
         }
     });
 
