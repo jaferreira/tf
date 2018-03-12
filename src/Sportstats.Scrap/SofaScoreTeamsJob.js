@@ -104,7 +104,7 @@ function* running(teams) {
         }
 
     }
-    console.log('results -> '.JSON.stringify(results))
+    // console.log('results -> '. JSON.stringify(results))
    
     return yield results;
 
