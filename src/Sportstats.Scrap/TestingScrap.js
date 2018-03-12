@@ -3,11 +3,13 @@ var vo = require('vo');
 function Status() {
     console.log('hey')
     var scraper = new Nightmare({
-        show: true, webPreferences: {
+        switches: { 'ignore-certificate-errors': true,
+    'lang' : 'en-EN' },
+        show: false, webPreferences: {
             images: true
-        },openDevTools: { mode: 'detach' }
+        }, openDevTools: { mode: 'detach' }
     });
-    console.log('hey')
+
     var team = {
         providers: [{
             link: 'asdasd',
@@ -15,11 +17,133 @@ function Status() {
         }]
     }
     return scraper
-        .goto('https://www.sofascore.com/pt/time/futebol/west-bromwich-albion/8')
+        .goto('https://www.sofascore.com/team/football/manchester-city/17')
 
         .wait('.squad')
         .evaluate(function (team) {
             
+            var t = document.querySelectorAll('h2.page-title')[0];
+            var nameTeam = $('h2.page-title')[0].innerText.trim();
+            var rows = $('.top-scorers-container')[0].querySelectorAll('a');
+            var topScores = [];
+            for (var i = 0, row; row = rows[i]; i++) {
+                console.log('hello 2 ');
+                topScores.push({
+                    position: row.querySelectorAll('.cell__content')[0].innerText.trim(),
+                    name: row.querySelectorAll('.cell__content')[2].innerText.trim(),
+                    matches: row.querySelectorAll('.cell__content')[3].innerText.trim(),
+                    goals: row.querySelectorAll('.cell__content')[4].innerText.trim(),
+                    ratings: row.querySelectorAll('.cell__content')[5].innerText.trim()
+                });
+
+
+            }
+
+            rows = $('.squad > a');
+            var squad = [];
+            for (var i = 0, row; row = rows[i]; i++) {
+                squad.push({
+                    name: row.querySelectorAll('.squad-player__name')[0].innerText.trim(),
+                    nationality: row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[1] ? row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[1].innerText.trim() : '',
+                    position: row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[0] ? row.querySelectorAll('.squad-player__info.u-t2 > .cell.cell--justified > div > div.cell__content')[0].innerText.trim() : '',
+                    number: row.querySelectorAll('span.squad-player__shirt-number.theme-background-color')[0] ? row.querySelectorAll('span.squad-player__shirt-number.theme-background-color')[0].innerText.trim() : ''
+
+                })
+
+            }
+
+            rows = $('table.table.table--justified > tbody > tr ');
+
+            var findElements = 0;
+            var manager = '';
+            var stadium = '';
+            var capacity = '';
+            var city = '';
+
+            for (var i = 0, row; row = rows[i]; i++) {
+
+                console.log(i)
+                if (row.innerText.startsWith('Manager') == true) {
+                    console.log('1')
+                    manager = row.innerText.split('Manager').join('').trim();
+                    findElements++;
+                }
+                else if (row.innerText.startsWith('Stadium') == true) {
+                    console.log('2')
+                    stadium = row.innerText.split('Stadium').join('').trim();
+                    findElements++;
+                }
+                else if (row.innerText.startsWith('Capacity') == true) {
+                    console.log('3')
+                    capacity = row.innerText.split('Capacity').join('').trim();
+                    findElements++;
+                }
+                else if (row.innerText.startsWith('City') == true) {
+                    console.log('4')
+                    city = row.innerText.split('City').join('').trim();
+                    findElements++;
+                }
+                if (findElements == 4)
+                    break;
+
+            }
+
+
+
+            var result = {
+                provider: team.providers[0],
+                teamName: $('h2.page-title')[0].innerText,
+                teamLink: team.providers[0].link,
+                topScores: topScores,
+                squad: squad,
+                teamInfo: {
+                    manager: manager,
+                    stadium: stadium,
+                    capacity: capacity,
+                    city: city
+                }
+            }
+
+
+            return result
+
+        }, team)
+
+        .then(function (items) {
+         console.log(JSON.stringify(items))
+        })
+
+        .catch(error => {
+            console.log('fuck')
+            var message;
+            if (typeof error.details != "undefined" && error.details != "") {
+                message = error.details;
+            } else if (typeof error == "string") {
+                message = error;
+
+                if (error == "Cannot read property 'focus' of null") {
+                    message += " (Likely because a non-existent selector was used)";
+                }
+            } else {
+                message = error.message;
+            }
+            console.log(error);
+            retry(scraper);
+
+        }
+        )
+
+
+
+
+}
+function retry(nightmare) {
+    return nightmare
+        .goto('https://www.sofascore.com/team/football/manchester-city/17')
+
+        .wait('.tournament-event-list-wrapper')
+        .evaluate(function (team) {
+            var t = document.querySelectorAll('h2.page-title')[0];
             var nameTeam = $('h2.page-title')[0].innerText.trim();
             var rows = $('.top-scorers-container')[0].querySelectorAll('a');
             var topScores = [];
@@ -109,30 +233,7 @@ function Status() {
         .then(function (items) {
             console.log(JSON.stringify(items))
         })
-
-        .catch(error => {
-            var message;
-            if (typeof error.details != "undefined" && error.details != "") {
-                message = error.details;
-            } else if (typeof error == "string") {
-                message = error;
-
-                if (error == "Cannot read property 'focus' of null") {
-                    message += " (Likely because a non-existent selector was used)";
-                }
-            } else {
-                message = error.message;
-            }
-            console.log(error);
-
-        }
-        )
-
-
-
-
 }
-
 function log(item) {
     console.log(item)
 }

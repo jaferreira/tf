@@ -11,8 +11,9 @@
   "dependencies": {
     "express": "^4.16.2",
     "express-yields": "^1.1.2",
-    "nightmare": "^2.10.0",
+    "nightmare": "3.0.0",
     "node-cron": "^1.2.1",
+    "npm": "^5.7.1",
     "request": "^2.83.0",
     "vo": "^4.0.2"
   }
