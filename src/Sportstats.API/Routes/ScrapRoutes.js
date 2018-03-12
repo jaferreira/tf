@@ -3,6 +3,12 @@ module.exports = function (app) {
 
     /**
      * @swagger
+     * tags:
+     *   - name: "Leagues"
+     *     description: "Leagues info..."
+     *   - name: "Teams"
+     *     description: "Teams info..."
+     * 
      * definitions:
      *   Provider:
      *     type: object
@@ -81,6 +87,8 @@ module.exports = function (app) {
      * @swagger
      * /scrap/teams/pending:
      *   get:
+     *     tags:
+     *       - "Teams"
      *     description: Returns teams that are pending to be scraped.
      *     produces:
      *      - application/json
@@ -103,6 +111,8 @@ module.exports = function (app) {
      * @swagger
      * /scrap/teams/bulk:
      *   post:
+     *     tags:
+     *       - "Teams"
      *     description: Save team scrap information for an array of teams. The ones that already exist, are updated. The key is the property 'permalink'.
      *     produces:
      *      - application/json
@@ -129,6 +139,8 @@ module.exports = function (app) {
      * @swagger
      * /scrap/leagues/pending:
      *   get:
+     *     tags:
+     *       - "Leagues"
      *     description: Returns leagues that are pending to be scraped.
      *     produces:
      *      - application/json
@@ -147,6 +159,8 @@ module.exports = function (app) {
      * @swagger
      * /scrap/leagues/pending:
      *   get:
+     *     tags:
+     *       - "Leagues"
      *     description: Reset the next scrap date for all the leagues, they will all stay pending for scrap.
      *     produces:
      *      - application/json
@@ -160,6 +174,8 @@ module.exports = function (app) {
      * @swagger
      * /scrap/leagues:
      *   post:
+     *     tags:
+     *       - "Leagues"
      *     description: Create new league to be scraped
      *     produces:
      *      - application/json
@@ -176,6 +192,8 @@ module.exports = function (app) {
      * @swagger
      * /scrap/leagues/bulk:
      *   post:
+     *     tags:
+     *       - "Leagues"
      *     description: Save league scrap information for an array of leagues. The ones that already exist, are updated. The key is the property 'permalink'.
      *     produces:
      *      - application/json
