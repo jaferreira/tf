@@ -58,7 +58,6 @@ definitions:
         type: array
         items:
             $ref: '#/definitions/Provider'
-
   TeamToScrap:
     type: object
     required:
