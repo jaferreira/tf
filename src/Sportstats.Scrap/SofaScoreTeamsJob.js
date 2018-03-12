@@ -27,7 +27,7 @@ module.exports = {
         results = yield* running(teamsToScrap);
         //console.log(JSON.stringify(results))
 
-        // console.log('before send  ->'.JSON.stringify(results));
+        // console.lorekg('before send  ->'.JSON.stringify(results));
         request.post({
             url: 'http://localhost:3000/scrap/teams/bulk/',
             json: true,
@@ -193,10 +193,11 @@ function* scrapLeagueInfo(team,retry) {
 
             var result = {
                 provider: team.providers[0],
-                teamName: $('h2.page-title')[0].innerText,
+                name: team.name,
                 teamLink: team.providers[0].link,
                 topScores: topScores,
                 squad: squad,
+                country : team.country,
                 teamInfo: {
                     manager: manager,
                     stadium: stadium,
