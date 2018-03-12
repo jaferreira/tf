@@ -27,7 +27,7 @@ module.exports = {
         results = yield* running(teamsToScrap);
         //console.log(JSON.stringify(results))
 
-        console.log('before send  ->'.JSON.stringify(results));
+        // console.log('before send  ->'.JSON.stringify(results));
         request.post({
             url: 'http://localhost:3000/scrap/teams/bulk/',
             json: true,
