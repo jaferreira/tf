@@ -6,10 +6,10 @@ module.exports.default = (router) => {
     router.get("/", (req, res) => {
 
         leagueController.get_countries(req, res, function (info){
-            
+            console.log(info);
             const data = {
                 title: "TF",
-                countries: info.result.docs
+                countries: info.result
             };
             const vueOptions = {
                 head: {
