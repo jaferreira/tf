@@ -189,7 +189,18 @@ function* scrapLeagueInfo(team,retry) {
                 
             }
 
+            var rows = $('.event-list-table-wrapper.js-event-list-table-wrapper > div > div > a')
 
+            var nextGame = '';
+
+            for (var i = 0, row; row = rows[i]; i++) {
+                var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
+                if (time.getTime() > new Date().getTime()) {
+                    time.setMinutes(time.getMinutes() + 110)//change league.getTime()
+                    nextGame = time;
+                    break;
+                }
+            }
 
             var result = {
                 provider: team.providers[0],
@@ -198,6 +209,7 @@ function* scrapLeagueInfo(team,retry) {
                 topScores: topScores,
                 squad: squad,
                 country : team.country,
+                nextScrapAt: nextGame,
                 teamInfo: {
                     manager: manager,
                     stadium: stadium,
