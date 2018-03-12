@@ -14,13 +14,13 @@ var logger = require('./Logger.js'),
     expressMetrics = require('express-metrics'),
     swaggerUi = require('swagger-ui-express'),
     swaggerJSDoc = require('swagger-jsdoc')
-upsertMany = require('@meanie/mongoose-upsert-many'),
+    upsertMany = require('@meanie/mongoose-upsert-many'),
     request = require('request'),
 
     // Models
     TeamToScrap = require('./Models/TeamToScrap'),
     TeamInfo = require('./Models/TeamInfo');
-LeagueToScrap = require('./Models/LeagueToScrap'),
+    LeagueToScrap = require('./Models/LeagueToScrap'),
     LeagueInfo = require('./Models/LeagueInfo');
 
 
@@ -95,6 +95,10 @@ mongoose.connect(mongoConnString, function (err) {
     app.get('/metrics', function (req, res) {
         var metricsUrl = 'http://wigserver.myvnc.com:3001/metrics';
         request.get(metricsUrl, (error, response, body) => {
+            if(error)
+            {
+                return res.send(error);
+            }
             let json = JSON.parse(body);
             var stats = [];
             for (var prop in json) {
@@ -104,24 +108,32 @@ mongoose.connect(mongoConnString, function (err) {
             }
             var content = '<h1>Sportstats API</h1><h2>Metrics</h2>';
             stats.forEach(stat => {
-                if (stat.key.indexOf('/') == 0) {
-                    content += '<h3>' + stat.key + '</h3>';
+                if (stat.key.indexOf('/') == 0 && stat.key != '/metrics') {
+                    
                     if (stat.stats.get) {
-                        content += '<h4>min=' + stat.stats.get.duration.min + '</h4>';
-                        content += '<h4>max=' + stat.stats.get.duration.max + '</h4>';
-                        content += '<h4>avg=' + stat.stats.get.duration.mean + '</h4>';
+                        content += '<h3>[GET] ' + stat.key + '</h3>';
+                        content += '<ul>';
+                        content += '<li>count: ' + stat.stats.get.duration.count + '</li>';
+                        content += '<li>min: ' + stat.stats.get.duration.min + '</li>';
+                        content += '<li>max: ' + stat.stats.get.duration.max + '</li>';
+                        content += '<li>avg: ' + stat.stats.get.duration.mean + '</li>';
+                        content += '</ul>';
                     }
 
                     if (stat.stats.post) {
-                        content += '<h4>min=' + stat.stats.post.duration.min + '</h4>';
-                        content += '<h4>max=' + stat.stats.post.duration.max + '</h4>';
-                        content += '<h4>avg=' + stat.stats.post.duration.mean + '</h4>';
+                        content += '<h3>[POST] ' + stat.key + '</h3>';
+                        content += '<ul>';
+                        content += '<li>count: ' + stat.stats.post.duration.count + '</li>';
+                        content += '<li>min: ' + stat.stats.post.duration.min + '</li>';
+                        content += '<li>max: ' + stat.stats.post.duration.max + '</li>';
+                        content += '<li>avg: ' + stat.stats.post.duration.mean + '</li>';
+                        content += '</ul>';
                     }
 
                     content += '<hr/>';
-                    res.send(content);
                 }
             });
+            res.send(content);
         });
     });
 
