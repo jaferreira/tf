@@ -17,7 +17,7 @@ function Status() {
         }]
     }
     return scraper
-        .goto('https://www.sofascore.com/pt/time/futebol/botev-plovdiv/5241')
+        .goto('https://www.sofascore.com/pt/time/futebol/etar-veliko-tarnovo/36941')
 
         .wait('.squad')
         .evaluate(function (team) {

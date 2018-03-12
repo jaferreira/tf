@@ -133,8 +133,8 @@ function* scrapLeagueInfo(team,retry) {
                     position: row.querySelectorAll('.cell__content')[0].innerText.trim(),
                     name: row.querySelectorAll('.cell__content')[2].innerText.trim(),
                     matches: row.querySelectorAll('.cell__content')[3].innerText.trim(),
-                    goals: row.querySelectorAll('.cell__content')[4].innerText.trim(),
-                    ratings: row.querySelectorAll('.cell__content')[5].innerText.trim()
+                    goals: row.querySelectorAll('.cell__content')[4].innerText.trim()
+                    //ratings: row.querySelectorAll('.cell__content')[5].innerText.trim()
                 });
 
 
