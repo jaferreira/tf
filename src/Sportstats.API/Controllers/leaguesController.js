@@ -3,6 +3,7 @@ var logger = require('../Logger.js'),
     mongoose = require('mongoose'),
     LeagueInfo = mongoose.model('Leagues'),
     LeaguesToScrap = mongoose.model('LeaguesToScrap'),
+    TeamsToScrap = mongoose.model('TeamsToScrap'),
     async = require('async'),
     responseModel = require('./Response.js');
 
