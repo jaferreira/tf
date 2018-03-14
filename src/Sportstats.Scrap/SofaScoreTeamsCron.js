@@ -6,10 +6,10 @@ tryCount = 0;
 
 
 cron.schedule('*/1 * * * *', function () {
-
+    console.log('start Teams')
 
     var t = request.get({
-        url: 'http://127.0.0.1:3000/scrap/teams/pending',
+        url: 'http://127.0.0.1:3000/api/teams/scrap/pending',
         json: true, 
         headers: { 'User-Agent': 'request' }
     }, (err, res, data) => {
