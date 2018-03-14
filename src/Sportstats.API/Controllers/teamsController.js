@@ -191,10 +191,10 @@ class TeamsController extends BaseController {
                     var nextGameDate = new Date(team.nextGame.date);
 
                     var homeTeamArray = dicionario.filter(function (el) {
-                        return el.sofaTeamName == team.nextGame.homeTeamName;
+                        return el.sofaTeamName == team.nextGame.homeTeam;
                     });
                     var awayTeamArray = dicionario.filter(function (el) {
-                        return el.sofaTeamName == team.nextGame.awayTeamName;
+                        return el.sofaTeamName == team.nextGame.awayTeam;
                     });
 
                     logger.debug('Home Maped Team: ' + JSON.stringify(homeTeamArray));
