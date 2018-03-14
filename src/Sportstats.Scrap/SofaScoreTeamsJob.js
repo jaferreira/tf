@@ -9,7 +9,7 @@ process.on('unhandledRejection', (reason, p) => {
     if (tryCount <= 5) {
         console.log('retry - ' + tryCount)
         tryCount++;
-        run(currentTeam,tryCount);
+        run(currentTeam, tryCount);
     }
     else {
         //TODO reporting error
@@ -68,7 +68,7 @@ function* running(teams) {
         console.log('[' + teams[i].name + '] Going to start scraping url ' + teams[i].providers[0].link);
         // results.push(yield* scrapLeagueInfo(teams[i]));
         var r = yield* scrapLeagueInfo(teams[i]);
- 
+
         if (r != null) {
             console.log('[' + teams[i].name + '] Scraping done.');
             console.log(JSON.stringify(r))
@@ -105,15 +105,15 @@ function* running(teams) {
 
     }
     // console.log('results -> '. JSON.stringify(results))
-   
+
     return yield results;
 
 }
 
-function* scrapLeagueInfo(team,retry) {
+function* scrapLeagueInfo(team, retry) {
     tryCount = retry;
     currentTeam = team;
-    var url =  team.providers[0].link;
+    var url = team.providers[0].link;
     console.log('starting Scrap Url ' + url);
     var value = yield nbot
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
@@ -121,7 +121,7 @@ function* scrapLeagueInfo(team,retry) {
         .goto(url)
         .wait(1000)
         .wait('.squad')
-        
+
         .evaluate(function (team) {
             debugger;
             var nameTeam = $('h2.page-title')[0].innerText.trim();
@@ -156,69 +156,81 @@ function* scrapLeagueInfo(team,retry) {
             rows = $('table.table.table--justified > tbody > tr ');
 
             var findElements = 0;
-            var manager = '';
-            var stadium = '';
-            var capacity = '';
-            var city = '';
+            var Manager = '';
+            var Stadium = '';
+            var Capacity = '';
+            var City = '';
 
             for (var i = 0, row; row = rows[i]; i++) {
-                
-                    console.log(i)
-                    if (row.innerText.startsWith('Manager') == true) {
-                        console.log('1')
-                        manager = row.innerText.split('Manager').join('').trim();
-                        findElements++;
-                    }
-                    else if (row.innerText.startsWith('Stadium') == true) {
-                        console.log('2')
-                        stadium = row.innerText.split('Stadium').join('').trim();
-                        findElements++;
-                    }
-                    else if (row.innerText.startsWith('Capacity') == true) {
-                        console.log('3')
-                        capacity = row.innerText.split('Capacity').join('').trim();
-                        findElements++;
-                    }
-                    else if (row.innerText.startsWith('City') == true) {
-                        console.log('4')
-                        city = row.innerText.split('City').join('').trim();
-                        findElements++;
-                    }
-                    if (findElements == 4)
-                        break;
-                
+
+
+                if (row.innerText.startsWith('Manager') == true) {
+
+                    Manager = row.innerText.split('Manager').join('').trim();
+                    findElements++;
+                }
+                else if (row.innerText.startsWith('Stadium') == true) {
+
+                    Stadium = row.innerText.split('Stadium').join('').trim();
+                    findElements++;
+                }
+                else if (row.innerText.startsWith('Capacity') == true) {
+
+                    Capacity = row.innerText.split('Capacity').join('').trim();
+                    findElements++;
+                }
+                else if (row.innerText.startsWith('City') == true) {
+
+                    City = row.innerText.split('City').join('').trim();
+                    findElements++;
+                }
+                if (findElements == 4)
+                    break;
+
             }
 
             var rows = $('.event-list-table-wrapper.js-event-list-table-wrapper > div > div > a')
 
             var nextGame = '';
-
+            var homeTeam = '';
+            var awayTeam = '';
             for (var i = 0, row; row = rows[i]; i++) {
                 var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
-                if (time.getTime() > new Date().getTime()) {
+                var title = row.querySelectorAll('.cell__section.status')[0].getAttribute('title');
+                if ((time.getTime() > new Date().getTime()) && title == '-' )  {
                     time.setMinutes(time.getMinutes() + 110)//change league.getTime()
                     nextGame = time;
+                    homeTeam = row.querySelectorAll('.cell__content.event-team')[0].innerText;
+                    awayTeam =  row.querySelectorAll('.cell__content.event-team')[1].innerText;
                     break;
                 }
             }
-
+     
             var result = {
                 provider: team.providers[0],
                 name: team.name,
                 permalink: team.permalink,
                 topScores: topScores,
                 squad: squad,
-                country : team.country,
+                country: team.country,
                 nextScrapAt: nextGame,
+
+                nextGame: {
+                    date: time,
+                    awayTeam: awayTeam,
+                    homeTeam: homeTeam,
+                    provider: team.providers[0].name
+                },
+
                 teamInfo: {
-                    manager: manager,
-                    stadium: stadium,
-                    capacity: capacity,
-                    city: city
+                    manager: Manager,
+                    stadium: Stadium,
+                    capacity: Capacity,
+                    city: City
                 }
             }
 
-            
+
             return result;
 
         }, team)
