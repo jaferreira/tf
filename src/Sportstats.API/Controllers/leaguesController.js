@@ -240,7 +240,7 @@ class LeaguesController extends BaseController {
                 logger.info('Updated ' + teamsToScrap.length + ' teams to be scraped.');
 
                 // Updating League Info Data
-                var result2 = Leagues.upsertMany(leaguesData, matchFields);
+                var result2 = LeagueInfo.upsertMany(leaguesData, matchFields);
                 logger.info('League info data succesfully saved for ' + leaguesData.length + ' teams.');
 
 
