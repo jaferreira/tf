@@ -30,6 +30,16 @@ var TeamToScrapSchema = new Schema({
         default: Date.now
     },
 
+    nextGameScrapAt: Date,
+
+    nextGame: {
+        provider: String,
+        homeTeamName: String,
+        homeTeamLink: String,
+        awayTeamName: String,
+        awayTeamLink: String
+    },
+
     createdAt: {
         type: Date,
         default: Date.now
