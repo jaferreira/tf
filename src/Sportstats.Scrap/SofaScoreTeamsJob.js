@@ -194,12 +194,14 @@ function* scrapLeagueInfo(team, retry) {
             var nextGame = '';
             var homeTeam = '';
             var awayTeam = '';
+            var nextGameDate = '';
             for (var i = 0, row; row = rows[i]; i++) {
                 var time = new Date(row.getAttribute('data-start-timestamp') * 1000);
                 var title = row.querySelectorAll('.cell__section.status')[0].getAttribute('title');
                 if ((time.getTime() > new Date().getTime()) && title == '-' )  {
                     time.setMinutes(time.getMinutes() + 110)//change league.getTime()
                     nextGame = time;
+                    nextGameDate = new Date(row.getAttribute('data-start-timestamp') * 1000);
                     homeTeam = row.querySelectorAll('.cell__content.event-team')[0].innerText;
                     awayTeam =  row.querySelectorAll('.cell__content.event-team')[1].innerText;
                     break;
@@ -216,7 +218,7 @@ function* scrapLeagueInfo(team, retry) {
                 nextScrapAt: nextGame,
 
                 nextGame: {
-                    date: time,
+                    date: nextGameDate,
                     awayTeam: awayTeam,
                     homeTeam: homeTeam,
                     provider: team.providers[0].name
