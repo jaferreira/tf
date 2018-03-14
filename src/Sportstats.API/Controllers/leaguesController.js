@@ -170,7 +170,7 @@ class LeaguesController extends BaseController {
         var leaguesData = req.body;
 
         var ids = [];
-        logger.info('Saving ' + leaguesData.length + ' leagues:');
+        logger.info('(new) Saving ' + leaguesData.length + ' leagues:');
         leaguesData.forEach(league => {
             ids.push(league.permalink);
             logger.info(' » (' + league.country + ') ' + league.name);
@@ -200,6 +200,8 @@ class LeaguesController extends BaseController {
                 }
             });
 
+            logger.debug('Before update info in leagues to scrap.');
+
             // Gather teams to scrap (in all the leagues)
             var teamsToScrap = [];
             leaguesData.forEach(leagueInfo => {
@@ -226,6 +228,7 @@ class LeaguesController extends BaseController {
             //Fields to match on for leagues upsert condition
             const matchFields = ['permalink'];
 
+            logger.debug('Before update teams to scrap.');
 
             //Perform bulk operation
             var result1 = TeamsToScrap.upsertMany(teamsToScrap, matchFields);
