@@ -18,10 +18,10 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 cron.schedule('*/1 * * * *', function () {
-
+    console.log('start Leagues')
 
     var t = request.get({
-        url: 'http://wigserver.myvnc.com:3000/scrap/leagues/pending',
+        url: 'http://127.0.0.1:3000/api/leagues/scrap/pending',
         json: true,
         headers: { 'User-Agent': 'request' }
     }, (err, res, data) => {

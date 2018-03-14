@@ -26,7 +26,7 @@ module.exports = {
 
         console.log(JSON.stringify('done'));
         request.post({
-            url: 'http://wigserver.myvnc.com:3000/scrap/leagues/bulk/',
+            url: 'http://127.0.0.1:3000/api/leagues/scrap',
             json: true,
             body: results
         }, function (error, response, body) {
