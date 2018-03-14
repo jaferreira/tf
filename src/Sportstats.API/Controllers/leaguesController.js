@@ -43,6 +43,7 @@ class LeaguesController extends BaseController {
             });
     }
 
+    
     /**
      * 
      * @param {*} req 
