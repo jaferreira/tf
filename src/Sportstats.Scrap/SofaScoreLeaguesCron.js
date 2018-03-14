@@ -21,7 +21,7 @@ cron.schedule('*/1 * * * *', function () {
 
 
     var t = request.get({
-        url: 'http://http://wigserver.myvnc.com:3000/scrap/leagues/pending',
+        url: 'http://wigserver.myvnc.com:3000/scrap/leagues/pending',
         json: true,
         headers: { 'User-Agent': 'request' }
     }, (err, res, data) => {
