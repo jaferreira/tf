@@ -123,10 +123,10 @@ class LeaguesController extends BaseController {
             function (err, num) {
                 if (err) {
                     logger.error(err);
-                    return res.json(response.errorResponse(err));
+                    return res.json(responseModel.errorResponse(err));
                 }
                 logger.info('Reset Next Scrap Date for ' + num + ' football leagues.');
-                return res.json(response.successResponse());
+                return res.json(responseModel.successResponse());
             });
     }
 
@@ -154,10 +154,10 @@ class LeaguesController extends BaseController {
         }, function (err, doc) {
             if (err) {
                 logger.error(err);
-                return res.json(response.errorResponse(err));
+                return res.json(responseModel.errorResponse(err));
             }
             logger.info('League to scrap succesfully saved: ' + leagueInfo.name);
-            return res.json(response.successResponse(doc));
+            return res.json(responseModel.successResponse(doc));
         });
     }
 
@@ -184,7 +184,7 @@ class LeaguesController extends BaseController {
         }, function (err, dbLeaguesToScrap) {
             if (err) {
                 logger.error(err);
-                return res.json(response.errorResponse(err));
+                return res.json(responseModel.errorResponse(err));
             }
             logger.info('Got ' + dbLeaguesToScrap.length + ' LeaguesToScrap from db');
 
@@ -247,8 +247,8 @@ class LeaguesController extends BaseController {
                 var result3 = LeaguesToScrap.upsertMany(dbLeaguesToScrap, matchFields);
                 logger.info('Updated LeaguesToScrap info with nextScrapAt.');
 
-                return res.json(response.successResponse());
-            } catch (err) { logger.error(err); return res.json(response.errorResponse(err)); }
+                return res.json(responseModel.successResponse());
+            } catch (err) { logger.error(err); return res.json(responseModel.errorResponse(err)); }
         });
     }
 
