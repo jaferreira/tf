@@ -21,7 +21,7 @@ cron.schedule('*/1 * * * *', function () {
 
 
     var t = request.get({
-        url: 'http://localhost:3000/scrap/leagues/pending',
+        url: 'http://wigserver.myvnc.com:3000/scrap/leagues/pending',
         json: true,
         headers: { 'User-Agent': 'request' }
     }, (err, res, data) => {
@@ -35,7 +35,7 @@ cron.schedule('*/1 * * * *', function () {
 
 
                 request.post({
-                    url: 'http://localhost:3007/SofaScoreLeague',
+                    url: 'http://127.0.0.1:3007/SofaScoreLeague',
                     json: true,
                     body: { leagues: data.result.docs }
                 }, function (error, response, body) {

@@ -29,7 +29,7 @@ module.exports = {
 
         // console.lorekg('before send  ->'.JSON.stringify(results));
         request.post({
-            url: 'http://localhost:3000/scrap/teams/bulk/',
+            url: 'http://wigserver.myvnc.com:3000/scrap/teams/bulk/',
             json: true,
             body: results
         }, function (error, response, body) {

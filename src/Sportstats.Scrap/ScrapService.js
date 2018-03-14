@@ -22,6 +22,10 @@ app.post('/SofaScoreLeague', function* (req, res) {
     res.send('Hello')
   });
 
+  app.get('/helloscrap', function* (req, res) {
+   
+    res.send('Hello')
+  });
 
 app.listen(port, () => {
     console.log('We are live on ' + port);
