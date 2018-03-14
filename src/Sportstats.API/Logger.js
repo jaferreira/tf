@@ -9,7 +9,7 @@ const myFormat = printf(info => {
 });
 
 var logger = winston.createLogger({
-    level: 'info',
+    level: 'debug',
     format: combine(
         label({ label: 'Sportstats.API' }),
         timestamp(),

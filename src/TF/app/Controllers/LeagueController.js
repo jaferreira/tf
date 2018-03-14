@@ -1,12 +1,12 @@
 'use strict';
 
 var request = require('request');
-var apiBaseUrl = 'http://localhost:3000';
+var apiBaseUrl = 'http://localhost:3000/api';
 
 
 exports.get_league_info = function (req, res, callback) {
 
-    var url = apiBaseUrl + '/info/leagues/' + req.params.permalink;
+    var url = apiBaseUrl + '/leagues/' + req.params.permalink;
 
     request({
         url: url,
@@ -21,7 +21,7 @@ exports.get_league_info = function (req, res, callback) {
 
 exports.get_country_leagues = function (req, res, callback) {
 
-    var url = apiBaseUrl + '/info/countries/' + req.params.country;
+    var url = apiBaseUrl + '/countries/' + req.params.country + '/competitions';
 
     request({
         url: url,
@@ -35,7 +35,7 @@ exports.get_country_leagues = function (req, res, callback) {
 
 exports.get_countries = function (req, res, callback) {
 
-    var url = apiBaseUrl + '/info/countries';
+    var url = apiBaseUrl + '/countries';
 
     request({
         url: url,
