@@ -130,6 +130,60 @@ class TeamsController extends BaseController {
     }
 
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
+    get_pending_team_games_to_scrap(req, res){
+        var requestBody = req.body;
+
+        var now = new Date();
+        var filter = {
+            nextGameScrapAt: { "$lte": now }
+        };
+
+        var options = {
+            page: 1,
+            limit: 10,
+            sort: {
+                createdAt: -1
+            },
+            select:{
+                permalink: 1,
+                name:1,
+                nextGame: 1
+            }
+        };
+
+        if (requestBody) {
+            //
+            // page:
+            // pageSize:
+            // 
+            //
+            if (requestBody.page) {
+                options.page = requestBody.page;
+                logger.debug('Aplying custom page: ' + requestBody.page);
+            }
+            if (requestBody.pageSize) {
+                options.limit = requestBody.pageSize;
+                logger.debug('Aplying custom pageSize: ' + requestBody.pageSize);
+            }
+        }
+
+        TeamsToScrap.paginate(
+            filter,
+            options,
+            function (err, data) {
+                if (err) {
+                    logger.error(err);
+                    return res.status(500).json(responseModel.errorResponse(err));
+                }
+                return res.json(responseModel.successResponse(data));
+            });
+    }
+
 
     /**
     * 

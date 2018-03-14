@@ -109,4 +109,23 @@ module.exports = function (app) {
     app.route(`/${settings.api.apiBasePath}/${teamsRoutePrefix}/scrap/reset`)
         .post(teamsCtrl.reset_teams_to_scrap);
 
+
+
+    /**
+     * @swagger
+     * /teams/games/scrap/pending:
+     *   get:
+     *     tags:
+     *       - "Teams"
+     *     description: Returns a list of games that are pending to be scraped.
+     *     produces:
+     *      - application/json
+     *     responses:
+     *       200:
+     *         description: games
+     *         schema:
+     *           type: array
+     */
+    app.route(`/${settings.api.apiBasePath}/${teamsRoutePrefix}/games/scrap/pending`)
+        .get(teamsCtrl.get_pending_team_games_to_scrap);
 };
