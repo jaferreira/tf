@@ -214,6 +214,8 @@ class TeamsController extends BaseController {
                     if (homeTeamArray.length > 0 && awayTeamArray.length > 0) {
 
                         nextGames.push({
+                            date: team.nextGame.date,
+
                             permalink: team.permalink,
 
                             provider: 'WhoScored',
@@ -276,6 +278,7 @@ class TeamsController extends BaseController {
 
                 if (nextGameArray.length > 0) {
                     teamInfo.nextGame = {
+                        date: nextGameArray[0].date,
                         provider: nextGameArray[0].provider,
                         homeTeamName: nextGameArray[0].homeTeamName,
                         homeTeamLink: nextGameArray[0].homeTeamLink,
