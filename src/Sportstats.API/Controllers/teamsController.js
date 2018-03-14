@@ -187,7 +187,7 @@ class TeamsController extends BaseController {
 
             // SETTING GAMES TO BE SCRAPED
             if (team.nextGame) {
-                if (team.nextGame.data && team.nextGame.homeTeamName && team.nextGame.awayTeamName) {
+                if (team.nextGame.date && team.nextGame.homeTeam && team.nextGame.awayTeam) {
                     var nextGameDate = new Date(team.nextGame.date);
 
                     var homeTeamArray = dicionario.filter(function (el) {
