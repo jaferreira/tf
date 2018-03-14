@@ -3,6 +3,7 @@ const name = 'API Server'
 const version = '0.0.1';
 
 var logger = require('./Logger.js'),
+    settings = require('./settings'),
     morgan = require('morgan'),
     express = require('express'),
     app = express(),
@@ -13,19 +14,19 @@ var logger = require('./Logger.js'),
     bodyParser = require('body-parser'),
     expressMetrics = require('express-metrics'),
     swaggerUi = require('swagger-ui-express'),
-    swaggerJSDoc = require('swagger-jsdoc')
-upsertMany = require('@meanie/mongoose-upsert-many'),
+    swaggerJSDoc = require('swagger-jsdoc'),
+    upsertMany = require('@meanie/mongoose-upsert-many'),
     request = require('request'),
 
     // Models
     TeamToScrap = require('./Models/TeamToScrap'),
-    TeamInfo = require('./Models/TeamInfo');
-LeagueToScrap = require('./Models/LeagueToScrap'),
+    TeamInfo = require('./Models/TeamInfo'),
+    LeagueToScrap = require('./Models/LeagueToScrap'),
     LeagueInfo = require('./Models/LeagueInfo');
 
 
 // Mongoose Configuration
-var mongoConnString = 'mongodb://localhost/sportstats';
+var mongoConnString = `${settings.mongo.connString}`;
 mongoose.Promise = global.Promise;
 mongoose.plugin(upsertMany);
 
@@ -49,8 +50,8 @@ mongoose.connect(mongoConnString, function (err) {
             version: version, // Version (required)
             description: 'Sportstats API', // Description (optional)
         },
-        host: 'wigserver.myvnc.com:3000', // Host (optional)
-        basePath: '/', // Base path (optional)
+        host: `${settings.api.hostUrl}`, // Host (optional)
+        basePath: `/${settings.api.apiBasePath}`, // Base path (optional)
     };
 
     // Options for the swagger docs
@@ -59,13 +60,15 @@ mongoose.connect(mongoConnString, function (err) {
         swaggerDefinition: swaggerDefinition,
         // Path to the API docs
         apis: [
-            './docs/swaggwer/tags.yaml',
-            './docs/swaggwer/definitions.yaml',
+            './docs/swagger/tags.yaml',
+            './docs/swagger/definitions.yaml',
             './Routes/*.js']
     };
 
     // Initialize swagger-jsdoc -> returns validated swagger spec in json format
     var swaggerSpec = swaggerJSDoc(options);
+
+    //swaggerSpec.definitions.in_login = require("./docs/swagger/tags.yaml");
 
     // Serve swagger docs the way you like (Recommendation: swagger-tools)
     app.get('/api-docs.json', function (req, res) {
@@ -155,10 +158,16 @@ mongoose.connect(mongoConnString, function (err) {
     });
 
     // Routes
-    var scrapRoutes = require('./Routes/ScrapRoutes');
-    scrapRoutes(app);
-    var infoRoutes = require('./Routes/InfoRoutes');
-    infoRoutes(app);
+    // var scrapRoutes = require('./Routes/ScrapRoutes');
+    // scrapRoutes(app);
+    // var infoRoutes = require('./Routes/InfoRoutes');
+    // infoRoutes(app);
+    var leagueRoutes = require('./Routes/LeaguesRoutes');
+    leagueRoutes(app);
+    var teamRoutes = require('./Routes/TeamsRoutes');
+    teamRoutes(app);
+    var countriesRoutes = require('./Routes/CountriesRoutes');
+    countriesRoutes(app);
 
     app.listen(port);
     logger.info('Sportstats API server started on: ' + port);

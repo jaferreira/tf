@@ -6,20 +6,21 @@ module.exports.default = (router) => {
 
         leagueController.get_league_info(req, res, function (info) {
             
-            
+            console.log(info.result.standings[0].teamName);
+
             const data = {
                 message: "POST",
                 csrfToken: req.csrfToken(),
                 
-                title: info.result.docs[0].name,
-                subtitle: info.result.docs[0].country,
+                title: info.result.name,
+                subtitle: info.result.country,
                 
-                data: info.result.docs[0],
-                standings: info.result.docs[0].standings
+                data: info.result,
+                standings: info.result.standings
             };
             req.vueOptions = {
                 head: {
-                    title: info.result.docs[0].name
+                    title: info.result.name
                 }
             };
             res.renderVue("leagues/league.vue", data, req.vueOptions);
