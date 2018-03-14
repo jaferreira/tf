@@ -160,7 +160,7 @@ class TeamsController extends BaseController {
     save_team_scrap_info(req, res) {
 
         var teamsData = req.body;
-    
+
         var ids = [];
         logger.info('Saving ' + teamsData.length + ' teams:');
         teamsData.forEach(team => {
@@ -207,7 +207,7 @@ class TeamsController extends BaseController {
     
             const matchFields = ['permalink'];
     
-            var result2 = Teams.upsertMany(teamsData, matchFields);
+            var result2 = TeamInfo.upsertMany(teamsData, matchFields);
             logger.info('Team info data succesfully saved for ' + teamsData.length + ' teams.');
     
     

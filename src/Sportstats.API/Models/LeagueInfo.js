@@ -12,6 +12,11 @@ var LeagueInfo = new Schema({
 
     country: String,
 
+    teams: [{
+        name: String,
+        permalink: String
+    }],
+
     mostTitles: [{
         name: String,
         titles: Number

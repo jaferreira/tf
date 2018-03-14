@@ -3,6 +3,7 @@ var logger = require('../Logger.js'),
     mongoose = require('mongoose'),
     LeagueInfo = mongoose.model('Leagues'),
     LeaguesToScrap = mongoose.model('LeaguesToScrap'),
+    TeamsToScrap = mongoose.model('TeamsToScrap'),
     async = require('async'),
     responseModel = require('./Response.js');
 
@@ -41,6 +42,7 @@ class LeaguesController extends BaseController {
                 return res.json(responseModel.errorResponse(error));
             });
     }
+
 
     /**
      * 
@@ -122,10 +124,10 @@ class LeaguesController extends BaseController {
             function (err, num) {
                 if (err) {
                     logger.error(err);
-                    return res.json(response.errorResponse(err));
+                    return res.json(responseModel.errorResponse(err));
                 }
                 logger.info('Reset Next Scrap Date for ' + num + ' football leagues.');
-                return res.json(response.successResponse());
+                return res.json(responseModel.successResponse());
             });
     }
 
@@ -153,10 +155,10 @@ class LeaguesController extends BaseController {
         }, function (err, doc) {
             if (err) {
                 logger.error(err);
-                return res.json(response.errorResponse(err));
+                return res.json(responseModel.errorResponse(err));
             }
             logger.info('League to scrap succesfully saved: ' + leagueInfo.name);
-            return res.json(response.successResponse(doc));
+            return res.json(responseModel.successResponse(doc));
         });
     }
 
@@ -170,7 +172,7 @@ class LeaguesController extends BaseController {
         var leaguesData = req.body;
 
         var ids = [];
-        logger.info('Saving ' + leaguesData.length + ' leagues:');
+        logger.info('(new) Saving ' + leaguesData.length + ' leagues:');
         leaguesData.forEach(league => {
             ids.push(league.permalink);
             logger.info(' » (' + league.country + ') ' + league.name);
@@ -183,7 +185,7 @@ class LeaguesController extends BaseController {
         }, function (err, dbLeaguesToScrap) {
             if (err) {
                 logger.error(err);
-                return res.json(response.errorResponse(err));
+                return res.json(responseModel.errorResponse(err));
             }
             logger.info('Got ' + dbLeaguesToScrap.length + ' LeaguesToScrap from db');
 
@@ -200,46 +202,71 @@ class LeaguesController extends BaseController {
                 }
             });
 
-            // Gather teams to scrap (in all the leagues)
-            var teamsToScrap = [];
-            leaguesData.forEach(leagueInfo => {
-                if (leagueInfo.standings)
-                    leagueInfo.standings.forEach(standing => {
-                        var newTeamToScrap = new TeamsToScrap();
-                        newTeamToScrap.country = leagueInfo.country;
-                        newTeamToScrap.league = leagueInfo.name;
-                        newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
-                        newTeamToScrap.name = standing.teamName;
-                        newTeamToScrap.providers = [];
+            logger.debug('Before update info in leagues to scrap.');
 
-                        if (standing.providerInfo)
-                            newTeamToScrap.providers.push({
-                                name: standing.providerInfo.name,
-                                link: standing.providerInfo.link,
+            // Gather teams to scrap (in all the leagues)
+            try {
+
+                var teamsToScrap = [];
+                leaguesData.forEach(leagueInfo => {
+                    var leagueTeams = [];
+
+                    if (leagueInfo.standings) {
+                        leagueInfo.standings.forEach(standing => {
+                            var newTeamToScrap = new TeamsToScrap();
+
+                            newTeamToScrap.country = leagueInfo.country;
+                            newTeamToScrap.league = leagueInfo.name;
+                            newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
+                            newTeamToScrap.name = standing.teamName;
+                            newTeamToScrap.providers = [];
+
+                            if (standing.providerInfo)
+                                newTeamToScrap.providers.push({
+                                    name: standing.providerInfo.name,
+                                    link: standing.providerInfo.link,
+                                });
+
+                            leagueTeams.push({
+                                name: newTeamToScrap.name,
+                                permalink: newTeamToScrap.permalink
                             });
 
-                        teamsToScrap.push(newTeamToScrap);
-                        logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
-                    });
-            });
+                            teamsToScrap.push(newTeamToScrap);
+                            logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
+                        });
 
-            //Fields to match on for leagues upsert condition
-            const matchFields = ['permalink'];
+                        leagueInfo.teams = leagueTeams;
+                    }
+                });
+                leaguesData.forEach(leagueInfo => {
 
-
-            //Perform bulk operation
-            var result1 = TeamsToScrap.upsertMany(teamsToScrap, matchFields);
-            logger.info('Updated ' + teamsToScrap.length + ' teams to be scraped.');
-
-            // Updating League Info Data
-            var result2 = Leagues.upsertMany(leaguesData, matchFields);
-            logger.info('League info data succesfully saved for ' + leaguesData.length + ' teams.');
+                    if (leagueInfo.teams && leagueInfo.teams.length > 0)
+                        logger.debug('[# Teams] ' + leagueInfo.teams.length);
+                    else
+                        logger.debug('[# Teams] ' + 0);
+                });
 
 
-            var result3 = LeaguesToScrap.upsertMany(dbLeaguesToScrap, matchFields);
-            logger.info('Updated LeaguesToScrap info with nextScrapAt.');
+                //Fields to match on for leagues upsert condition
+                const matchFields = ['permalink'];
 
-            return res.json(response.successResponse());
+                logger.debug('Before update teams to scrap.');
+
+                //Perform bulk operation
+                var result1 = TeamsToScrap.upsertMany(teamsToScrap, matchFields);
+                logger.info('Updated ' + teamsToScrap.length + ' teams to be scraped.');
+
+                // Updating League Info Data
+                var result2 = LeagueInfo.upsertMany(leaguesData, matchFields);
+                logger.info('League info data succesfully saved for ' + leaguesData.length + ' teams.');
+
+
+                var result3 = LeaguesToScrap.upsertMany(dbLeaguesToScrap, matchFields);
+                logger.info('Updated LeaguesToScrap info with nextScrapAt.');
+
+                return res.json(responseModel.successResponse());
+            } catch (err) { logger.error(err); return res.json(responseModel.errorResponse(err)); }
         });
     }
 
