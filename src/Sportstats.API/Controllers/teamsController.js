@@ -277,6 +277,7 @@ class TeamsController extends BaseController {
                 });
 
                 if (nextGameArray.length > 0) {
+                    teamInfo.nextGameScrapAt = new Date();
                     teamInfo.nextGame = {
                         date: nextGameArray[0].date,
                         provider: nextGameArray[0].provider,
