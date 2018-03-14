@@ -203,27 +203,31 @@ class LeaguesController extends BaseController {
             logger.debug('Before update info in leagues to scrap.');
 
             // Gather teams to scrap (in all the leagues)
-            var teamsToScrap = [];
-            leaguesData.forEach(leagueInfo => {
-                if (leagueInfo.standings)
-                    leagueInfo.standings.forEach(standing => {
-                        var newTeamToScrap = new TeamsToScrap();
-                        newTeamToScrap.country = leagueInfo.country;
-                        newTeamToScrap.league = leagueInfo.name;
-                        newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
-                        newTeamToScrap.name = standing.teamName;
-                        newTeamToScrap.providers = [];
+            try {
 
-                        if (standing.providerInfo)
-                            newTeamToScrap.providers.push({
-                                name: standing.providerInfo.name,
-                                link: standing.providerInfo.link,
-                            });
+                var teamsToScrap = [];
+                leaguesData.forEach(leagueInfo => {
 
-                        teamsToScrap.push(newTeamToScrap);
-                        logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
-                    });
-            });
+                    if (leagueInfo.standings)
+                        leagueInfo.standings.forEach(standing => {
+                            var newTeamToScrap = new TeamsToScrap();
+                            newTeamToScrap.country = leagueInfo.country;
+                            newTeamToScrap.league = leagueInfo.name;
+                            newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
+                            newTeamToScrap.name = standing.teamName;
+                            newTeamToScrap.providers = [];
+
+                            if (standing.providerInfo)
+                                newTeamToScrap.providers.push({
+                                    name: standing.providerInfo.name,
+                                    link: standing.providerInfo.link,
+                                });
+
+                            teamsToScrap.push(newTeamToScrap);
+                            logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
+                        });
+                });
+            } catch (err) { logger.error(err); return res.json(response.errorResponse(err)); }
 
             //Fields to match on for leagues upsert condition
             const matchFields = ['permalink'];
