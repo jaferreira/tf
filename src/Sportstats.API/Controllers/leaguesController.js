@@ -228,26 +228,27 @@ class LeaguesController extends BaseController {
                             logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
                         });
                 });
+
+
+                //Fields to match on for leagues upsert condition
+                const matchFields = ['permalink'];
+
+                logger.debug('Before update teams to scrap.');
+
+                //Perform bulk operation
+                var result1 = TeamsToScrap.upsertMany(teamsToScrap, matchFields);
+                logger.info('Updated ' + teamsToScrap.length + ' teams to be scraped.');
+
+                // Updating League Info Data
+                var result2 = Leagues.upsertMany(leaguesData, matchFields);
+                logger.info('League info data succesfully saved for ' + leaguesData.length + ' teams.');
+
+
+                var result3 = LeaguesToScrap.upsertMany(dbLeaguesToScrap, matchFields);
+                logger.info('Updated LeaguesToScrap info with nextScrapAt.');
+
+                return res.json(response.successResponse());
             } catch (err) { logger.error(err); return res.json(response.errorResponse(err)); }
-
-            //Fields to match on for leagues upsert condition
-            const matchFields = ['permalink'];
-
-            logger.debug('Before update teams to scrap.');
-
-            //Perform bulk operation
-            var result1 = TeamsToScrap.upsertMany(teamsToScrap, matchFields);
-            logger.info('Updated ' + teamsToScrap.length + ' teams to be scraped.');
-
-            // Updating League Info Data
-            var result2 = Leagues.upsertMany(leaguesData, matchFields);
-            logger.info('League info data succesfully saved for ' + leaguesData.length + ' teams.');
-
-
-            var result3 = LeaguesToScrap.upsertMany(dbLeaguesToScrap, matchFields);
-            logger.info('Updated LeaguesToScrap info with nextScrapAt.');
-
-            return res.json(response.successResponse());
         });
     }
 

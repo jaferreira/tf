@@ -160,7 +160,7 @@ class TeamsController extends BaseController {
     save_team_scrap_info(req, res) {
 
         var teamsData = req.body;
-    
+
         var ids = [];
         logger.info('Saving ' + teamsData.length + ' teams:');
         teamsData.forEach(team => {
