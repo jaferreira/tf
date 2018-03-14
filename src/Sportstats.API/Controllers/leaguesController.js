@@ -43,7 +43,7 @@ class LeaguesController extends BaseController {
             });
     }
 
-    
+
     /**
      * 
      * @param {*} req 
@@ -209,10 +209,12 @@ class LeaguesController extends BaseController {
 
                 var teamsToScrap = [];
                 leaguesData.forEach(leagueInfo => {
+                    var leagueTeams = [];
 
-                    if (leagueInfo.standings)
+                    if (leagueInfo.standings) {
                         leagueInfo.standings.forEach(standing => {
                             var newTeamToScrap = new TeamsToScrap();
+
                             newTeamToScrap.country = leagueInfo.country;
                             newTeamToScrap.league = leagueInfo.name;
                             newTeamToScrap.permalink = leagueInfo.permalink + '_' + standing.teamName.replace(/\s+/g, '');
@@ -225,9 +227,24 @@ class LeaguesController extends BaseController {
                                     link: standing.providerInfo.link,
                                 });
 
+                            leagueTeams.push({
+                                name: newTeamToScrap.name,
+                                permalink: newTeamToScrap.permalink
+                            });
+
                             teamsToScrap.push(newTeamToScrap);
                             logger.info(' » Set team ' + newTeamToScrap.name + ' (' + newTeamToScrap.league + ' - ' + newTeamToScrap.country + ') to be scraped.');
                         });
+
+                        leagueInfo.teams = leagueTeams;
+                    }
+                });
+                leaguesData.forEach(leagueInfo => {
+
+                    if (leagueInfo.teams && leagueInfo.teams.length > 0)
+                        logger.debug('[# Teams] ' + leagueInfo.teams.length);
+                    else
+                        logger.debug('[# Teams] ' + 0);
                 });
 
 
