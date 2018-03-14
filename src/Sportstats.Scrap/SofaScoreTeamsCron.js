@@ -9,7 +9,7 @@ cron.schedule('*/1 * * * *', function () {
 
 
     var t = request.get({
-        url: 'http://wigserver.myvnc.com:3000/scrap/teams/pending',
+        url: 'http://127.0.0.1:3000/scrap/teams/pending',
         json: true, 
         headers: { 'User-Agent': 'request' }
     }, (err, res, data) => {
