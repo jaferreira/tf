@@ -33,6 +33,7 @@ var TeamToScrapSchema = new Schema({
     nextGameScrapAt: Date,
 
     nextGame: {
+        date: Date,
         provider: String,
         homeTeamName: String,
         homeTeamLink: String,

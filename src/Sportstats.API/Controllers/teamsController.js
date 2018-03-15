@@ -68,8 +68,232 @@ class TeamsController extends BaseController {
             .then(result => {
                 if (result.total == 0)
                     return res.json(responseModel.successResponse(null));
-                else
-                    return res.json(responseModel.successResponse(result.docs[0]));
+                else {
+                    var doc = responseModel.successResponse(result.docs[0]);
+
+                    var newDoc = {
+                        success: true,
+                        result: {
+                            teamInfo: doc.result.teamInfo,
+                            squad: doc.result.squad,
+                            topScores: doc.result.topScores,
+                            createdAt: doc.result.createdAt,
+                            country: doc.result.country,
+                            name: doc.result.name,
+                            permalink: doc.result.permalink,
+                            nextGame: {
+
+                                awayLineup: [
+                                    {
+                                        left: "",
+                                        name: "Pickford",
+                                        right: "30.3636px",
+                                        top: "174.5px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Baines",
+                                        right: "91.0909px",
+                                        top: "275.136px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Jagielka",
+                                        right: "91.0909px",
+                                        top: "208.045px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Keane",
+                                        right: "91.0909px",
+                                        top: "140.955px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Coleman",
+                                        right: "91.0909px",
+                                        top: "73.8636px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Davies",
+                                        right: "151.818px",
+                                        top: "208.045px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Gueye",
+                                        right: "151.818px",
+                                        top: "140.955px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Bolasie",
+                                        right: "212.545px",
+                                        top: "241.591px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Rooney",
+                                        right: "212.545px",
+                                        top: "174.5px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Walcott",
+                                        right: "212.545px",
+                                        top: "107.409px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Tosun",
+                                        right: "273.273px",
+                                        top: "174.5px"
+                                    }
+                                ],
+                                homeLineup: [
+                                    {
+                                        left: "30.3636px",
+                                        name: "Butland",
+                                        right: "",
+                                        top: "174.5px"
+                                    },
+                                    {
+                                        left: "91.0909px",
+                                        name: "Stafylidis",
+                                        right: "",
+                                        top: "73.8636px"
+                                    },
+                                    {
+                                        left: "91.0909px",
+                                        name: "Zouma",
+                                        right: "",
+                                        top: "140.955px"
+                                    },
+                                    {
+                                        left: "91.0909px",
+                                        name: "Shawcross",
+                                        right: "",
+                                        top: "208.045px"
+                                    },
+                                    {
+                                        left: "91.0909px",
+                                        name: "Bauer",
+                                        right: "",
+                                        top: "275.136px"
+                                    },
+                                    {
+                                        left: "151.818px",
+                                        name: "Ndiaye",
+                                        right: "",
+                                        top: "140.955px"
+                                    },
+                                    {
+                                        left: "151.818px",
+                                        name: "Cameron",
+                                        right: "",
+                                        top: "208.045px"
+                                    },
+                                    {
+                                        left: "212.545px",
+                                        name: "Choupo-Moting",
+                                        right: "",
+                                        top: "107.409px"
+                                    },
+                                    {
+                                        left: "212.545px",
+                                        name: "Allen",
+                                        right: "",
+                                        top: "174.5px"
+                                    },
+                                    {
+                                        left: "212.545px",
+                                        name: "Shaqiri",
+                                        right: "",
+                                        top: "241.591px"
+                                    },
+                                    {
+                                        left: "273.273px",
+                                        name: "Crouch",
+                                        right: "",
+                                        top: "174.5px"
+                                    }
+                                ],
+                                missingAwayPlayers: [
+                                    {
+                                        name: "James McCarthy",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Maarten Stekelenburg",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Eliaquim Mangala",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Gylfi Sigurdsson",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Ashley Williams",
+                                        reason: "suspended",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Idrissa Gueye",
+                                        reason: "unfit",
+                                        status: "Doubtful"
+                                    },
+                                    {
+                                        name: "Morgan Schneiderlin",
+                                        reason: "unfit",
+                                        status: "Doubtful"
+                                    },
+                                    {
+                                        name: "Theo Walcott",
+                                        reason: "injured doubtful",
+                                        status: "Doubtful"
+                                    }
+                                ],
+                                missingHomePlayers: [
+                                    {
+                                        name: "Stephen Ireland",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Lee Grant",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Mame Biram Diouf",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Kevin Wimmer",
+                                        reason: "unfit",
+                                        status: "Doubtful"
+                                    },
+                                    {
+                                        name: "Ryan Shawcross",
+                                        reason: "injured doubtful",
+                                        status: "Doubtful"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+
+                    return res.json(newDoc);
+                }
             })
             .catch(error => {
                 logger.error(error);
@@ -130,6 +354,60 @@ class TeamsController extends BaseController {
     }
 
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
+    get_pending_team_games_to_scrap(req, res) {
+        var requestBody = req.body;
+
+        var now = new Date();
+        var filter = {
+            nextGameScrapAt: { "$lte": now }
+        };
+
+        var options = {
+            page: 1,
+            limit: 10,
+            sort: {
+                createdAt: -1
+            },
+            select: {
+                permalink: 1,
+                name: 1,
+                nextGame: 1
+            }
+        };
+
+        if (requestBody) {
+            //
+            // page:
+            // pageSize:
+            // 
+            //
+            if (requestBody.page) {
+                options.page = requestBody.page;
+                logger.debug('Aplying custom page: ' + requestBody.page);
+            }
+            if (requestBody.pageSize) {
+                options.limit = requestBody.pageSize;
+                logger.debug('Aplying custom pageSize: ' + requestBody.pageSize);
+            }
+        }
+
+        TeamsToScrap.paginate(
+            filter,
+            options,
+            function (err, data) {
+                if (err) {
+                    logger.error(err);
+                    return res.status(500).json(responseModel.errorResponse(err));
+                }
+                return res.json(responseModel.successResponse(data));
+            });
+    }
+
 
     /**
     * 
@@ -169,6 +447,28 @@ class TeamsController extends BaseController {
             whoTeamId: '167',
             whoTeamName: 'Manchester City',
             whoTeamLink: 'https://www.whoscored.com/Teams/167/Show/England-Manchester-City',
+        },
+        {
+            sofaProviderName: 'SofaScore',
+            sofaTeamId: '48',
+            sofaTeamName: 'Everton',
+            sofaTeamLink: 'https://www.sofascore.com/team/football/everton/48',
+
+            whoScoredProviderName: 'WhoScored',
+            whoTeamId: '34',
+            whoTeamName: 'Everton',
+            whoTeamLink: 'https://www.whoscored.com/Teams/31/Show/England-Everton',
+        },
+        {
+            sofaProviderName: 'SofaScore',
+            sofaTeamId: '29',
+            sofaTeamName: 'Stoke City',
+            sofaTeamLink: 'https://www.sofascore.com/team/football/stoke-city/29',
+
+            whoScoredProviderName: 'WhoScored',
+            whoTeamId: '96',
+            whoTeamName: 'Stoke',
+            whoTeamLink: 'https://www.whoscored.com/Teams/96/Show/England-Stoke',
         }];
 
         var teamsData = req.body;
@@ -191,10 +491,10 @@ class TeamsController extends BaseController {
                     var nextGameDate = new Date(team.nextGame.date);
 
                     var homeTeamArray = dicionario.filter(function (el) {
-                        return el.sofaTeamName == team.nextGame.homeTeamName;
+                        return el.sofaTeamName == team.nextGame.homeTeam;
                     });
                     var awayTeamArray = dicionario.filter(function (el) {
-                        return el.sofaTeamName == team.nextGame.awayTeamName;
+                        return el.sofaTeamName == team.nextGame.awayTeam;
                     });
 
                     logger.debug('Home Maped Team: ' + JSON.stringify(homeTeamArray));
@@ -203,6 +503,8 @@ class TeamsController extends BaseController {
                     if (homeTeamArray.length > 0 && awayTeamArray.length > 0) {
 
                         nextGames.push({
+                            date: team.nextGame.date,
+
                             permalink: team.permalink,
 
                             provider: 'WhoScored',
@@ -264,7 +566,9 @@ class TeamsController extends BaseController {
                 });
 
                 if (nextGameArray.length > 0) {
+                    teamInfo.nextGameScrapAt = new Date();
                     teamInfo.nextGame = {
+                        date: nextGameArray[0].date,
                         provider: nextGameArray[0].provider,
                         homeTeamName: nextGameArray[0].homeTeamName,
                         homeTeamLink: nextGameArray[0].homeTeamLink,
