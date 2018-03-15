@@ -25,14 +25,14 @@ var TeamInfo = new Schema({
     permalink: String,
 
     squad: [{
-        goals: String,
+        name: String,
         nationality: String,
         number: Number,
         position: String
     }],
 
     topScores: [{
-        name: Number,
+        goals: Number,
         matches: Number,
         name: String,
         position: Number,
