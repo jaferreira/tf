@@ -82,7 +82,6 @@ class TeamsController extends BaseController {
                             name: doc.result.name,
                             permalink: doc.result.permalink,
                             nextGame: {
-
                                 awayLineup: [
                                     {
                                         left: "",
@@ -151,6 +150,26 @@ class TeamsController extends BaseController {
                                         top: "174.5px"
                                     }
                                 ],
+                                awayNews: [
+                                    {
+                                        text: "Gylfi Sigurdsson is sidelined for up to eight weeks, joining Eliaquim Mangala, Maarten Stekelenburg and James McCarthy on the sidelines for Everton this weekend."
+                                    },
+                                    {
+                                        text: "Theo Walcott picked up a calf injury last weekend and remains a doubt for the away side, though Sam Allardyce will hope to have his January arrival available here."
+                                    },
+                                    {
+                                        text: "Ashley Williams serves the second of a three-match suspension against Stoke, meaning Michael Keane and Phil Jagielka should continue at centre back."
+                                    },
+                                    {
+                                        text: "Leighton Baines made his first appearance since the end of November last weekend and was named the WhoScored Man of the Match. He should continue here."
+                                    },
+                                    {
+                                        text: "Wayne Rooney will hope to move further forward to cover for Sigurdsson's absence, which should pave the way for Idrissa Gueye to return."
+                                    },
+                                    {
+                                        text: "Morgan Schneiderlin and Idrissa Gueye missed the 2-0 win over Brighton last weekend because of illness and they remains doubts for the Toffees."
+                                    }
+                                ],
                                 homeLineup: [
                                     {
                                         left: "30.3636px",
@@ -217,6 +236,17 @@ class TeamsController extends BaseController {
                                         name: "Crouch",
                                         right: "",
                                         top: "174.5px"
+                                    }
+                                ],
+                                homeNews: [
+                                    {
+                                        text: "Jese made his first start since October in Stoke's 2-0 defeat at home to Manchester City on Monday but is expected to return to the bench here."
+                                    },
+                                    {
+                                        text: "Ryan Shawcross will hope to be fit enough to start this match after only making the bench in Stoke's last two matches. Kevin Wimmer is also a doubt for the home side."
+                                    },
+                                    {
+                                        text: "Mame Biram Diouf, Lee Grant and Stephen Ireland are ruled out for the Potters when they welcome Everton on Saturday."
                                     }
                                 ],
                                 missingAwayPlayers: [
