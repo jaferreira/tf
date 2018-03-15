@@ -238,7 +238,7 @@ class TeamsController extends BaseController {
         {
             sofaProviderName: 'SofaScore',
             sofaTeamId: '29',
-            sofaTeamName: 'Stoke',
+            sofaTeamName: 'Stoke City',
             sofaTeamLink: 'https://www.sofascore.com/team/football/stoke-city/29',
 
             whoScoredProviderName: 'WhoScored',
