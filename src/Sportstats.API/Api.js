@@ -62,6 +62,7 @@ mongoose.connect(mongoConnString, function (err) {
         apis: [
             './docs/swagger/tags.yaml',
             './docs/swagger/definitions.yaml',
+            './docs/swagger/security.yaml',
             './Routes/*.js']
     };
 
@@ -162,6 +163,8 @@ mongoose.connect(mongoConnString, function (err) {
     // scrapRoutes(app);
     // var infoRoutes = require('./Routes/InfoRoutes');
     // infoRoutes(app);
+    var authRoutes = require('./Routes/AuthRoutes');
+    authRoutes(app);
     var leagueRoutes = require('./Routes/LeaguesRoutes');
     leagueRoutes(app);
     var teamRoutes = require('./Routes/TeamsRoutes');

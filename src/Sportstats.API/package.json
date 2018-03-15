@@ -27,6 +27,8 @@
     "request": "^2.83.0",
     "swagger-jsdoc": "^1.9.7",
     "swagger-ui-express": "^2.0.15",
-    "winston": "^3.0.0-rc1"
+    "winston": "^3.0.0-rc1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.2.0"
   }
 }

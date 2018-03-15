@@ -234,6 +234,17 @@ class TeamsController extends BaseController {
             whoTeamId: '34',
             whoTeamName: 'Everton',
             whoTeamLink: 'https://www.whoscored.com/Teams/31/Show/England-Everton',
+        },
+        {
+            sofaProviderName: 'SofaScore',
+            sofaTeamId: '29',
+            sofaTeamName: 'Stoke',
+            sofaTeamLink: 'https://www.sofascore.com/team/football/stoke-city/29',
+
+            whoScoredProviderName: 'WhoScored',
+            whoTeamId: '96',
+            whoTeamName: 'Stoke',
+            whoTeamLink: 'https://www.whoscored.com/Teams/96/Show/England-Stoke',
         }];
 
         var teamsData = req.body;

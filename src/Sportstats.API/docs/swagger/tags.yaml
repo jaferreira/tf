@@ -8,5 +8,8 @@ tags:
 - name: "Teams"
   description: ""
 
+- name: "Auth"
+  description: ""
+
 schemes:
 - "http"
