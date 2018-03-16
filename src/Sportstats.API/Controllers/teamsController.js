@@ -69,260 +69,260 @@ class TeamsController extends BaseController {
                 if (result.total == 0)
                     return res.json(responseModel.successResponse(null));
                 else {
-                    // var doc = responseModel.successResponse(result.docs[0]);
+                    var doc = responseModel.successResponse(result.docs[0]);
 
-                    // var newDoc = {
-                    //     success: true,
-                    //     result: {
-                    //         teamInfo: doc.result.teamInfo,
-                    //         squad: doc.result.squad,
-                    //         topScores: doc.result.topScores,
-                    //         createdAt: doc.result.createdAt,
-                    //         country: doc.result.country,
-                    //         name: doc.result.name,
-                    //         permalink: doc.result.permalink,
-                    //         nextGame: {
-                    //             awayLineup: [
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Pickford",
-                    //                     right: "30.3636px",
-                    //                     top: "174.5px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Baines",
-                    //                     right: "91.0909px",
-                    //                     top: "275.136px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Jagielka",
-                    //                     right: "91.0909px",
-                    //                     top: "208.045px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Keane",
-                    //                     right: "91.0909px",
-                    //                     top: "140.955px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Coleman",
-                    //                     right: "91.0909px",
-                    //                     top: "73.8636px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Davies",
-                    //                     right: "151.818px",
-                    //                     top: "208.045px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Gueye",
-                    //                     right: "151.818px",
-                    //                     top: "140.955px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Bolasie",
-                    //                     right: "212.545px",
-                    //                     top: "241.591px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Rooney",
-                    //                     right: "212.545px",
-                    //                     top: "174.5px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Walcott",
-                    //                     right: "212.545px",
-                    //                     top: "107.409px"
-                    //                 },
-                    //                 {
-                    //                     left: "",
-                    //                     name: "Tosun",
-                    //                     right: "273.273px",
-                    //                     top: "174.5px"
-                    //                 }
-                    //             ],
-                    //             awayNews: [
-                    //                 {
-                    //                     text: "Gylfi Sigurdsson is sidelined for up to eight weeks, joining Eliaquim Mangala, Maarten Stekelenburg and James McCarthy on the sidelines for Everton this weekend."
-                    //                 },
-                    //                 {
-                    //                     text: "Theo Walcott picked up a calf injury last weekend and remains a doubt for the away side, though Sam Allardyce will hope to have his January arrival available here."
-                    //                 },
-                    //                 {
-                    //                     text: "Ashley Williams serves the second of a three-match suspension against Stoke, meaning Michael Keane and Phil Jagielka should continue at centre back."
-                    //                 },
-                    //                 {
-                    //                     text: "Leighton Baines made his first appearance since the end of November last weekend and was named the WhoScored Man of the Match. He should continue here."
-                    //                 },
-                    //                 {
-                    //                     text: "Wayne Rooney will hope to move further forward to cover for Sigurdsson's absence, which should pave the way for Idrissa Gueye to return."
-                    //                 },
-                    //                 {
-                    //                     text: "Morgan Schneiderlin and Idrissa Gueye missed the 2-0 win over Brighton last weekend because of illness and they remains doubts for the Toffees."
-                    //                 }
-                    //             ],
-                    //             homeLineup: [
-                    //                 {
-                    //                     left: "30.3636px",
-                    //                     name: "Butland",
-                    //                     right: "",
-                    //                     top: "174.5px"
-                    //                 },
-                    //                 {
-                    //                     left: "91.0909px",
-                    //                     name: "Stafylidis",
-                    //                     right: "",
-                    //                     top: "73.8636px"
-                    //                 },
-                    //                 {
-                    //                     left: "91.0909px",
-                    //                     name: "Zouma",
-                    //                     right: "",
-                    //                     top: "140.955px"
-                    //                 },
-                    //                 {
-                    //                     left: "91.0909px",
-                    //                     name: "Shawcross",
-                    //                     right: "",
-                    //                     top: "208.045px"
-                    //                 },
-                    //                 {
-                    //                     left: "91.0909px",
-                    //                     name: "Bauer",
-                    //                     right: "",
-                    //                     top: "275.136px"
-                    //                 },
-                    //                 {
-                    //                     left: "151.818px",
-                    //                     name: "Ndiaye",
-                    //                     right: "",
-                    //                     top: "140.955px"
-                    //                 },
-                    //                 {
-                    //                     left: "151.818px",
-                    //                     name: "Cameron",
-                    //                     right: "",
-                    //                     top: "208.045px"
-                    //                 },
-                    //                 {
-                    //                     left: "212.545px",
-                    //                     name: "Choupo-Moting",
-                    //                     right: "",
-                    //                     top: "107.409px"
-                    //                 },
-                    //                 {
-                    //                     left: "212.545px",
-                    //                     name: "Allen",
-                    //                     right: "",
-                    //                     top: "174.5px"
-                    //                 },
-                    //                 {
-                    //                     left: "212.545px",
-                    //                     name: "Shaqiri",
-                    //                     right: "",
-                    //                     top: "241.591px"
-                    //                 },
-                    //                 {
-                    //                     left: "273.273px",
-                    //                     name: "Crouch",
-                    //                     right: "",
-                    //                     top: "174.5px"
-                    //                 }
-                    //             ],
-                    //             homeNews: [
-                    //                 {
-                    //                     text: "Jese made his first start since October in Stoke's 2-0 defeat at home to Manchester City on Monday but is expected to return to the bench here."
-                    //                 },
-                    //                 {
-                    //                     text: "Ryan Shawcross will hope to be fit enough to start this match after only making the bench in Stoke's last two matches. Kevin Wimmer is also a doubt for the home side."
-                    //                 },
-                    //                 {
-                    //                     text: "Mame Biram Diouf, Lee Grant and Stephen Ireland are ruled out for the Potters when they welcome Everton on Saturday."
-                    //                 }
-                    //             ],
-                    //             missingAwayPlayers: [
-                    //                 {
-                    //                     name: "James McCarthy",
-                    //                     reason: "injured",
-                    //                     status: "Out"
-                    //                 },
-                    //                 {
-                    //                     name: "Maarten Stekelenburg",
-                    //                     reason: "injured",
-                    //                     status: "Out"
-                    //                 },
-                    //                 {
-                    //                     name: "Eliaquim Mangala",
-                    //                     reason: "injured",
-                    //                     status: "Out"
-                    //                 },
-                    //                 {
-                    //                     name: "Gylfi Sigurdsson",
-                    //                     reason: "injured",
-                    //                     status: "Out"
-                    //                 },
-                    //                 {
-                    //                     name: "Ashley Williams",
-                    //                     reason: "suspended",
-                    //                     status: "Out"
-                    //                 },
-                    //                 {
-                    //                     name: "Idrissa Gueye",
-                    //                     reason: "unfit",
-                    //                     status: "Doubtful"
-                    //                 },
-                    //                 {
-                    //                     name: "Morgan Schneiderlin",
-                    //                     reason: "unfit",
-                    //                     status: "Doubtful"
-                    //                 },
-                    //                 {
-                    //                     name: "Theo Walcott",
-                    //                     reason: "injured doubtful",
-                    //                     status: "Doubtful"
-                    //                 }
-                    //             ],
-                    //             missingHomePlayers: [
-                    //                 {
-                    //                     name: "Stephen Ireland",
-                    //                     reason: "injured",
-                    //                     status: "Out"
-                    //                 },
-                    //                 {
-                    //                     name: "Lee Grant",
-                    //                     reason: "injured",
-                    //                     status: "Out"
-                    //                 },
-                    //                 {
-                    //                     name: "Mame Biram Diouf",
-                    //                     reason: "injured",
-                    //                     status: "Out"
-                    //                 },
-                    //                 {
-                    //                     name: "Kevin Wimmer",
-                    //                     reason: "unfit",
-                    //                     status: "Doubtful"
-                    //                 },
-                    //                 {
-                    //                     name: "Ryan Shawcross",
-                    //                     reason: "injured doubtful",
-                    //                     status: "Doubtful"
-                    //                 }
-                    //             ]
-                    //         }
-                    //     }
-                    // }
+                    var newDoc = {
+                        success: true,
+                        result: {
+                            teamInfo: doc.result.teamInfo,
+                            squad: doc.result.squad,
+                            topScores: doc.result.topScores,
+                            createdAt: doc.result.createdAt,
+                            country: doc.result.country,
+                            name: doc.result.name,
+                            permalink: doc.result.permalink,
+                            nextGame: {
+                                awayLineup: [
+                                    {
+                                        left: "",
+                                        name: "Pickford",
+                                        right: "30.3636px",
+                                        top: "174.5px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Baines",
+                                        right: "91.0909px",
+                                        top: "275.136px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Jagielka",
+                                        right: "91.0909px",
+                                        top: "208.045px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Keane",
+                                        right: "91.0909px",
+                                        top: "140.955px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Coleman",
+                                        right: "91.0909px",
+                                        top: "73.8636px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Davies",
+                                        right: "151.818px",
+                                        top: "208.045px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Gueye",
+                                        right: "151.818px",
+                                        top: "140.955px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Bolasie",
+                                        right: "212.545px",
+                                        top: "241.591px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Rooney",
+                                        right: "212.545px",
+                                        top: "174.5px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Walcott",
+                                        right: "212.545px",
+                                        top: "107.409px"
+                                    },
+                                    {
+                                        left: "",
+                                        name: "Tosun",
+                                        right: "273.273px",
+                                        top: "174.5px"
+                                    }
+                                ],
+                                awayNews: [
+                                    {
+                                        text: "Gylfi Sigurdsson is sidelined for up to eight weeks, joining Eliaquim Mangala, Maarten Stekelenburg and James McCarthy on the sidelines for Everton this weekend."
+                                    },
+                                    {
+                                        text: "Theo Walcott picked up a calf injury last weekend and remains a doubt for the away side, though Sam Allardyce will hope to have his January arrival available here."
+                                    },
+                                    {
+                                        text: "Ashley Williams serves the second of a three-match suspension against Stoke, meaning Michael Keane and Phil Jagielka should continue at centre back."
+                                    },
+                                    {
+                                        text: "Leighton Baines made his first appearance since the end of November last weekend and was named the WhoScored Man of the Match. He should continue here."
+                                    },
+                                    {
+                                        text: "Wayne Rooney will hope to move further forward to cover for Sigurdsson's absence, which should pave the way for Idrissa Gueye to return."
+                                    },
+                                    {
+                                        text: "Morgan Schneiderlin and Idrissa Gueye missed the 2-0 win over Brighton last weekend because of illness and they remains doubts for the Toffees."
+                                    }
+                                ],
+                                homeLineup: [
+                                    {
+                                        left: "30.3636px",
+                                        name: "Butland",
+                                        right: "",
+                                        top: "174.5px"
+                                    },
+                                    {
+                                        left: "91.0909px",
+                                        name: "Stafylidis",
+                                        right: "",
+                                        top: "73.8636px"
+                                    },
+                                    {
+                                        left: "91.0909px",
+                                        name: "Zouma",
+                                        right: "",
+                                        top: "140.955px"
+                                    },
+                                    {
+                                        left: "91.0909px",
+                                        name: "Shawcross",
+                                        right: "",
+                                        top: "208.045px"
+                                    },
+                                    {
+                                        left: "91.0909px",
+                                        name: "Bauer",
+                                        right: "",
+                                        top: "275.136px"
+                                    },
+                                    {
+                                        left: "151.818px",
+                                        name: "Ndiaye",
+                                        right: "",
+                                        top: "140.955px"
+                                    },
+                                    {
+                                        left: "151.818px",
+                                        name: "Cameron",
+                                        right: "",
+                                        top: "208.045px"
+                                    },
+                                    {
+                                        left: "212.545px",
+                                        name: "Choupo-Moting",
+                                        right: "",
+                                        top: "107.409px"
+                                    },
+                                    {
+                                        left: "212.545px",
+                                        name: "Allen",
+                                        right: "",
+                                        top: "174.5px"
+                                    },
+                                    {
+                                        left: "212.545px",
+                                        name: "Shaqiri",
+                                        right: "",
+                                        top: "241.591px"
+                                    },
+                                    {
+                                        left: "273.273px",
+                                        name: "Crouch",
+                                        right: "",
+                                        top: "174.5px"
+                                    }
+                                ],
+                                homeNews: [
+                                    {
+                                        text: "Jese made his first start since October in Stoke's 2-0 defeat at home to Manchester City on Monday but is expected to return to the bench here."
+                                    },
+                                    {
+                                        text: "Ryan Shawcross will hope to be fit enough to start this match after only making the bench in Stoke's last two matches. Kevin Wimmer is also a doubt for the home side."
+                                    },
+                                    {
+                                        text: "Mame Biram Diouf, Lee Grant and Stephen Ireland are ruled out for the Potters when they welcome Everton on Saturday."
+                                    }
+                                ],
+                                missingAwayPlayers: [
+                                    {
+                                        name: "James McCarthy",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Maarten Stekelenburg",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Eliaquim Mangala",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Gylfi Sigurdsson",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Ashley Williams",
+                                        reason: "suspended",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Idrissa Gueye",
+                                        reason: "unfit",
+                                        status: "Doubtful"
+                                    },
+                                    {
+                                        name: "Morgan Schneiderlin",
+                                        reason: "unfit",
+                                        status: "Doubtful"
+                                    },
+                                    {
+                                        name: "Theo Walcott",
+                                        reason: "injured doubtful",
+                                        status: "Doubtful"
+                                    }
+                                ],
+                                missingHomePlayers: [
+                                    {
+                                        name: "Stephen Ireland",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Lee Grant",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Mame Biram Diouf",
+                                        reason: "injured",
+                                        status: "Out"
+                                    },
+                                    {
+                                        name: "Kevin Wimmer",
+                                        reason: "unfit",
+                                        status: "Doubtful"
+                                    },
+                                    {
+                                        name: "Ryan Shawcross",
+                                        reason: "injured doubtful",
+                                        status: "Doubtful"
+                                    }
+                                ]
+                            }
+                        }
+                    }
 
-                    return res.json(responseModel.successResponse(result.docs[0]));
+                    return res.json(newDoc);
                 }
             })
             .catch(error => {
