@@ -39,6 +39,37 @@ var TeamInfo = new Schema({
         ratings: Number
     }],
 
+    nextGame: {
+        homeLineup: [{
+            left: String,
+            right: String,
+            top: String,
+            name: String
+        }],
+        awayLineup:  [{
+            left: String,
+            right: String,
+            top: String,
+            name: String
+        }],
+        homeNews:  [{
+            text: String
+        }],
+        awayNews: [{
+            text: String
+        }],
+        missingHomePlayers: [{
+            reason: String,
+            status: String,
+            name: String
+        }],
+        missingAwayPlayers: [{
+            reason: String,
+            status: String,
+            name: String
+        }]
+    },
+
     createdAt: {
         type: Date,
         default: Date.now

@@ -128,4 +128,22 @@ module.exports = function (app) {
      */
     app.route(`/${settings.api.apiBasePath}/${teamsRoutePrefix}/games/scrap/pending`)
         .get(teamsCtrl.get_pending_team_games_to_scrap);
+
+    /**
+     * @swagger
+     * /teams/games/scrap:
+     *   post:
+     *     tags:
+     *       - "Teams"
+     *     description: Saves Team game scraped information for a list of teams.
+     *     produces:
+     *      - application/json
+     *     responses:
+     *       200:
+     *         description: result
+     *         schema:
+     *           type: object
+     */
+    app.route(`/${settings.api.apiBasePath}/${teamsRoutePrefix}/games/scrap`)
+        .post(teamsCtrl.save_team_game_scrap_info);
 };
