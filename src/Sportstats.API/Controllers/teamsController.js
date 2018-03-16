@@ -513,8 +513,8 @@ class TeamsController extends BaseController {
                 ids.push(team.permalink);
                 logger.info(' » (' + team.country + ') ' + team.name + ' » ' + team.permalink);
             }
-
-            team[nextGame] = {
+            var n = 'nextGame';
+            team[n] = {
                 awayLineup: [
                     {
                         left: "",
