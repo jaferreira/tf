@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "WhoScoredGamesCron",
-      "script": "WhoScoredGamesJob.js",
+      "script": "WhoScoredGamesCron.js",
       "env": {
         "DISPLAY": ":99"
       }
