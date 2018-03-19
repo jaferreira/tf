@@ -187,12 +187,13 @@ function* scrapGameInfo(game, retry) {
                 for (var i = 0, row; row = homeSquad[i]; i++) {
                     var playerData = $('div.pitch > .home > ul')[3].getAttribute('title').split('(');
 
+                    var position = (playerData[0].indexOf(')') > 0) ? playerData[0].replace(')', '') : '';
                     homeLineup.push({
                         top: row.style.top,
                         left: row.style.left,
                         right: row.style.right,
                         name: playerData[0], //row.querySelectorAll('.player-name-wrapper')[0].innerText
-                        position: playerData[0].replace(')', '')
+                        position: position
                     })
                 }
 
