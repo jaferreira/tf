@@ -94,11 +94,14 @@ function* Status() {
                 var homeLineup = [];
                 var awayLineup = [];
                 for (var i = 0, row; row = homeSquad[i]; i++) {
+                    var playerData = $('div.pitch > .home > ul')[3].getAttribute('title').split('(');
+                    
                     homeLineup.push({
                         top: row.style.top,
                         left: row.style.left,
                         right: row.style.right,
-                        name: row.querySelectorAll('.player-name-wrapper')[0].innerText
+                        name: playerData[0], //row.querySelectorAll('.player-name-wrapper')[0].innerText
+                        position: playerData[0].replace(')', '')
                     })
                 }
 
@@ -147,6 +150,8 @@ function* Status() {
 
 
                 var data = {
+                    homeTeam: $('div.match-header > table > tbody > tr > td.team')[0].innerText,
+                    awayTeam: $('div.match-header > table > tbody > tr > td.team')[1].innerText,
                     homeLineup: homeLineup,
                     awayLineup: awayLineup,
                     homeNews : homeNews,

@@ -40,6 +40,8 @@ var TeamInfo = new Schema({
     }],
 
     nextGame: {
+        homeTeam: String,
+        awayTeam: String,
         homeLineup: Array,
         awayLineup: Array,
         homeNews: Array,
