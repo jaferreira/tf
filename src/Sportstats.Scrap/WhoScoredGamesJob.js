@@ -24,6 +24,7 @@ module.exports = {
 
         console.log('start')
         z = 0;
+        console.log(JSON.stringify(gamesToScrap));
         results = yield* running(gamesToScrap);
         //console.log(JSON.stringify(results))
 

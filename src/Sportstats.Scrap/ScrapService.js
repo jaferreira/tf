@@ -25,7 +25,7 @@ app.post('/SofaScoreTeam', function* (req, res) {
 
 app.post('/WhoScoredGame', function* (req, res) {
   console.log('WhoScored Game')
-  var results = yield* sofaTeams.scrapTeams(req.body.teams);
+  var results = yield* whoScoredGames.scrapGames(req.body.games);
   res.send('Hello')
 });
 
