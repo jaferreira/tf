@@ -755,7 +755,9 @@ class TeamsController extends BaseController {
 
             // SETTING GAMES TO BE SCRAPED
             if (team.nextGame) {
-                if (team.nextGame.date && team.nextGame.homeTeam && team.nextGame.awayTeam) {
+                if (!team.nextGame.date || !team.nextGame.homeTeam || !team.nextGame.awayTeam) {
+                    logger.debug(`» ${team.name}: There is no next game required information (date/home/away).`);
+                } else {
                     var nextGameDate = new Date(team.nextGame.date);
 
                     var homeTeamArray = dicionario.filter(function (el) {
@@ -787,9 +789,9 @@ class TeamsController extends BaseController {
                         logger.debug('Teams no found in dictionary!');
                     }
                 }
-                else {
-                    logger.debug(`» ${team.name}: There is no next game required information (date/home/away).`);
-                }
+                // else {
+
+                // }
             }
             else {
                 logger.debug(`» ${team.name}: There is no next game defined.`);
