@@ -175,7 +175,7 @@ function* scrapGameInfo(game, retry) {
         })
     console.log(value.link.length)
     if (value.link.length > 0) {
-        console.log('value')
+        console.log('value: ' + value.link)
         var data = yield nbot
             .goto('https://www.whoscored.com' + value.link)
             .wait('.pitch')
