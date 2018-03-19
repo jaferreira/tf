@@ -79,7 +79,8 @@ function* running(games) {
 
 
     }
-    // console.log('results -> '. JSON.stringify(results))
+    console.log('results -> '. JSON.stringify(results))
+
     var detail = [];
     for (j = 0; j < results.length; j++) {
         var res = yield* detailGameInfo(results[j]);
