@@ -101,7 +101,7 @@ function* detailGameInfo(value) {
         console.log('value: ' + value.link)
         var data = yield nbot
             .goto('https://www.whoscored.com' + value.link)
-            .wait('.pitch')
+            .wait(1500)
             .evaluate(function () {
 
                 // var homeSquad = $('div.pitch > .home > ul')
