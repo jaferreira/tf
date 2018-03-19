@@ -76,108 +76,28 @@ function* running(games) {
             console.log(JSON.stringify(r))
             results.push(r);
         }
-        else {
-            console.log('[' + games[i].name + '] Scraping error.');
-            // var retriesInfo = {};
-            // for (var j in retries) {
-            //     if (retries[j].permalink == teams[i].permalink) {
-            //         retriesInfo = retries[j];
-            //         break;
-            //     }
-            // }
-            // var retryCount = retriesInfo.retryCount;
-            // var maxRetries = retriesInfo.maxRetries;
 
-            // console.log('[' + teams[i].name + '] Retry information: RetryCount: ' + retryCount + ' (max: ' + maxRetries + ')');
-            // if (retriesInfo && retryCount <= maxRetries) {
-            //     // update retry information
-            //     for (var k in retries) {
-            //         if (retries[k].permalink == teams[i].permalink) {
-            //             retries[k].retryCount++;
-            //             break;
-            //         }
-            //     }
-            //     console.log('[' + teams[i].name + '] RetryCount (' + retryCount + ') less the max (' + maxRetries + '), trying one more time. Decremented i: ' + (i - 1));
-            //     i--;
-            // }
-            // else {
-            //     console.log('[' + teams[i].name + '] Max retries reached, going to next league (i: ' + i + ')');
-            // }
-        }
 
     }
     // console.log('results -> '. JSON.stringify(results))
+    var detail = [];
+    for (j = 0; j < results.length; j++) {
+        var res = yield* detailGameInfo(results[j]);
+        if(res)
+        {
+            detail.push(res);
+        }
+    }
 
-    return yield results;
+    return yield detail;
 
 }
 
-function* scrapGameInfo(game, retry) {
-    tryCount = retry;
-    currentTeam = game;
-    var homeTeamName = 'Doncaster';
-    var awayTeamName = 'Bradford';
-    var url = 'https://www.whoscored.com/Teams/910/Show/England-Doncaster';
-    console.log('starting Scrap Url ' + url);
-    var value = yield nbot
-        .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
-
-        .goto(url)
-        .wait(1000)
-        .wait('table#team-fixtures-summary')
-        .evaluate(function (team, teams) {
-
-
-            var rows = $('table#team-fixtures-summary > tbody > tr');
-            var link = '';
-            var home = '';
-            var away = '';
-            for (var i = 0, row; row = rows[i]; i++) {
-                home = row.querySelectorAll('td.team.home')[0].innerText;
-                away = row.querySelectorAll('td.team.away')[0].innerText;
-                if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview') && (home == teams.homeTeam && away == teams.awayTeam)) {
-                    link = row.querySelectorAll('td.toolbar.right > a')[0].getAttribute('href');
-                    break;
-                }
-                else {
-                    home = '';
-                    away = '';
-                }
-            }
-
-
-
-            var result = {
-                home: home,
-                away: away,
-                link: link
-            }
-
-
-            return result
-
-        }, game, { homeTeam: homeTeamName, awayTeam: awayTeamName })
-
-        .catch(error => {
-            var message;
-            if (typeof error.details != "undefined" && error.details != "") {
-                message = error.details;
-            } else if (typeof error == "string") {
-                message = error;
-
-                if (error == "Cannot read property 'focus' of null") {
-                    message += " (Likely because a non-existent selector was used)";
-                }
-            } else {
-                message = error.message;
-            }
-            console.log(error);
-
-        })
-    console.log(value.link.length)
+function* detailGameInfo(value) {
+    console.log('Detail');
     if (value.link.length > 0) {
         console.log('value: ' + value.link)
-        value = yield nbot
+        var data = yield nbot
             .goto('https://www.whoscored.com' + value.link)
             .wait('.pitch')
             .evaluate(function () {
@@ -260,7 +180,7 @@ function* scrapGameInfo(game, retry) {
                     message = error.details;
                 } else if (typeof error == "string") {
                     message = error;
-    
+
                     if (error == "Cannot read property 'focus' of null") {
                         message += " (Likely because a non-existent selector was used)";
                     }
@@ -268,13 +188,79 @@ function* scrapGameInfo(game, retry) {
                     message = error.message;
                 }
                 console.log(error);
-    
+
             })
 
-            // console.log('Ended evaluate.');
-            // console.log(JSON.stringify(data));
-            // return data;
+        // console.log('Ended evaluate.');
+        // console.log(JSON.stringify(data));
+        return data;
     }
+}
+
+function* scrapGameInfo(game, retry) {
+    tryCount = retry;
+    currentTeam = game;
+    var homeTeamName = 'Doncaster';
+    var awayTeamName = 'Bradford';
+    var url = 'https://www.whoscored.com/Teams/910/Show/England-Doncaster';
+    console.log('starting Scrap Url ' + url);
+    var value = yield nbot
+        .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
+
+        .goto(url)
+        .wait(1000)
+        .wait('table#team-fixtures-summary')
+        .evaluate(function (team, teams) {
+
+
+            var rows = $('table#team-fixtures-summary > tbody > tr');
+            var link = '';
+            var home = '';
+            var away = '';
+            for (var i = 0, row; row = rows[i]; i++) {
+                home = row.querySelectorAll('td.team.home')[0].innerText;
+                away = row.querySelectorAll('td.team.away')[0].innerText;
+                if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview') && (home == teams.homeTeam && away == teams.awayTeam)) {
+                    link = row.querySelectorAll('td.toolbar.right > a')[0].getAttribute('href');
+                    break;
+                }
+                else {
+                    home = '';
+                    away = '';
+                }
+            }
+
+
+
+            var result = {
+                home: home,
+                away: away,
+                link: link
+            }
+
+
+            return result
+
+        }, game, { homeTeam: homeTeamName, awayTeam: awayTeamName })
+
+        .catch(error => {
+            var message;
+            if (typeof error.details != "undefined" && error.details != "") {
+                message = error.details;
+            } else if (typeof error == "string") {
+                message = error;
+
+                if (error == "Cannot read property 'focus' of null") {
+                    message += " (Likely because a non-existent selector was used)";
+                }
+            } else {
+                message = error.message;
+            }
+            console.log(error);
+
+        })
+    console.log(value.link.length)
+
 
     return value;
 
