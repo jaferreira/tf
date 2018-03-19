@@ -114,6 +114,8 @@ function* running(games) {
 function* scrapGameInfo(game, retry) {
     tryCount = retry;
     currentTeam = game;
+    var homeTeamName = 'Doncaster';
+    var awayTeamName = 'Bradford';
     var url = 'https://www.whoscored.com/Teams/910/Show/England-Doncaster';
     console.log('starting Scrap Url ' + url);
     var value = yield nbot
@@ -122,7 +124,7 @@ function* scrapGameInfo(game, retry) {
         .goto(url)
         .wait(1000)
         .wait('table#team-fixtures-summary')
-        .evaluate(function (team) {
+        .evaluate(function (team, teams) {
 
 
             var rows = $('table#team-fixtures-summary > tbody > tr');
@@ -132,7 +134,7 @@ function* scrapGameInfo(game, retry) {
             for (var i = 0, row; row = rows[i]; i++) {
                 home = row.querySelectorAll('td.team.home')[0].innerText;
                 away = row.querySelectorAll('td.team.away')[0].innerText;
-                if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview') && (home == 'Stoke' && away == 'Everton')) {
+                if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview') && (home == teams.homeTeam && away == teams.awayTeam)) {
                     link = row.querySelectorAll('td.toolbar.right > a')[0].getAttribute('href');
                     break;
                 }
@@ -153,7 +155,7 @@ function* scrapGameInfo(game, retry) {
 
             return result
 
-        }, game)
+        }, game, { homeTeam: homeTeamName, awayTeam: awayTeamName })
 
         .catch(error => {
             var message;
@@ -171,7 +173,7 @@ function* scrapGameInfo(game, retry) {
             console.log(error);
 
         })
-        console.log(value.link.length)
+    console.log(value.link.length)
     if (value.link.length > 0) {
         console.log('value')
         var data = yield nbot
