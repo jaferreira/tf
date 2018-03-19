@@ -7,7 +7,7 @@ function* Status() {
             'ignore-certificate-errors': true,
             'lang': 'en-EN'
         },
-        show: false, webPreferences: {
+        show: true, webPreferences: {
             images: true
         }, openDevTools: { mode: 'detach' }
     });
@@ -19,7 +19,7 @@ function* Status() {
         }]
     }
     var value = yield scraper
-        .goto('https://www.whoscored.com/Teams/31/Show/England-Everton')
+        .goto('https://www.whoscored.com/Teams/910/Show/England-Doncaster')
 
         .wait('table#team-fixtures-summary')
         .evaluate(function (team) {
@@ -32,7 +32,7 @@ function* Status() {
             for (var i = 0, row; row = rows[i]; i++) {
                 home = row.querySelectorAll('td.team.home')[0].innerText;
                 away = row.querySelectorAll('td.team.away')[0].innerText;
-                if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview') && (home == 'Stoke' && away == 'Everton')) {
+                if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview') && (home == 'Doncaster' && away == 'Bradford')) {
                     link = row.querySelectorAll('td.toolbar.right > a')[0].getAttribute('href');
                     break;
                 }

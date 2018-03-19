@@ -26,7 +26,8 @@ module.exports = {
         z = 0;
         console.log(JSON.stringify(gamesToScrap));
         results = yield* running(gamesToScrap);
-        //console.log(JSON.stringify(results))
+
+        console.log(JSON.stringify(results))
 
         // console.lorekg('before send  ->'.JSON.stringify(results));
         // request.post({
@@ -176,7 +177,7 @@ function* scrapGameInfo(game, retry) {
     console.log(value.link.length)
     if (value.link.length > 0) {
         console.log('value: ' + value.link)
-        var data = yield nbot
+        value = yield nbot
             .goto('https://www.whoscored.com' + value.link)
             .wait('.pitch')
             .evaluate(function () {
@@ -187,7 +188,7 @@ function* scrapGameInfo(game, retry) {
                 for (var i = 0, row; row = homeSquad[i]; i++) {
                     var playerData = $('div.pitch > .home > ul')[3].getAttribute('title').split('(');
 
-                    var position = (playerData[0].indexOf(')') > 0) ? playerData[0].replace(')', '') : '';
+                    var position = (playerData[1].indexOf(')') > 0) ? playerData[1].replace(')', '') : '';
                     homeLineup.push({
                         top: row.style.top,
                         left: row.style.left,
@@ -270,10 +271,11 @@ function* scrapGameInfo(game, retry) {
     
             })
 
-            console.log('Ended evaluate.');
-            console.log(JSON.stringify(data));
+            // console.log('Ended evaluate.');
+            // console.log(JSON.stringify(data));
+            // return data;
     }
 
-    return data;
+    return value;
 
 }
