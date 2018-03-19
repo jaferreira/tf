@@ -252,6 +252,22 @@ function* scrapGameInfo(game, retry) {
                 };
                 return data
             })
+            .catch(error => {
+                var message;
+                if (typeof error.details != "undefined" && error.details != "") {
+                    message = error.details;
+                } else if (typeof error == "string") {
+                    message = error;
+    
+                    if (error == "Cannot read property 'focus' of null") {
+                        message += " (Likely because a non-existent selector was used)";
+                    }
+                } else {
+                    message = error.message;
+                }
+                console.log(error);
+    
+            })
 
             console.log('Ended evaluate.');
             console.log(JSON.stringify(data));
