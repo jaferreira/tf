@@ -16,7 +16,7 @@ process.on('unhandledRejection', (reason, p) => {
     }
 });
 module.exports = {
-    scrapTeams: function* run(teamsToScrap) {
+    scrapGames: function* run(gamesToScrap) {
         nbot = nightmare({
             switches: { 'ignore-certificate-errors': true },
             show: false
@@ -24,7 +24,7 @@ module.exports = {
 
         console.log('start')
         z = 0;
-        results = yield* running(teamsToScrap);
+        results = yield* running(gamesToScrap);
         //console.log(JSON.stringify(results))
 
         // console.lorekg('before send  ->'.JSON.stringify(results));
