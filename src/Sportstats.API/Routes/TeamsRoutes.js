@@ -87,7 +87,9 @@ module.exports = function (app) {
       *         schema:
       *           type: array
       */
-    app.route(`/${settings.api.apiBasePath}/${teamsRoutePrefix}/scrap/pending`)
+     app.route(`/${settings.api.apiBasePath}/${teamsRoutePrefix}/scrap/pending`)
+        .get(teamsCtrl.get_pending_teams_to_scrap);
+     app.route(`/${settings.api.apiBasePath}/${teamsRoutePrefix}/games/scrap/pending`)
         .get(teamsCtrl.get_pending_teams_to_scrap);
 
 
