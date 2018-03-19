@@ -1,7 +1,7 @@
 'use strict';
 
 var request = require('request');
-var apiBaseUrl = 'http://localhost:3000/api';
+var apiBaseUrl = 'http://server:3000/api';
 
 
 exports.get_league_info = function (req, res, callback) {

@@ -19,4 +19,6 @@ module.exports.default = (router) => {
             res.renderVue("main/main.vue", data, vueOptions);
         });
     });
+
+    
 };

@@ -1,6 +1,13 @@
 {
   "apps": [
     {
+      "name": "WhoScoredGamesCron",
+      "script": "WhoScoredGamesJob.js",
+      "env": {
+        "DISPLAY": ":99"
+      }
+    },
+    {
       "name": "SofaScoreLeagueCron",
       "script": "SofaScoreLeaguesCron.js",
       "env": {

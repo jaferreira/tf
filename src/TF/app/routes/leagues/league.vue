@@ -1,5 +1,13 @@
 <template>
+
     <div>
+
+      <form action="/league/scrap" method="post">
+          <label for="team_name">Enter name: </label>
+          <input id="team_name" type="text" name="name_field" value="Default name for team.">
+          <input type="submit" value="OK">
+      </form>
+      <hr/>
         <div>
             <h1>{{title}}</h1>
             <h3>{{subtitle}}</h3>

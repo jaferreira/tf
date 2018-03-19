@@ -84,7 +84,7 @@ module.exports.init = (app, config) => {
     app.use(cookieSession(sessionConfig));
 
     app.use(csrf({
-        cookie: true
+        cookie: false
     }));
 
     app.use(function (req, res, next) {
