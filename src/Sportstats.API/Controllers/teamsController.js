@@ -755,40 +755,40 @@ class TeamsController extends BaseController {
 
             // SETTING GAMES TO BE SCRAPED
             if (team.nextGame) {
-                if (!team.nextGame.date || !team.nextGame.homeTeam || !team.nextGame.awayTeam) {
-                    logger.debug(`» ${team.name}: There is no next game required information (date/home/away).`);
-                } else {
-                    var nextGameDate = new Date(team.nextGame.date);
+                // if (!team.nextGame.date || !team.nextGame.homeTeam || !team.nextGame.awayTeam) {
+                //     logger.debug(`» ${team.name}: There is no next game required information (date/home/away).`);
+                // } else {
+                var nextGameDate = new Date(team.nextGame.date);
 
-                    var homeTeamArray = dicionario.filter(function (el) {
-                        return el.sofaTeamName == team.nextGame.homeTeam;
+                var homeTeamArray = dicionario.filter(function (el) {
+                    return el.sofaTeamName == team.nextGame.homeTeam;
+                });
+                var awayTeamArray = dicionario.filter(function (el) {
+                    return el.sofaTeamName == team.nextGame.awayTeam;
+                });
+
+                logger.debug('Home Maped Team: ' + JSON.stringify(homeTeamArray));
+                logger.debug('Away Maped Team: ' + JSON.stringify(awayTeamArray));
+
+                if (homeTeamArray.length > 0 && awayTeamArray.length > 0) {
+
+                    nextGames.push({
+                        date: team.nextGame.date,
+
+                        permalink: team.permalink,
+
+                        provider: 'WhoScored',
+                        homeTeamLink: homeTeamArray[0].whoTeamLink,
+                        homeTeamName: homeTeamArray[0].whoTeamName,
+
+                        awayTeamLink: awayTeamArray[0].whoTeamLink,
+                        awayTeamName: awayTeamArray[0].whoTeamName
                     });
-                    var awayTeamArray = dicionario.filter(function (el) {
-                        return el.sofaTeamName == team.nextGame.awayTeam;
-                    });
-
-                    logger.debug('Home Maped Team: ' + JSON.stringify(homeTeamArray));
-                    logger.debug('Away Maped Team: ' + JSON.stringify(awayTeamArray));
-
-                    if (homeTeamArray.length > 0 && awayTeamArray.length > 0) {
-
-                        nextGames.push({
-                            date: team.nextGame.date,
-
-                            permalink: team.permalink,
-
-                            provider: 'WhoScored',
-                            homeTeamLink: homeTeamArray[0].whoTeamLink,
-                            homeTeamName: homeTeamArray[0].whoTeamName,
-
-                            awayTeamLink: awayTeamArray[0].whoTeamLink,
-                            awayTeamName: awayTeamArray[0].whoTeamName
-                        });
-                    }
-                    else {
-                        logger.debug('Teams no found in dictionary!');
-                    }
                 }
+                else {
+                    logger.debug('Teams no found in dictionary!');
+                }
+                // }
                 // else {
 
                 // }
