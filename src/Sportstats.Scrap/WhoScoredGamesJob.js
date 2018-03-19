@@ -259,6 +259,6 @@ function* scrapGameInfo(game, retry) {
 
 
 
-    return value;
+    return data;
 
 }
