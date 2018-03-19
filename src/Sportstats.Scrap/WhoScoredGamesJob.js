@@ -153,7 +153,7 @@ function* scrapGameInfo(game, retry) {
 
             return result
 
-        }, team)
+        }, game)
 
         .catch(error => {
             var message;
