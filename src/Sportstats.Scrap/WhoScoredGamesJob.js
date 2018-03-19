@@ -81,6 +81,11 @@ function* running(games) {
     }
     console.log('results -> ' + JSON.stringify(results));
 
+    nbot = nightmare({
+        switches: { 'ignore-certificate-errors': true },
+        show: false
+    });
+    
     var detail = [];
     for (j = 0; j < results.length; j++) {
         var res = yield* detailGameInfo(results[j]);
