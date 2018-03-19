@@ -253,11 +253,9 @@ function* scrapGameInfo(game, retry) {
                 return data
             })
 
-        console.log(JSON.stringify(data));
-
+            console.log('Ended evaluate.');
+            console.log(JSON.stringify(data));
     }
-
-
 
     return data;
 
