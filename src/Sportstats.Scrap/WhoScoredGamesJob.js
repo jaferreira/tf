@@ -114,7 +114,7 @@ function* running(games) {
 function* scrapGameInfo(game, retry) {
     tryCount = retry;
     currentTeam = game;
-    var url = 'https://www.whoscored.com/Matches/1193057/Preview/England-League-1-2017-2018-Doncaster-Bradford';
+    var url = 'https://www.whoscored.com/Teams/910/Show/England-Doncaster';
     console.log('starting Scrap Url ' + url);
     var value = yield nbot
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
