@@ -16,7 +16,7 @@ process.on('unhandledRejection', (reason, p) => {
     }
 });
 module.exports = {
-    scrapGames: function* run(gamesToScrap) {
+    scrapGames: function* run(competitionsToScrap) {
         nbot = nightmare({
             switches: { 'ignore-certificate-errors': true },
             show: false
@@ -24,8 +24,8 @@ module.exports = {
 
         console.log('start')
         z = 0;
-        console.log(JSON.stringify(gamesToScrap));
-        results = yield* running(gamesToScrap);
+        console.log(JSON.stringify(competitionsToScrap));
+        results = yield* running(competitionsToScrap);
 
         console.log(JSON.stringify(results))
 
@@ -69,7 +69,7 @@ function* running(games) {
         console.log('Running [' + (i + 1) + '] of ' + games.length)
         console.log('[' + games[i].name + '] Going to start scraping url ' + games[i].providers[0].link);
         // results.push(yield* scrapLeagueInfo(teams[i]));
-        var r = yield* scrapGameInfo(games[i]);
+        var r = yield* scrapGamePreview(games[i]);
 
         if (r != null) {
             console.log('[' + games[i].name + '] Scraping done.');
@@ -79,34 +79,32 @@ function* running(games) {
 
 
     }
-    console.log('results -> ' + JSON.stringify(results));
+    // console.log('results -> ' + JSON.stringify(results));
 
-    nbot = nightmare({
-        switches: { 'ignore-certificate-errors': true },
-        show: false
-    });
-    
-    var detail = [];
-    for (j = 0; j < results.length; j++) {
-        var res = yield* detailGameInfo(results[j]);
-        if(res)
-        {
-            console.log('res: ' + JSON.stringify(res));
-            detail.push(res);
-        }
-    }
+    // nbot = nightmare({
+    //     switches: { 'ignore-certificate-errors': true },
+    //     show: false
+    // });
 
-    return yield detail;
+    // var detail = [];
+    // for (j = 0; j < results.length; j++) {
+    //     var res = yield* detailGameInfo(results[j]);
+    //     if(res)
+    //     {
+    //         detail.push(res);
+    //     }
+    // }
+
+    return yield results;
 
 }
 
-function* detailGameInfo(value) {
-    console.log('Detail');
-    if (value.link.length > 0) {
-        console.log('value: ' + value.link)
+function* scrapGamePreview(value) {
+    console.log('scrapGamePreview');
+    
         var data = yield nbot
-            .goto('https://www.whoscored.com' + value.link)
-            .wait(1500)
+            .goto(value.providers[0].link)
+            .wait('.pitch')
             .evaluate(function () {
 
                 var homeSquad = $('div.pitch > .home > ul')
@@ -201,15 +199,15 @@ function* detailGameInfo(value) {
         // console.log('Ended evaluate.');
         // console.log(JSON.stringify(data));
         return data;
-    }
+    
 }
 
-function* scrapGameInfo(game, retry) {
+function* findPreviews(competition, retry) {
     tryCount = retry;
-    currentTeam = game;
-    var homeTeamName = 'Doncaster';
-    var awayTeamName = 'Bradford';
-    var url = 'https://www.whoscored.com/Teams/910/Show/England-Doncaster';
+    currentTeam = competition;
+
+    var url = competition.providers[0].link;
+
     console.log('starting Scrap Url ' + url);
     var value = yield nbot
         .useragent('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
@@ -217,38 +215,25 @@ function* scrapGameInfo(game, retry) {
         .goto(url)
         .wait(1000)
         .wait('table#team-fixtures-summary')
-        .evaluate(function (team, teams) {
+        .evaluate(function () {
 
+            var previews = [];
 
             var rows = $('table#team-fixtures-summary > tbody > tr');
-            var link = '';
-            var home = '';
-            var away = '';
+            
             for (var i = 0, row; row = rows[i]; i++) {
-                home = row.querySelectorAll('td.team.home')[0].innerText;
-                away = row.querySelectorAll('td.team.away')[0].innerText;
-                if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview') && (home == teams.homeTeam && away == teams.awayTeam)) {
-                    link = row.querySelectorAll('td.toolbar.right > a')[0].getAttribute('href');
-                    break;
-                }
-                else {
-                    home = '';
-                    away = '';
+                
+                if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview')) {
+                    previews.push({
+                        home: row.querySelectorAll('td.team.home')[0].innerText,
+                        away: row.querySelectorAll('td.team.away')[0].innerText,
+                        link: row.querySelectorAll('td.toolbar.right > a')[0].getAttribute('href')
+                    });
                 }
             }
 
-
-
-            var result = {
-                home: home,
-                away: away,
-                link: link
-            }
-
-
-            return result
-
-        }, game, { homeTeam: homeTeamName, awayTeam: awayTeamName })
+            return previews;
+        })
 
         .catch(error => {
             var message;
@@ -266,7 +251,7 @@ function* scrapGameInfo(game, retry) {
             console.log(error);
 
         })
-    console.log(value.link.length)
+    console.log(JSON.stringify(value))
 
 
     return value;

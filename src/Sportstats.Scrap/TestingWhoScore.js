@@ -101,7 +101,7 @@ function* Status() {
                         left: row.style.left,
                         right: row.style.right,
                         name: playerData[0], //row.querySelectorAll('.player-name-wrapper')[0].innerText
-                        position: playerData[0].replace(')', '')
+                        position: playerData[1].replace(')', '')
                     })
                 }
 

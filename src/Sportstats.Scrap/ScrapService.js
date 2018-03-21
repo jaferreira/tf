@@ -4,7 +4,9 @@ const app = express();
 const port = 3007;
 const sofaLeague = require('./SofaScoreLeagueJob');
 const sofaTeams = require('./SofaScoreTeamsJob');
-const whoScoredGames = require('./WhoScoredGamesJob');
+const whoScoredPreviewFinder = require('./WhoScoredPreviewFinderJob');
+const whoScoredPreviewScraper = require('./WhoScoredPreviewScraperJob');
+
 const yields = require('express-yields');
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
@@ -23,9 +25,15 @@ app.post('/SofaScoreTeam', function* (req, res) {
   res.send('Hello')
 });
 
-app.post('/WhoScoredGame', function* (req, res) {
-  console.log('WhoScored Game')
-  var results = yield* whoScoredGames.scrapGames(req.body.games);
+app.post('/WhoScoredPreviewFinder', function* (req, res) {
+  console.log('WhoScored Preview Finder')
+  var results = yield* whoScoredPreviewFinder.scrapPreviews(req.body.games);
+  res.send('Hello')
+});
+
+app.post('/WhoScoredPreviewScraper', function* (req, res) {
+  console.log('WhoScored Preview Scraper')
+  var results = yield* whoScoredPreviewScraper.scrapPreviews(req.body.games);
   res.send('Hello')
 });
 

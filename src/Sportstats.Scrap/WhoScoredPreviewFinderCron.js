@@ -23,7 +23,7 @@ cron.schedule('*/1 * * * *', function () {
 
 
                 request.post({
-                    url: 'http://127.0.0.1:3007/WhoScoredGame',
+                    url: 'http://127.0.0.1:3007/WhoScoredPreviewFinder',
                     json: true,
                     body: { games: data.result.docs }
                 }, function (error, response, body) {
@@ -31,7 +31,7 @@ cron.schedule('*/1 * * * *', function () {
                 });
             }
             else {
-                console.log('No Games To Scrap')
+                console.log('No Previews found to Scrap')
             }
         }
     });

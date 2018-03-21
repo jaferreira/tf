@@ -1,8 +1,15 @@
 {
   "apps": [
     {
-      "name": "WhoScoredGamesCron",
-      "script": "WhoScoredGamesCron.js",
+      "name": "WhoScoredPreviewFinderCron",
+      "script": "WhoScoredPreviewFinderCron.js",
+      "env": {
+        "DISPLAY": ":99"
+      }
+    },
+    {
+      "name": "WhoScoredPreviewScraperCron",
+      "script": "WhoScoredPreviewScraperCron.js",
       "env": {
         "DISPLAY": ":99"
       }
