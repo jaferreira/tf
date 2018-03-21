@@ -173,7 +173,7 @@ class TeamsController extends BaseController {
                     if (doc.nextGame)
                         docs.gamesArray.push({ team: doc.permalink, nextGame: doc.nextGame });
                 });
-                return res.json(responseModel.successResponse(gamesArray));
+                return res.json(responseModel.successResponse(docs));
             });
     }
 
