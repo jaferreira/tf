@@ -126,11 +126,15 @@ function* scrapGamePreview(value) {
 
             var awaySquad = $('div.pitch > .away > ul')
             for (var i = 0, row; row = awaySquad[i]; i++) {
+                var playerData = $('div.pitch > .home > ul')[3].getAttribute('title').split('(');
+                var position = (playerData[1].indexOf(')') > 0) ? playerData[1].replace(')', '') : '';
+
                 awayLineup.push({
                     top: row.style.top,
                     left: row.style.left,
                     right: row.style.right,
-                    name: row.querySelectorAll('.player-name-wrapper')[0].innerText
+                    name: playerData[0], //row.querySelectorAll('.player-name-wrapper')[0].innerText
+                    position: position
                 })
             }
             var rows = $('div#missing-players > .home > table > tbody tr')
