@@ -74,7 +74,7 @@ function* running(games) {
         var r = yield* findPreviews(games[i]);
 
         if (r != null) {
-            console.log('[' + games[i].team + '] Scraping done.');
+            console.log('[' + games[i].nextGame.homeTeamName + ' - ' + games[i].nextGame.awayTeamName + '] Scraping done.');
             console.log(JSON.stringify(r))
             results.push(r);
         }
