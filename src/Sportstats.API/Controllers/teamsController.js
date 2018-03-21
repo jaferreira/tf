@@ -165,10 +165,13 @@ class TeamsController extends BaseController {
                     return res.status(500).json(responseModel.errorResponse(err));
                 }
 
-                var gamesArray = [];
+
+                var docs = {
+                    gamesArray: []
+                };
                 data.docs.forEach(doc => {
                     if (doc.nextGame)
-                        gamesArray.push({ team: doc.permalink, nextGame: doc.nextGame });
+                        docs.gamesArray.push({ team: doc.permalink, nextGame: doc.nextGame });
                 });
                 return res.json(responseModel.successResponse(gamesArray));
             });
@@ -869,7 +872,7 @@ class TeamsController extends BaseController {
                         awayTeamName: nextGameArray[0].awayTeamName,
                         awayTeamLink: nextGameArray[0].awayTeamLink
                     };
-                    console.log('2 - NextGameScrapDate for ' + teamInfo.name + ': ' +teamInfo.nextGameScrapAt);
+                    console.log('2 - NextGameScrapDate for ' + teamInfo.name + ': ' + teamInfo.nextGameScrapAt);
                 }
             });
 
