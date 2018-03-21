@@ -49,14 +49,16 @@ module.exports = {
 
 }
 
-function* running(competitions) {
+function* running(games) {
 
     var globalMaxRetries = 5;
     var results = [];
     var retries = [];
 
+    console.log('Competitions: ' + JSON.stringify(games));
+
     // Initialize retry counters
-    competitions.forEach(league => {
+    games.forEach(league => {
         retries.push({
             permalink: league.permalink,
             maxRetries: globalMaxRetries,
@@ -64,15 +66,15 @@ function* running(competitions) {
         });
     });
 
-    for (i = 0; i < competitions.length; i++) {
+    for (i = 0; i < games.length; i++) {
         console.log(' --- ');
-        console.log('Running [' + (i + 1) + '] of ' + competitions.length)
-        console.log('[' + competitions[i].name + '] Going to start scraping url ' + competitions[i].providers[0].link);
+        console.log('Running [' + (i + 1) + '] of ' + games.length)
+        console.log('[' + games[i].nextGame.homeTeamName + ' - ' + games[i].nextGame.awayTeamName + '] Going to start scraping url for home team: ' + games[i].nextGame.homeTeamLink);
         // results.push(yield* scrapLeagueInfo(teams[i]));
-        var r = yield* findPreviews(competitions[i]);
+        var r = yield* findPreviews(games[i]);
 
         if (r != null) {
-            console.log('[' + competitions[i].name + '] Scraping done.');
+            console.log('[' + games[i].team + '] Scraping done.');
             console.log(JSON.stringify(r))
             results.push(r);
         }
@@ -99,11 +101,11 @@ function* running(competitions) {
 
 }
 
-function* findPreviews(competition, retry) {
+function* findPreviews(game, retry) {
     tryCount = retry;
-    currentTeam = competition;
+    currentTeam = game;
 
-    var url = competition.providers[0].link;
+    var url = game.homeTeamLink;
 
     console.log('starting Scrap Url ' + url);
     var value = yield nbot
