@@ -165,8 +165,9 @@ class TeamsController extends BaseController {
                     return res.status(500).json(responseModel.errorResponse(err));
                 }
 
-
-                var docs = [];
+                var resultObj = {
+                    docs: []
+                };
                 data.docs.forEach(doc => {
                     if (doc.nextGame)
                         docs.push({ team: doc.permalink, nextGame: doc.nextGame });
