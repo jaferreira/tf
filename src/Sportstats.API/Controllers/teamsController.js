@@ -166,12 +166,10 @@ class TeamsController extends BaseController {
                 }
 
 
-                var docs = {
-                    gamesArray: []
-                };
+                var docs = [];
                 data.docs.forEach(doc => {
                     if (doc.nextGame)
-                        docs.gamesArray.push({ team: doc.permalink, nextGame: doc.nextGame });
+                        docs.push({ team: doc.permalink, nextGame: doc.nextGame });
                 });
                 return res.json(responseModel.successResponse(docs));
             });
