@@ -27,13 +27,13 @@ app.post('/SofaScoreTeam', function* (req, res) {
 
 app.post('/WhoScoredPreviewFinder', function* (req, res) {
   console.log('WhoScored Preview Finder')
-  var results = yield* whoScoredPreviewFinder.scrapPreviews(req.body.games);
+  var results = yield* whoScoredPreviewFinder.scrapGames(req.body.games);
   res.send('Hello')
 });
 
 app.post('/WhoScoredPreviewScraper', function* (req, res) {
   console.log('WhoScored Preview Scraper')
-  var results = yield* whoScoredPreviewScraper.scrapPreviews(req.body.games);
+  var results = yield* whoScoredPreviewScraper.scrapGames(req.body.games);
   res.send('Hello')
 });
 
