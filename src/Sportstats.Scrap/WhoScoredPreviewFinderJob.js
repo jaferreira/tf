@@ -105,7 +105,7 @@ function* findPreviews(game, retry) {
     tryCount = retry;
     currentTeam = game;
 
-    var url = game.homeTeamLink;
+    var url = game.nextGame.homeTeamLink;
 
     console.log('starting Scrap Url ' + url);
     var value = yield nbot
