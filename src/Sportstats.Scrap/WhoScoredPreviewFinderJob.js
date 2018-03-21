@@ -119,9 +119,9 @@ function* findPreviews(game, retry) {
             var previews = [];
 
             var rows = $('table#team-fixtures-summary > tbody > tr');
-            
+
             for (var i = 0, row; row = rows[i]; i++) {
-                
+
                 if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview')) {
                     previews.push({
                         home: row.querySelectorAll('td.team.home')[0].innerText,
@@ -133,7 +133,6 @@ function* findPreviews(game, retry) {
 
             return previews;
         })
-
         .catch(error => {
             var message;
             if (typeof error.details != "undefined" && error.details != "") {
@@ -150,8 +149,8 @@ function* findPreviews(game, retry) {
             console.log(error);
 
         })
+    
     console.log(JSON.stringify(value))
-
 
     return value;
 

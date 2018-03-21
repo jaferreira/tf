@@ -16,7 +16,7 @@ process.on('unhandledRejection', (reason, p) => {
     }
 });
 module.exports = {
-    scrapGames: function* run(competitionsToScrap) {
+    scrapGames: function* run(gamesToScrap) {
         nbot = nightmare({
             switches: { 'ignore-certificate-errors': true },
             show: false
@@ -24,8 +24,8 @@ module.exports = {
 
         console.log('start')
         z = 0;
-        console.log(JSON.stringify(competitionsToScrap));
-        results = yield* running(competitionsToScrap);
+        console.log(JSON.stringify(gamesToScrap));
+        results = yield* running(gamesToScrap);
 
         console.log(JSON.stringify(results))
 
@@ -67,7 +67,7 @@ function* running(games) {
     for (i = 0; i < games.length; i++) {
         console.log(' --- ');
         console.log('Running [' + (i + 1) + '] of ' + games.length)
-        console.log('[' + games[i].name + '] Going to start scraping url ' + games[i].providers[0].link);
+        console.log('[' + games[i].home + ' - ' + games[i].away + '] Going to start scraping url ' + games[i].link);
         // results.push(yield* scrapLeagueInfo(teams[i]));
         var r = yield* scrapGamePreview(games[i]);
 
@@ -103,7 +103,7 @@ function* scrapGamePreview(value) {
     console.log('scrapGamePreview');
     
         var data = yield nbot
-            .goto(value.providers[0].link)
+            .goto(value.link)
             .wait('.pitch')
             .evaluate(function () {
 
@@ -196,8 +196,8 @@ function* scrapGamePreview(value) {
 
             })
 
-        // console.log('Ended evaluate.');
-        // console.log(JSON.stringify(data));
+        console.log('Ended evaluate.');
+        console.log(JSON.stringify(data));
         return data;
     
 }
