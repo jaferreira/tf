@@ -100,106 +100,107 @@ function* running(games) {
 }
 
 function* scrapGamePreview(value) {
-    console.log('scrapGamePreview');
-    
-        var data = yield nbot
-            .goto(value.link)
-            .wait('.pitch')
-            .evaluate(function () {
+    var url = 'https://www.whoscored.com' + value.link;
+    console.log('ScrapGamePreview: ' + url);
 
-                var homeSquad = $('div.pitch > .home > ul')
-                var homeLineup = [];
-                var awayLineup = [];
-                for (var i = 0, row; row = homeSquad[i]; i++) {
-                    var playerData = $('div.pitch > .home > ul')[3].getAttribute('title').split('(');
+    var data = yield nbot
+        .goto(url)
+        .wait('.pitch')
+        .evaluate(function () {
 
-                    var position = (playerData[1].indexOf(')') > 0) ? playerData[1].replace(')', '') : '';
-                    homeLineup.push({
-                        top: row.style.top,
-                        left: row.style.left,
-                        right: row.style.right,
-                        name: playerData[0], //row.querySelectorAll('.player-name-wrapper')[0].innerText
-                        position: position
-                    })
+            var homeSquad = $('div.pitch > .home > ul')
+            var homeLineup = [];
+            var awayLineup = [];
+            for (var i = 0, row; row = homeSquad[i]; i++) {
+                var playerData = $('div.pitch > .home > ul')[3].getAttribute('title').split('(');
+
+                var position = (playerData[1].indexOf(')') > 0) ? playerData[1].replace(')', '') : '';
+                homeLineup.push({
+                    top: row.style.top,
+                    left: row.style.left,
+                    right: row.style.right,
+                    name: playerData[0], //row.querySelectorAll('.player-name-wrapper')[0].innerText
+                    position: position
+                })
+            }
+
+            var awaySquad = $('div.pitch > .away > ul')
+            for (var i = 0, row; row = awaySquad[i]; i++) {
+                awayLineup.push({
+                    top: row.style.top,
+                    left: row.style.left,
+                    right: row.style.right,
+                    name: row.querySelectorAll('.player-name-wrapper')[0].innerText
+                })
+            }
+            var rows = $('div#missing-players > .home > table > tbody tr')
+            var missingHomePlayers = [];
+
+            for (var i = 0, row; row = rows[i]; i++) {
+                missingHomePlayers.push({
+                    name: row.querySelectorAll('.pn')[0].innerText,
+                    reason: row.querySelectorAll('.reason > span')[0].getAttribute('title'),
+                    status: row.querySelectorAll('td')[2].innerText
+                })
+            }
+            rows = $('div#missing-players > .away > table > tbody tr')
+            var missingAwayPlayers = [];
+            for (var i = 0, row; row = rows[i]; i++) {
+                missingAwayPlayers.push({
+                    name: row.querySelectorAll('.pn')[0].innerText,
+                    reason: row.querySelectorAll('.reason > span')[0].getAttribute('title'),
+                    status: row.querySelectorAll('td')[2].innerText
+                })
+                //   var name = row.querySelectorAll('.pn')[0].innerText;
+                //   var reason = row.querySelectorAll('.reason > span')[0].getAttribute('title');
+                //   var status = row.querySelectorAll('td')[2]
+            }
+
+            rows = $('div#preview-team-news > .home > .note.rc-b > ul.items > li');
+            var homeNews = [];
+            for (var i = 0, row; row = rows[i]; i++) {
+                homeNews.push({ text: row.innerText });
+            }
+            rows = $('div#preview-team-news > .away > .note.rc-b > ul.items > li');
+            var awayNews = [];
+            for (var i = 0, row; row = rows[i]; i++) {
+                awayNews.push({ text: row.innerText });
+            }
+
+
+            var data = {
+                homeTeam: $('div.match-header > table > tbody > tr > td.team')[0].innerText,
+                awayTeam: $('div.match-header > table > tbody > tr > td.team')[1].innerText,
+                homeLineup: homeLineup,
+                awayLineup: awayLineup,
+                homeNews: homeNews,
+                awayNews: awayNews,
+                missingHomePlayers: missingHomePlayers,
+                missingAwayPlayers: missingAwayPlayers
+            };
+            return data;
+        })
+        .catch(error => {
+            var message;
+            if (typeof error.details != "undefined" && error.details != "") {
+                message = error.details;
+            } else if (typeof error == "string") {
+                message = error;
+
+                if (error == "Cannot read property 'focus' of null") {
+                    message += " (Likely because a non-existent selector was used)";
                 }
+            } else {
+                message = error.message;
+            }
+            console.log(error);
 
-                var awaySquad = $('div.pitch > .away > ul')
-                for (var i = 0, row; row = awaySquad[i]; i++) {
-                    awayLineup.push({
-                        top: row.style.top,
-                        left: row.style.left,
-                        right: row.style.right,
-                        name: row.querySelectorAll('.player-name-wrapper')[0].innerText
-                    })
-                }
-                var rows = $('div#missing-players > .home > table > tbody tr')
-                var missingHomePlayers = [];
+        })
 
-                for (var i = 0, row; row = rows[i]; i++) {
-                    missingHomePlayers.push({
-                        name: row.querySelectorAll('.pn')[0].innerText,
-                        reason: row.querySelectorAll('.reason > span')[0].getAttribute('title'),
-                        status: row.querySelectorAll('td')[2].innerText
-                    })
-                }
-                rows = $('div#missing-players > .away > table > tbody tr')
-                var missingAwayPlayers = [];
-                for (var i = 0, row; row = rows[i]; i++) {
-                    missingAwayPlayers.push({
-                        name: row.querySelectorAll('.pn')[0].innerText,
-                        reason: row.querySelectorAll('.reason > span')[0].getAttribute('title'),
-                        status: row.querySelectorAll('td')[2].innerText
-                    })
-                    //   var name = row.querySelectorAll('.pn')[0].innerText;
-                    //   var reason = row.querySelectorAll('.reason > span')[0].getAttribute('title');
-                    //   var status = row.querySelectorAll('td')[2]
-                }
+    console.log('Ended evaluate.');
+    console.log(JSON.stringify(data));
+    return data;
 
-                rows = $('div#preview-team-news > .home > .note.rc-b > ul.items > li');
-                var homeNews = [];
-                for (var i = 0, row; row = rows[i]; i++) {
-                    homeNews.push({ text: row.innerText });
-                }
-                rows = $('div#preview-team-news > .away > .note.rc-b > ul.items > li');
-                var awayNews = [];
-                for (var i = 0, row; row = rows[i]; i++) {
-                    awayNews.push({ text: row.innerText });
-                }
-
-
-                var data = {
-                    homeTeam: $('div.match-header > table > tbody > tr > td.team')[0].innerText,
-                    awayTeam: $('div.match-header > table > tbody > tr > td.team')[1].innerText,
-                    homeLineup: homeLineup,
-                    awayLineup: awayLineup,
-                    homeNews: homeNews,
-                    awayNews: awayNews,
-                    missingHomePlayers: missingHomePlayers,
-                    missingAwayPlayers: missingAwayPlayers
-                };
-                return data;
-            })
-            .catch(error => {
-                var message;
-                if (typeof error.details != "undefined" && error.details != "") {
-                    message = error.details;
-                } else if (typeof error == "string") {
-                    message = error;
-
-                    if (error == "Cannot read property 'focus' of null") {
-                        message += " (Likely because a non-existent selector was used)";
-                    }
-                } else {
-                    message = error.message;
-                }
-                console.log(error);
-
-            })
-
-        console.log('Ended evaluate.');
-        console.log(JSON.stringify(data));
-        return data;
-    
 }
 
 function* findPreviews(competition, retry) {
@@ -220,9 +221,9 @@ function* findPreviews(competition, retry) {
             var previews = [];
 
             var rows = $('table#team-fixtures-summary > tbody > tr');
-            
+
             for (var i = 0, row; row = rows[i]; i++) {
-                
+
                 if ((row.querySelectorAll('td.toolbar.right')[0].innerText == 'Preview')) {
                     previews.push({
                         home: row.querySelectorAll('td.team.home')[0].innerText,
