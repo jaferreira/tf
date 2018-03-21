@@ -324,6 +324,26 @@ class TeamsController extends BaseController {
 
             sofaProviderName: 'SofaScore',
 
+            sofaTeamId: '49',
+
+            sofaTeamName: 'Wigan Athletic',
+
+            sofaTeamLink: 'https://www.sofascore.com/team/football/wigan-athletic/49',
+
+            whoScoredProviderName: 'WhoScored',
+
+            whoTeamId: '194',
+
+            whoTeamName: 'Wigan',
+
+            whoTeamLink: 'https://www.whoscored.com/Teams/194/Show/England-Wigan',
+
+        },
+
+        {
+
+            sofaProviderName: 'SofaScore',
+
             sofaTeamId: '13',
 
             sofaTeamName: 'Rotherham United',
@@ -838,8 +858,9 @@ class TeamsController extends BaseController {
                 });
 
                 if (nextGameArray.length > 0) {
-                    console.log(' - NextGameScrapDate for ' + teamInfo.name);
-                    teamInfo.nextGameScrapAt = new Date();
+                    console.log('1 - NextGameScrapDate for ' + teamInfo.name);
+                    var name = 'nextGameScrapAt';
+                    teamInfo[name] = new Date();
                     teamInfo.nextGame = {
                         date: nextGameArray[0].date,
                         provider: nextGameArray[0].provider,
@@ -848,6 +869,7 @@ class TeamsController extends BaseController {
                         awayTeamName: nextGameArray[0].awayTeamName,
                         awayTeamLink: nextGameArray[0].awayTeamLink
                     };
+                    console.log('2 - NextGameScrapDate for ' + teamInfo.name + ': ' +teamInfo.nextGameScrapAt);
                 }
             });
 
